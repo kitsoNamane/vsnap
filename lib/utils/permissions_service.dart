@@ -28,7 +28,6 @@ class PermissionsService {
     return false;
   }
 
-
   static Future<bool> _requestCameraPermission() async {
     return _requestPermission(Permission.camera);
   }
@@ -42,13 +41,15 @@ class PermissionsService {
   }
 
   static Future<bool> getAppPermissions() async {
-    Future<bool> _status = false;
     _permissions.forEach((permission) {
-      _status = _requestPermission(permission);
-      if (_status == false) {
-        return _status;
-      }
+      _requestPermission(permission).then((onValue) {
+        if (onValue == false) {
+          return false;
+        }
+      }).catchError((onError) {
+        print(onError.toString());
+      });
     });
-    return _status;
+    return true;
   }
 }
