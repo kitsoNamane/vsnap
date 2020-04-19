@@ -7,9 +7,9 @@ class PermissionsService {
     Permission.storage
   ];
 
-  static Future<bool> _requestPermission(Permission permission) async {
+  static Future<bool> requestPermission(Permission permission) async {
     // check if we have already granted permission
-    var checkStatus = await _hasPermission(permission);
+    var checkStatus = await hasPermission(permission);
     if (checkStatus) return true;
 
     // get permissions if not already granted
@@ -20,7 +20,7 @@ class PermissionsService {
     return false;
   }
 
-  static Future<bool> _hasPermission(Permission permission) async {
+  static Future<bool> hasPermission(Permission permission) async {
     var status = await permission.status;
     if (status == PermissionStatus.granted) {
       return true;
@@ -28,27 +28,12 @@ class PermissionsService {
     return false;
   }
 
-  static Future<bool> _requestCameraPermission() async {
-    return _requestPermission(Permission.camera);
-  }
-
-  static Future<bool> _requestLocationPermission() async {
-    return _requestPermission(Permission.locationWhenInUse);
-  }
-
-  static Future<bool> _requestFileReadWritePermission() async {
-    return _requestPermission(Permission.storage);
-  }
-
   static Future<bool> getAppPermissions() async {
-    _permissions.forEach((permission) {
-      _requestPermission(permission).then((onValue) {
-        if (onValue == false) {
-          return false;
-        }
-      }).catchError((onError) {
-        print(onError.toString());
-      });
+    Map<Permission, PermissionStatus> statuses = await _permissions.request();
+    statuses.forEach((key, value) {
+      if (value != PermissionStatus.granted) {
+        return false;
+      }
     });
     return true;
   }

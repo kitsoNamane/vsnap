@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vsnap/utils/permissions_service.dart';
+import 'package:vsnap/utils/utils.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,12 +16,7 @@ class MyApp extends StatelessWidget {
               child: Text('Request contacts permission'),
               onPressed: () {
                 PermissionsService.getAppPermissions();
-                //if (PermissionsService().requestCameraPermission() == true) {
-                //  print("Camera Permissions Granted");
-                // }
-                //if (PermissionsService().requestLocationPermission() == true) {
-                //  print("Location Permissions Granted");
-                //}
+                Utils.myUtils();
               },
             ),
           ),
