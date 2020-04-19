@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vsnap/data/local/excel_data_source.dart';
 import 'package:vsnap/utils/permissions_service.dart';
 import 'package:vsnap/utils/utils.dart';
 
@@ -11,13 +12,36 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         home: Scaffold(
           body: Center(
-            child: MaterialButton(
-              color: Colors.yellow[300],
-              child: Text('Request contacts permission'),
-              onPressed: () {
-                PermissionsService.getAppPermissions();
-                Utils.myUtils();
-              },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                MaterialButton(
+                  color: Colors.yellow[300],
+                  child: Text('Request permission'),
+                  onPressed: () {
+                    PermissionsService.getAppPermissions();
+                    //Utils.myUtils();
+                    //var _excel = ExcelDataSource();
+                    //_excel.createExcelFile();
+                  },
+                ),
+                MaterialButton(
+                  color: Colors.green[300],
+                  child: Text('Create Excel File'),
+                  onPressed: () {
+                    var _excel = ExcelDataSource();
+                    _excel.createExcelFile(Utils.getCurrentTime()).then((file) {
+                      print(file.path);
+                    });
+                    //var _file =
+                    //    FileStorage.file("${Utils.getCurrentTime()}.xlsx")
+                    //        .then((file) {
+                    //  print(file.path);
+                    //});
+                  },
+                ),
+              ],
             ),
           ),
         ));

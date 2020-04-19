@@ -1,4 +1,4 @@
-export 'file.dart';
+export 'file_storage.dart';
 export 'permissions_service.dart';
 
 import 'package:intl/intl.dart';
