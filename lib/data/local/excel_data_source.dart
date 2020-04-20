@@ -8,7 +8,7 @@ class ExcelDataSource {
 
   Future<File> createExcelFile(String filename) {
     var decoder = Excel.createExcel();
-    var file = FileStorage.file(filename + _extension);
+    var file = getFile(filename + _extension);
     var sheetName = "$filename Visitors";
 
     decoder

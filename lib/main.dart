@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
                   color: Colors.yellow[300],
                   child: Text('Request permission'),
                   onPressed: () {
-                    PermissionsService.getAppPermissions();
+                    getAppPermissions();
                     //Utils.myUtils();
                     //var _excel = ExcelDataSource();
                     //_excel.createExcelFile();
@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
                   child: Text('Create Excel File'),
                   onPressed: () {
                     var _excel = ExcelDataSource();
-                    _excel.createExcelFile(Utils.getCurrentTime()).then((file) {
+                    _excel.createExcelFile(getCurrentTime()).then((file) {
                       _excel.readExcel(file.path);
+                      sendEMail(file.path);
                       //print("excel file created");
                       //print("$file.path");
                     });
