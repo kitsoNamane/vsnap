@@ -5,9 +5,9 @@ import 'package:vsnap/utils/utils.dart';
 
 class ExcelDataSource {
   var _extension = ".xlsx";
-  var decoder = Excel.createExcel();
 
   Future<File> createExcelFile(String filename) {
+    var decoder = Excel.createExcel();
     var file = FileStorage.file(filename + _extension);
     var sheetName = "$filename Visitors";
 
@@ -32,5 +32,21 @@ class ExcelDataSource {
       });
     });
     return file;
+  }
+
+  Future<void> readExcel(String filename) {
+    var bytes = File(filename).readAsBytesSync();
+    var decoder = Excel.decodeBytes(bytes, update: true);
+    print("$filename");
+    print("printing excel content");
+    //
+    //for (var table in decoder.tables.keys) {
+    // print(table);
+    //print(decoder.tables[table].maxCols);
+    //print(decoder.tables[table].maxRows);
+    //for (var row in decoder.tables[table].rows) {
+    //print("$row");
+    //}
+    //}
   }
 }

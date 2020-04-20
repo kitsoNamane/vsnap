@@ -10,7 +10,7 @@ class Utils {
 
   static String getCurrentTime() {
     var now = DateTime.now().toLocal();
-    var format = DateFormat().add_d().add_M().add_y().add_Hm();
+    var format = DateFormat().add_d().add_M().add_y().add_Hms();
     return format.format(now);
   }
 }

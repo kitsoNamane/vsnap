@@ -12,6 +12,15 @@ class FileStorage {
     return directory;
   }
 
+  // get application directory
+  static String getAppDir() {
+    String _appDir;
+    _localPath.then((dir) {
+      _appDir = dir.path;
+    });
+    return _appDir;
+  }
+
   // will create a new file if doesn't exist
   static Future<File> file(String filename) async {
     final path = await _localPath.then((dir) {

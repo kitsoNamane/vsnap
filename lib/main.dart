@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
                   onPressed: () {
                     var _excel = ExcelDataSource();
                     _excel.createExcelFile(Utils.getCurrentTime()).then((file) {
-                      print(file.path);
+                      _excel.readExcel(file.path);
+                      //print("excel file created");
+                      //print("$file.path");
                     });
                     //var _file =
                     //    FileStorage.file("${Utils.getCurrentTime()}.xlsx")
