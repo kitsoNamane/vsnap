@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mrz_scanner/flutter_mrz_scanner.dart';
 
 class CameraPage extends StatefulWidget {
+  final String scanType;
+
+  const CameraPage({Key key, this.scanType}) : super(key: key);
   @override
-  _CameraPageState createState() => _CameraPageState();
+  CameraPageState createState() => CameraPageState(scanType);
 }
 
-class _CameraPageState extends State<CameraPage> {
+class CameraPageState extends State<CameraPage> {
   bool isParsed = false;
+  final String scanType;
+
+  CameraPageState(this.scanType);
 
   @override
   Widget build(BuildContext context) {

@@ -31,8 +31,8 @@ Future<bool> getAppPermissions() async {
   Map<Permission, PermissionStatus> statuses = await _permissions.request();
   statuses.forEach((key, value) {
     if (value != PermissionStatus.granted) {
-      return false;
+      return Future.value(false);
     }
   });
-  return true;
+  return Future.value(true);
 }

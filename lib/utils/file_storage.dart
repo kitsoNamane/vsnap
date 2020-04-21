@@ -35,4 +35,5 @@ Future<void> removeAllFiles() {
       dirItem.delete(recursive: false);
     });
   });
+  return Future.value();
 }
