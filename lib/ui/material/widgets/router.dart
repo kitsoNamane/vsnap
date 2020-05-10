@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 import 'camera_page.dart';
 import 'home_page.dart';
-
+import 'navigation.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -15,11 +14,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HomePage());
       case '/scan':
         // Validation of correct data type
-        if (args is String) {
+        if (args is CameraArguments) {
+          debugPrint("camerax not working");
           return MaterialPageRoute(
-            builder: (_) => CameraPage(
-                  scanType: args,
-                ),
+            builder: (context) => CameraPage(),
+            settings: RouteSettings(
+              arguments: args,
+            ),
           );
         }
         // If args is not of the correct type, return an error page.

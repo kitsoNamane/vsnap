@@ -25,9 +25,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: _pages[_currentIndex].title,
           elevation: 0.0,
@@ -49,56 +47,7 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.email), title: Text("Reports")),
           ],
         ),
-      ),
     );
   }
 }
 
-/** 
-class HomePage extends StatelessWidget {
-  const HomePage({
-    Key key,
-  }) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("VSnap"),
-            centerTitle: true,
-            elevation: 0.0,
-          ),
-          body: _pages,
-          //backgroundColor: Colors.blue,
-          bottomNavigationBar: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), title: Text("Scan")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.email), title: Text("Reports")),
-            ],
-          ),
-        ));
-  }
-}
-
-class HomeWidget extends StatefulWidget {
-  HomeWidget({Key key}) : super(key: key);
-
-  @override
-  _HomeWidget createState() => _HomeWidget();
-}
-
-class _HomeWidget extends State<HomeWidget> {
-  List<Widget> _pages = [HomeTab(), ReportsTab()];
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-       child: ,
-    );
-  }
-}
-*/

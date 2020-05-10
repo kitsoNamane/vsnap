@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'navigation.dart';
+
 
 class ScanBtn extends StatelessWidget {
   final String navRoute;
@@ -8,16 +12,20 @@ class ScanBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left:16.0, right: 16.0),
-      width: double.infinity,
-      child: MaterialButton(
-        color: btnColor,
-        elevation: 0.0,
-        onPressed: () {
-          print("go to scan screen");
-        },
-        child: Text(navRoute),
+    var cameraArgs =
+        CameraArguments(scanType: navRoute, permission: Permission.camera);
+    return Expanded(
+      child: Container(
+        //padding: EdgeInsets.only(left: 16.0, right: 16.0),
+        width: double.infinity,
+        child: MaterialButton(
+          color: btnColor,
+          elevation: 0.0,
+          onPressed: () {
+            Navigator.of(context).pushNamed("/scan", arguments: cameraArgs);
+          },
+          child: Text(navRoute),
+        ),
       ),
     );
   }

@@ -35,8 +35,8 @@ class ExcelDataSource {
   }
 
   Future<void> readExcel(String filename) {
-    var bytes = File(filename).readAsBytesSync();
-    var decoder = Excel.decodeBytes(bytes, update: true);
+    //var bytes = File(filename).readAsBytesSync();
+    //var decoder = Excel.decodeBytes(bytes, update: true);
     print("$filename");
     print("printing excel content");
     //

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vsnap/ui/material/widgets/widgets.dart';
 
-import 'widgets/home_tab.dart';
-
 class AndroidApp extends StatelessWidget {
   const AndroidApp({Key key}) : super(key: key);
 

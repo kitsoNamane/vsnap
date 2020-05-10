@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "114208446711",
+    "firebase_url": "https://vsnap-13f68.firebaseio.com",
+    "project_id": "vsnap-13f68",
+    "storage_bucket": "vsnap-13f68.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114208446711:android:bcb060ea241aa29bbe9bf2",
+        "android_client_info": {
+          "package_name": "com.abstractclass.vsnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114208446711-tvgqjmcduinu6tap90ilf68dlumbnpim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm25xfggRThEoKj9WP68b_eC1gre2EHY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114208446711-tvgqjmcduinu6tap90ilf68dlumbnpim.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

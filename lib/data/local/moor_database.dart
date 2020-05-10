@@ -32,6 +32,7 @@ class Visitors extends Table {
   TextColumn get plateNumber => text()();
   IntColumn get phoneNumber => integer()();
 }
+
 // Denote which tables this DAO can access
 @UseDao(tables: [Visitors])
 class VisitorDao extends DatabaseAccessor<AppDatabase> with _$VisitorDaoMixin {
@@ -40,8 +41,14 @@ class VisitorDao extends DatabaseAccessor<AppDatabase> with _$VisitorDaoMixin {
   // Called by the AppDatabase class
   VisitorDao(this.db) : super(db);
 
-  Future<List<Visitor>> getAllTasks() => select(visitors).get();
-  Stream<List<Visitor>> watchAllTasks() => select(visitors).watch();
+  Future<List<Visitor>> getAllVisitors() => select(visitors).get();
+  Stream<List<Visitor>> watchAllVisitors() => select(visitors).watch();
+  Future<Visitor> getLastSignedVisitor(String _id) {
+    return (select(visitors)..where((t) => t.nationalId.equals(_id))..orderBy([
+      (t) => OrderingTerm(expression: t.timeIn, mode: OrderingMode.desc),
+    ])..limit(1)).getSingle();
+  }
+
   Future insertTask(Visitor visitor) => into(visitors).insert(visitor);
   Future updateTask(Visitor visitor) => update(visitors).replace(visitor);
   Future deleteTask(Visitor visitor) => delete(visitors).delete(visitor);
@@ -57,6 +64,7 @@ LazyDatabase _openConnection() {
     return VmDatabase(file);
   });
 }
+
 @UseMoor(tables: [Visitors], daos: [VisitorDao])
 // _$AppDatabase is the name of the generated class
 class AppDatabase extends _$AppDatabase {
@@ -64,4 +72,3 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 }
-
