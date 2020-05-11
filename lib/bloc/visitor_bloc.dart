@@ -1,0 +1,67 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/models/visitor.dart' as model;
+
+part 'visitor_event.dart';
+part 'visitor_state.dart';
+
+class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
+  VisitorDao dao;
+
+  @override
+  VisitorState get initialState => VisitorInitial();
+
+  @override
+  Stream<VisitorState> mapEventToState(
+    VisitorEvent event,
+  ) async* {
+    if (event is VisitorSignIn) {
+      yield* _mapSignInToState(event);
+    } else if (event is VisitorSignOut) {
+      yield* _mapSignOutToState(event);
+    } else {
+      yield VisitorError();
+    }
+  }
+
+  Stream<VisitorState> _mapSignInToState(VisitorSignIn event) async* {
+    // update database
+    yield VisitorLoading();
+    var names = event.visitor.person.names.split(" ");
+    Visitor visitor = Visitor(
+      nationalId: event.visitor.person.primaryId,
+      passportNumber: event.visitor.person.secondaryId,
+      documentType: event.visitor.person.documentType,
+      documentNumber: event.visitor.person.documentNumber,
+      nationalityCountryCode: event.visitor.person.nationalityCountryCode,
+      firstName: names[0],
+      middleName: names[1],
+      lastName: event.visitor.person.surname,
+      sex: event.visitor.person.sex,
+      purpose: event.visitor.purpose,
+      plateNumber: null,
+      phoneNumber: event.visitor.phone,
+      id: null,
+    );
+    var result = await dao
+        .insertVisitor(visitor)
+        .then((_) => VisitorSignedIn(visitor: event.visitor))
+        .catchError((_) => VisitorError());
+    yield result;
+  }
+
+  Stream<VisitorState> _mapSignOutToState(VisitorSignOut event) async* {
+    yield VisitorLoading();
+    var visitor =
+        await dao.getLastSignedVisitor(event.visitor.person.primaryId);
+    var updatedVisitor = visitor.copyWith(timeOut: DateTime.now());
+    var result = await dao
+        .updateVisitor(updatedVisitor)
+        .then((_) => VisitorSignedOut(visitor: event.visitor))
+        .catchError((_) => VisitorError());
+    yield result;
+  }
+}

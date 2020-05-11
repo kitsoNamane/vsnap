@@ -431,6 +431,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  mrz_parser:
+    dependency: "direct main"
+    description:
+      name: mrz_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   multi_server_socket:
     dependency: transitive
     description:
@@ -551,7 +558,7 @@ packages:
     source: hosted
     version: "1.4.0"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
