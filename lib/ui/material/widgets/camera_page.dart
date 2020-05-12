@@ -6,6 +6,7 @@ import 'package:vsnap/ui/material/widgets/permissions_tab.dart';
 
 import 'camera_tab.dart';
 import 'navigation.dart';
+import 'permission_error_tab.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key key}) : super(key: key);
@@ -14,9 +15,9 @@ class CameraPage extends StatefulWidget {
 }
 
 class CameraPageState extends State<CameraPage> {
+  List<Permission> _permissions = [Permission.camera];
   @override
   Widget build(BuildContext context) {
-    CameraArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
           title: Text('Camera'),
@@ -25,24 +26,36 @@ class CameraPageState extends State<CameraPage> {
         body: BlocProvider(
           create: (context) => PermissionBloc()
             ..add(RequestPermissions(
-              permissions: [Permission.camera,],
+              permissions: _permissions,
             )),
           child: BlocBuilder<PermissionBloc, PermissionState>(
               builder: (BuildContext context, state) {
-            if (state is PermissionInitial) {
+            if (state is PermissionInitial || state is PermissionLoading) {
               return Container();
             } else if (state is PermissionGranted) {
-              if (state.props.first == false) {
-                return PermissionsTab(
-                  permissions: [Permission.camera],
-                  message: "Enable access so you can start scanning ID's",
-                  action: "Enable Camera Access",
-                );
-              } else {
-                return CameraPreviewScanner();
-              }
+              return CameraPreviewScanner();
+            } else if (state is PermissionDenied) {
+              return PermissionsTab(
+                permissions:_permissions,
+                message:
+                    "Enable access so you can create, save and send report files",
+                action: "Enable Storage Access",
+              );
+            } else if (state is PermissionPermanentlyDenied) {
+              return PermissionErrorTab(
+                message:
+                    "You permenetly denied permissions for camera, to continue using our service go to your device setting and give us storage permissions",
+              );
+            } else if (state is PermissionRestricted) {
+              return PermissionErrorTab(
+                message:
+                    "Your Admin/Guardian has restricted camera permissions, contact them to give you access",
+              );
             } else {
-              return Container();
+              return PermissionErrorTab(
+                message:
+                    "Something went wrong, contact our admin at kitso@abstractclass.co",
+              );
             }
           }),
         ));

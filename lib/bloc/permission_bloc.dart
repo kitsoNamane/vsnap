@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -11,7 +12,6 @@ part 'permission_event.dart';
 part 'permission_state.dart';
 
 class PermissionBloc extends Bloc<PermissionEvent, PermissionState> {
-
   @override
   PermissionState get initialState => PermissionInitial();
 
@@ -21,21 +21,30 @@ class PermissionBloc extends Bloc<PermissionEvent, PermissionState> {
   ) async* {
     if (event is RequestPermissions) {
       yield PermissionLoading();
-      if(event.permissions == null || event.permissions.isEmpty) {
-        yield PermissionGranted(false);
+      if (event.permissions == null || event.permissions.isEmpty) {
+        yield PermissionError();
       }
 
-      final _permissionResult = await _requestPermission(event.permissions);
-      if (_permissionResult != null) {
-        yield PermissionGranted(_permissionResult);
+      final _permissionResult = await requestPermissions(event.permissions);
+      if (_permissionResult == PermissionStatus.granted) {
+        yield PermissionGranted();
+      } else if (_permissionResult == PermissionStatus.denied) {
+        yield PermissionDenied();
+      } else if (_permissionResult == PermissionStatus.permanentlyDenied &&
+          Platform.isAndroid) {
+        yield PermissionPermanentlyDenied();
+      } else if (_permissionResult == PermissionStatus.restricted &&
+          Platform.isIOS) {
+        yield PermissionRestricted();
       } else {
-        yield PermissionGranted(false);
+        yield PermissionError();
       }
-    }
-  }
 
-  Future<bool> _requestPermission(List<Permission> permission) async {
-    var permissionResult = await requestPermissions(permission);
-    return permissionResult;
+      //if (_permissionResult != null) {
+      //  yield PermissionGranted(_permissionResult);
+      //} else {
+      //  yield PermissionGranted(false);
+      //}
+    }
   }
 }

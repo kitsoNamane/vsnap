@@ -1,37 +1,53 @@
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/data/excel_data_source.dart';
+import 'package:vsnap/ui/material/widgets/permission_error_tab.dart';
 import 'package:vsnap/utils/utils.dart';
 
 import 'permissions_tab.dart';
 
 class ReportsTab extends StatelessWidget {
+  List<Permission> _permissions = [Permission.storage];
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PermissionBloc()
         ..add(RequestPermissions(
-          permissions: [Permission.storage],
+          permissions:_permissions,
         )),
       child: BlocBuilder<PermissionBloc, PermissionState>(
         builder: (context, state) {
-          if (state is PermissionInitial) {
+          if (state is PermissionInitial || state is PermissionLoading) {
             return Container();
           } else if (state is PermissionGranted) {
-            if (state.props.first == false) {
-              return PermissionsTab(
-                permissions: [Permission.storage],
-                message: "Enable access so you can create, save and send report files",
-                action: "Enable Storage Access",
-              );
-            } else {
-              return ReportsForm();
-            }
+            return ReportsForm();
+          } else if (state is PermissionDenied) {
+            return PermissionsTab(
+              permissions:_permissions,
+              message:
+                  "Enable access so you can create, save and send report files",
+              action: "Enable Storage Access",
+            );
+          } else if (state is PermissionPermanentlyDenied) {
+            return PermissionErrorTab(
+              message:
+                  "You permenetly denied permission for file storage/read/write, to continue using our service go to your device setting and give us storage permissions",
+            );
+          } else if (state is PermissionRestricted) {
+            return PermissionErrorTab(
+              message:
+                  "Your Admin/Guardian has restricted file storage/read/write permissions, contact them to give you access",
+            );
           } else {
-            return Container();
+            return PermissionErrorTab(
+              message:
+                  "Something went wrong, contact our admin at kitso@abstractclass.co",
+            );
           }
         },
       ),

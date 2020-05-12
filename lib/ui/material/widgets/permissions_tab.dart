@@ -9,7 +9,7 @@ class PermissionsTab extends StatelessWidget {
   final String message;
   final String action;
 
-  const PermissionsTab({
+  PermissionsTab({
     Key key,
     this.permissions,
     this.message,

@@ -6,13 +6,14 @@ var _permissions = [
   Permission.storage
 ];
 
-Future<bool> requestPermissions(List<Permission> permissions) async {
+Future<PermissionStatus> requestPermissions(
+    List<Permission> permissions) async {
   // check if we have already granted permission
-  Future<bool> state = Future.value(true);
+  Future<PermissionStatus> state = Future.value(PermissionStatus.granted);
   Map<Permission, PermissionStatus> statuses = await permissions.request();
   statuses.forEach((key, value) {
     if (value != PermissionStatus.granted) {
-      state = Future.value(false);
+      state = Future.value(value);
       return;
     }
   });

@@ -6,18 +6,20 @@ abstract class PermissionState extends Equatable {
   List<Object> get props => [];
 }
 
-class PermissionInitial extends PermissionState {}
-
-class PermissionLoading extends PermissionState {}
-
-class PermissionGranted extends PermissionState {
-  final bool _permissionResult;
-  const PermissionGranted(this._permissionResult);
-
-  @override
-  List<Object> get props => [_permissionResult];
-
-  @override
-  String toString() =>
-      'PermissionGranted(_permissionResult: $_permissionResult)';
+class PermissionInitial extends PermissionState {
 }
+
+class PermissionLoading extends PermissionState {
+}
+
+class PermissionGranted extends PermissionState {}
+
+class PermissionRestricted extends PermissionState {}
+
+class PermissionDenied extends PermissionState {}
+
+class PermissionPermanentlyDenied extends PermissionState {}
+
+class PermissionUndetermined extends PermissionState {}
+
+class PermissionError extends PermissionState {}
