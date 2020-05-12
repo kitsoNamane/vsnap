@@ -1,16 +1,52 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/data/excel_data_source.dart';
 import 'package:vsnap/utils/utils.dart';
 
-class ReportsTab extends StatefulWidget {
-  const ReportsTab({Key key}) : super(key: key);
+import 'permissions_tab.dart';
 
+class ReportsTab extends StatelessWidget {
   @override
-  _ReportsTabState createState() => _ReportsTabState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => PermissionBloc()
+        ..add(RequestPermissions(
+          permissions: [Permission.storage],
+        )),
+      child: BlocBuilder<PermissionBloc, PermissionState>(
+        builder: (context, state) {
+          if (state is PermissionInitial) {
+            return Container();
+          } else if (state is PermissionGranted) {
+            if (state.props.first == false) {
+              return PermissionsTab(
+                permissions: [Permission.storage],
+                message: "Enable access so you can create, save and send report files",
+                action: "Enable Storage Access",
+              );
+            } else {
+              return ReportsForm();
+            }
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
+  }
 }
 
-class _ReportsTabState extends State<ReportsTab> {
+class ReportsForm extends StatefulWidget {
+  const ReportsForm({Key key}) : super(key: key);
+
+  @override
+  _ReportsFormState createState() => _ReportsFormState();
+}
+
+class _ReportsFormState extends State<ReportsForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailTextController = TextEditingController();
   @override

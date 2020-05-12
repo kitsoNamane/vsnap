@@ -8,13 +8,15 @@ var _permissions = [
 
 Future<bool> requestPermissions(List<Permission> permissions) async {
   // check if we have already granted permission
+  Future<bool> state = Future.value(true);
   Map<Permission, PermissionStatus> statuses = await permissions.request();
   statuses.forEach((key, value) {
     if (value != PermissionStatus.granted) {
-      return Future.value(false);
+      state = Future.value(false);
+      return;
     }
   });
-  return Future.value(true);
+  return state;
   //var checkStatus = await hasPermission(permission);
   //if (checkStatus) return true;
 

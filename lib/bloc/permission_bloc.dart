@@ -21,6 +21,10 @@ class PermissionBloc extends Bloc<PermissionEvent, PermissionState> {
   ) async* {
     if (event is RequestPermissions) {
       yield PermissionLoading();
+      if(event.permissions == null || event.permissions.isEmpty) {
+        yield PermissionGranted(false);
+      }
+
       final _permissionResult = await _requestPermission(event.permissions);
       if (_permissionResult != null) {
         yield PermissionGranted(_permissionResult);
