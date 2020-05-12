@@ -1,5 +1,3 @@
-
-
 part of 'visitor_bloc.dart';
 
 abstract class VisitorState extends Equatable {
@@ -20,7 +18,6 @@ class VisitorSignedIn extends VisitorState {
   @override
   List<Object> get props => [visitor];
 }
-
 
 class VisitorSignedOut extends VisitorState {
   final model.Visitor visitor;

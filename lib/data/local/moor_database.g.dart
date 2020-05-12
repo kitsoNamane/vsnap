@@ -27,8 +27,8 @@ class Visitor extends DataClass implements Insertable<Visitor> {
   final int phoneNumber;
   Visitor(
       {@required this.id,
-      @required this.nationalId,
-      @required this.passportNumber,
+      this.nationalId,
+      this.passportNumber,
       @required this.documentType,
       @required this.documentNumber,
       @required this.nationalityCountryCode,
@@ -41,7 +41,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       @required this.purpose,
       this.timeIn,
       this.timeOut,
-      @required this.plateNumber,
+      this.plateNumber,
       @required this.phoneNumber});
   factory Visitor.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -345,8 +345,8 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
   });
   VisitorsCompanion.insert({
     this.id = const Value.absent(),
-    @required String nationalId,
-    @required String passportNumber,
+    this.nationalId = const Value.absent(),
+    this.passportNumber = const Value.absent(),
     @required String documentType,
     @required String documentNumber,
     @required String nationalityCountryCode,
@@ -359,11 +359,9 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
     @required String purpose,
     this.timeIn = const Value.absent(),
     this.timeOut = const Value.absent(),
-    @required String plateNumber,
+    this.plateNumber = const Value.absent(),
     @required int phoneNumber,
-  })  : nationalId = Value(nationalId),
-        passportNumber = Value(passportNumber),
-        documentType = Value(documentType),
+  })  : documentType = Value(documentType),
         documentNumber = Value(documentNumber),
         nationalityCountryCode = Value(nationalityCountryCode),
         firstName = Value(firstName),
@@ -371,7 +369,6 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
         lastName = Value(lastName),
         sex = Value(sex),
         purpose = Value(purpose),
-        plateNumber = Value(plateNumber),
         phoneNumber = Value(phoneNumber);
   VisitorsCompanion copyWith(
       {Value<int> id,
@@ -432,7 +429,7 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get nationalId => _nationalId ??= _constructNationalId();
   GeneratedTextColumn _constructNationalId() {
-    return GeneratedTextColumn('national_id', $tableName, false,
+    return GeneratedTextColumn('national_id', $tableName, true,
         minTextLength: 2, maxTextLength: 16);
   }
 
@@ -443,7 +440,7 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   GeneratedTextColumn get passportNumber =>
       _passportNumber ??= _constructPassportNumber();
   GeneratedTextColumn _constructPassportNumber() {
-    return GeneratedTextColumn('passport_number', $tableName, false,
+    return GeneratedTextColumn('passport_number', $tableName, true,
         minTextLength: 2, maxTextLength: 16);
   }
 
@@ -587,7 +584,7 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     return GeneratedTextColumn(
       'plate_number',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -641,16 +638,12 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     if (d.nationalId.present) {
       context.handle(_nationalIdMeta,
           nationalId.isAcceptableValue(d.nationalId.value, _nationalIdMeta));
-    } else if (isInserting) {
-      context.missing(_nationalIdMeta);
     }
     if (d.passportNumber.present) {
       context.handle(
           _passportNumberMeta,
           passportNumber.isAcceptableValue(
               d.passportNumber.value, _passportNumberMeta));
-    } else if (isInserting) {
-      context.missing(_passportNumberMeta);
     }
     if (d.documentType.present) {
       context.handle(
@@ -724,8 +717,6 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     if (d.plateNumber.present) {
       context.handle(_plateNumberMeta,
           plateNumber.isAcceptableValue(d.plateNumber.value, _plateNumberMeta));
-    } else if (isInserting) {
-      context.missing(_plateNumberMeta);
     }
     if (d.phoneNumber.present) {
       context.handle(_phoneNumberMeta,

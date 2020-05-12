@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/models/visitor.dart' as model;
 
 part 'visitor_event.dart';
@@ -10,6 +11,7 @@ part 'visitor_state.dart';
 
 class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
   VisitorDao dao;
+  VisitorBloc({this.dao});
 
   @override
   VisitorState get initialState => VisitorInitial();
@@ -22,9 +24,19 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
       yield* _mapSignInToState(event);
     } else if (event is VisitorSignOut) {
       yield* _mapSignOutToState(event);
+    } else if (event is AddVisitorButtonPressed) {
+      yield* _mapButtonPressedToState(event);
     } else {
       yield VisitorError();
     }
+  }
+
+  Stream<VisitorState> _mapButtonPressedToState(
+      AddVisitorButtonPressed event) async* {
+    yield VisitorLoading();
+    Map<String, String> map = {'purpose': event.purpose, 'phone': event.phone};
+    var visitor = model.Visitor.create(event.document, map);
+    this.add(VisitorSignIn(visitor: visitor));
   }
 
   Stream<VisitorState> _mapSignInToState(VisitorSignIn event) async* {

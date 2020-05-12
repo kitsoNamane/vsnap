@@ -36,8 +36,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     _camera = CameraController(
       description,
       defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.low
-          : ResolutionPreset.medium,
+          ? ResolutionPreset.veryHigh
+          : ResolutionPreset.ultraHigh,
       enableAudio: false,
     );
     await _camera.initialize();
@@ -53,19 +53,30 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         imageRotation: description.sensorOrientation,
       ).then((dynamic results) {
         if (_detector == null) return;
+        _processResults(results);
         setState(() {
-          // process text here
           _scanResults = results;
         });
       }).whenComplete(() => _isDetecting = false);
     });
   }
 
-  Future<void> _processResults(VisionText scanResults) async {
+  void _processResults(VisionText scanResults) {
     if (scanResults == null) return;
-    final mrz = decodeMRTD(scanResults.text);
-    if (mrz == null) return;
-    // extract and save to database;
+    if (scanResults.blocks.isEmpty) return;
+    for(TextBlock block in scanResults.blocks) {
+      var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
+      if(isMRTD(mrtd)){
+        var document = decodeMRTD(mrtd);
+        if (document == null) return;
+        Navigator.of(context).pushNamed('/visitor', arguments: document);
+      }
+    }
+    //var mrtd =
+    //    scanResults.blocks.last.text.toUpperCase().replaceAll(" ", "").trim();
+    //var document = decodeMRTD(mrtd);
+    //if (document == null) return;
+    //Navigator.of(context).pushNamed('/visitor', arguments: document);
   }
 
   Widget _buildResults() {

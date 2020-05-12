@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:mrz_parser/mrz_parser.dart';
 
 import 'package:vsnap/models/mrz_document.dart';
 
@@ -23,13 +20,13 @@ class Visitor extends Equatable {
   @override
   List<Object> get props => [person, purpose, phone, timeIn, timeOut];
 
-  static Visitor create(MRZResult result, Map<String, dynamic> map) {
-    if (result == null) return null;
+  static Visitor create(Document doc, Map<String, String> map) {
+    if (doc == null) return null;
 
     return Visitor(
-      person: Document.fromMRTD(result),
+      person: doc,
       purpose: map['purpose'].toString().toLowerCase(),
-      phone: map['phone'],
+      phone: int.tryParse(map['phone']),
       timeIn: DateTime.now(),
       timeOut: null,
     );

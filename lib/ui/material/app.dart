@@ -7,10 +7,10 @@ class AndroidApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "VSnap",
-      initialRoute: '/',
-      onGenerateRoute: RouteGenerator.generateRoute,
-      home: HomePage(),
+        title: "VSnap",
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
+        home: HomePage(),
     );
   }
 }

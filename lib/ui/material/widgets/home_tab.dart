@@ -18,10 +18,12 @@ class HomeTab extends StatelessWidget {
           ScanBtn(
             navRoute: "Sign In",
             btnColor: Colors.green[300],
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
           ),
           ScanBtn(
             navRoute: "Sign Out",
             btnColor: Colors.blue[500],
+            padding: EdgeInsets.fromLTRB(16, 4, 16, 16),
           )
         ],
       ),

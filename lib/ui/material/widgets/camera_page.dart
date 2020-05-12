@@ -59,9 +59,8 @@ class CameraPermissionTab extends StatelessWidget {
             MaterialButton(
               child: Text("Enable Camera Access"),
               onPressed: () {
-                //final Permission permissionType =
-                //    ModalRoute.of(context).settings.arguments;
-                //requestPermission(permissionType);
+                //requestPermission(Permission.camera);
+                BlocProvider.of<PermissionBloc>(context).add(RequestPermission());
               },
             )
           ],
@@ -70,6 +69,3 @@ class CameraPermissionTab extends StatelessWidget {
     );
   }
 }
-
-
-

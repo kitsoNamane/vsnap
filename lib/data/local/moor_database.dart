@@ -11,8 +11,8 @@ class Visitors extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   // These are the visitor's document informantion
-  TextColumn get nationalId => text().withLength(min: 2, max: 16)();
-  TextColumn get passportNumber => text().withLength(min: 2, max: 16)();
+  TextColumn get nationalId => text().withLength(min: 2, max: 16).nullable()();
+  TextColumn get passportNumber => text().withLength(min: 2, max: 16).nullable()();
   TextColumn get documentType => text().withLength(min: 2, max: 6)();
   TextColumn get documentNumber => text().withLength(min: 2, max: 16)();
   TextColumn get nationalityCountryCode => text().withLength(min: 2, max: 50)();
@@ -29,7 +29,7 @@ class Visitors extends Table {
   TextColumn get purpose => text()();
   DateTimeColumn get timeIn => dateTime().nullable()();
   DateTimeColumn get timeOut => dateTime().nullable()();
-  TextColumn get plateNumber => text()();
+  TextColumn get plateNumber => text().nullable()();
   IntColumn get phoneNumber => integer()();
 }
 
