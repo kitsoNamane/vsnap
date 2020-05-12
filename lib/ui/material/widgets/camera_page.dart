@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
+import 'package:vsnap/ui/material/widgets/permissions_tab.dart';
 
 import 'camera_tab.dart';
 import 'navigation.dart';
@@ -21,15 +23,21 @@ class CameraPageState extends State<CameraPage> {
           elevation: 0.0,
         ),
         body: BlocProvider(
-          create: (context) => PermissionBloc(permission: args.permission)
-            ..add(RequestPermission()),
+          create: (context) => PermissionBloc()
+            ..add(RequestPermissions(
+              permissions: [Permission.camera,],
+            )),
           child: BlocBuilder<PermissionBloc, PermissionState>(
               builder: (BuildContext context, state) {
             if (state is PermissionInitial) {
               return Container();
             } else if (state is PermissionGranted) {
               if (state.props.first == false) {
-                return CameraPermissionTab();
+                return PermissionsTab(
+                  permissions: [Permission.camera],
+                  message: "Enable access so you can start scanning ID's",
+                  action: "Enable Camera Access",
+                );
               } else {
                 return CameraPreviewScanner();
               }
@@ -38,34 +46,5 @@ class CameraPageState extends State<CameraPage> {
             }
           }),
         ));
-  }
-}
-
-class CameraPermissionTab extends StatelessWidget {
-  const CameraPermissionTab({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("Scan With VSnap"),
-            Text("Enable access so you can start scanning ID's"),
-            MaterialButton(
-              child: Text("Enable Camera Access"),
-              onPressed: () {
-                //requestPermission(Permission.camera);
-                BlocProvider.of<PermissionBloc>(context).add(RequestPermission());
-              },
-            )
-          ],
-        ),
-      ),
-    );
   }
 }
