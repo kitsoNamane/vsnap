@@ -18,6 +18,9 @@
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="fullUser"
+            android:rotationAnimation="seamless"
+            android:clearTaskOnLaunch="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -27,6 +30,17 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data android:name="io.flutter.embedding.android.SplashScreenDrawable" android:resource="@drawable/launch_background" />
+            <intent-filter>
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
+                <action android:name="android.media.action.STILL_IMAGE_CAMERA"/>
+                <action android:name="android.media.action.VIDEO_CAMERA" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+            <!-- Declare notch support -->
+            <meta-data android:name="android.notch_support" android:value="true"/>
+
         </activity>
 
         <!-- To use multiple models: android:value="ocr,model2,model3" -->
@@ -34,7 +48,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
         android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-        android:value="barcode,face,label,ocr" />
+        android:value="ocr" />
 
         <meta-data
             android:name="flutterEmbedding"

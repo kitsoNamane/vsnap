@@ -45,8 +45,13 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
     // update database
     yield VisitorLoading();
     developer.log("$event", name: "AppMain");
-    var names = event.visitor.person.names.split(" ");
-    Visitor visitor = Visitor(
+    var names = event.visitor.person.names.split(" ").length == 2
+        ? event.visitor.person.names.split(" ")
+        : [
+            event.visitor.person.names,
+            "",
+          ];
+    final visitor = Visitor(
       nationalId: event.visitor.person.primaryId,
       passportNumber: event.visitor.person.secondaryId,
       documentType: event.visitor.person.documentType,
@@ -57,9 +62,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
       lastName: event.visitor.person.surname,
       sex: event.visitor.person.sex,
       purpose: event.visitor.purpose,
-      plateNumber: null,
       phoneNumber: event.visitor.phone,
-      id: null,
     );
     yield await dao
         .insertVisitor(visitor)
@@ -69,8 +72,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
 
   Stream<VisitorState> _mapSignOutToState(VisitorSignOut event) async* {
     yield VisitorLoading();
-    var visitor =
-        await dao.getLastSignedVisitor(event.document.primaryId);
+    var visitor = await dao.getLastSignedVisitor(event.document.primaryId);
     var updatedVisitor = visitor.copyWith(timeOut: DateTime.now());
     yield await dao
         .updateVisitor(updatedVisitor)

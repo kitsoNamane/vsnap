@@ -58,7 +58,8 @@ class EmailReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExcelBloc(RepositoryProvider.of<VisitorDao>(context))..add(BuildExcel()),
+      create: (context) => ExcelBloc(RepositoryProvider.of<VisitorDao>(context))
+        ..add(BuildExcel()),
       child: BlocBuilder<ExcelBloc, ExcelState>(
         builder: (context, state) {
           if (state is ExcelLoading || state is ExcelInitial) {
@@ -79,7 +80,7 @@ class EmailReport extends StatelessWidget {
               )),
             );
           } else if (state is ExcelFileBuilt) {
-            return ReportsForm();
+            return ReportsForm(filepath: state.filepath);
           } else {
             // assume state is ExcelFileBuildError
             return Container(
@@ -94,8 +95,7 @@ class EmailReport extends StatelessWidget {
                         color: Colors.blueAccent,
                       ),
                       onPressed: () {
-                        BlocProvider.of<ExcelBloc>(context)
-                            .add(BuildExcel());
+                        BlocProvider.of<ExcelBloc>(context).add(BuildExcel());
                       },
                     ),
                   ],
@@ -110,16 +110,20 @@ class EmailReport extends StatelessWidget {
 }
 
 class ReportsForm extends StatefulWidget {
-  const ReportsForm({Key key}) : super(key: key);
+  final String filepath;
+  const ReportsForm({Key key, this.filepath}) : super(key: key);
 
   @override
-  _ReportsFormState createState() => _ReportsFormState();
+  _ReportsFormState createState() => _ReportsFormState(filepath);
 }
 
 class _ReportsFormState extends State<ReportsForm> {
+  final String filepath;
   final _formKey = GlobalKey<FormState>();
   final _emailTextController =
       TextEditingController(text: "info@abstractclass.co");
+
+  _ReportsFormState(this.filepath);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -154,15 +158,7 @@ class _ReportsFormState extends State<ReportsForm> {
                 child: Text("Email Report"),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    ExcelFileBuilt _state = BlocProvider.of(context).state;
-                    sendEMail(_state.filepath);
-                    /*
-                    ExcelDataSource()
-                        .createExcelFile(getCurrentTime())
-                      /  .then((file) {
-                      sendEMail(file.path);
-                    }).catchError((error) => print("try again later"));
-                    */
+                    sendEMail(filepath).then((value) => Navigator.of(context).popAndPushNamed("/"));
                   }
                 },
               ),

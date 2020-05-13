@@ -71,15 +71,14 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     if (args.scanType == "Sign In") {
       Navigator.of(context).popAndPushNamed('/visitor', arguments: document);
     } else {
-      var updated =
-          updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
+      updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
       final snackBar = SnackBar(
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.green,
         content: Text('Visitor Signed Out'),
       );
       // Find the Scaffold in the widget tree and use it to show a SnackBar.
       Scaffold.of(context).showSnackBar(snackBar);
-      Future.delayed(Duration(seconds: 1), () => Navigator.of(context).pop());
+      Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pop());
     }
   }
 

@@ -41,7 +41,6 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
   final _genderController = TextEditingController();
   final _nationalityController = TextEditingController();
   final _purposeController = TextEditingController();
-  final _birthController = TextEditingController();
   DateTime _birth;
   String _date = "Date of Birth";
   final _formKey = GlobalKey<FormState>();
@@ -162,7 +161,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                       ).then((value) {
                         _birth = value;
                         setState(() {
-                          _date = dateTimeToString(value);
+                          _date = dateToString(value);
                         });
                       });
                     },
@@ -219,6 +218,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
           );
           // Find the Scaffold in the widget tree and use it to show a SnackBar.
           Scaffold.of(context).showSnackBar(snackBar);
+          Navigator.of(context).popAndPushNamed("/");
         }
         if (state is VisitorError) {
           final snackBar = SnackBar(
@@ -227,6 +227,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
           );
           // Find the Scaffold in the widget tree and use it to show a SnackBar.
           Scaffold.of(context).showSnackBar(snackBar);
+          Navigator.of(context).popAndPushNamed("/");
         }
       },
     );

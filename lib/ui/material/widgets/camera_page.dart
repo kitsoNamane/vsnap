@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
+import 'package:vsnap/ui/material/widgets/navigation.dart';
 import 'package:vsnap/ui/material/widgets/permissions_tab.dart';
 
 import 'camera_tab.dart';
@@ -11,6 +12,7 @@ class CameraPage extends StatelessWidget {
   List<Permission> _permissions = [Permission.camera];
   CameraPage({Key key}) : super(key: key);
   Widget build(BuildContext context) {
+    CameraArguments args = ModalRoute.of(context).settings.arguments;
     return BlocProvider(
         create: (context) => PermissionBloc()
           ..add(RequestPermissions(
@@ -23,11 +25,11 @@ class CameraPage extends StatelessWidget {
                 title: Text('Camera'),
                 elevation: 0.0,
               ),
-              floatingActionButton: state == PermissionGranted()
+              floatingActionButton: state == PermissionGranted() && args.scanType == "Sign In"
                   ? FloatingActionButton(
                       child: Icon(
                         Icons.edit,
-                        color: Colors.greenAccent,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).popAndPushNamed("/manual");

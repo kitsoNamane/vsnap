@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mrz_parser/mrz_parser.dart';
 import 'package:vsnap/bloc/visitor_bloc.dart';
 import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/models/mrz_document.dart';
+import 'package:vsnap/utils/date.dart';
 
 class VisitorPage extends StatefulWidget {
   @override
@@ -50,7 +53,7 @@ class VisitorTab extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final TextEditingController _phoneController;
   final TextEditingController _purposeController;
-  final Object document;
+  final Document document;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,41 @@ class VisitorTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "Names: ${document.names}",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "ID Number: ${document.primaryId}",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "Date of Birth: ${document.birthDate}",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "Gender: ${document.sex == Sex.male ? "Male" : "Female"}",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "Nationality ${document.nationalityCountryCode}",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: TextFormField(

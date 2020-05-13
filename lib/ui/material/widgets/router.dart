@@ -42,7 +42,6 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => ManualVisitor(),
         );
-        return _errorRoute();
       default:
         // If there is no such named route in the switch statement, e.g. /third
         return _errorRoute();
