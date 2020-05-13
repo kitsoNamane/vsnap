@@ -43,6 +43,6 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
         print(file);
         return ExcelFileBuildError();
       }
-    }).catchError((_) => print("error occured help"));
+    }).catchError((_) => ExcelFileBuildError());
   }
 }

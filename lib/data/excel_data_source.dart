@@ -74,64 +74,61 @@ class ExcelDataSource {
     sheetName = "$filename Visitors";
 
     decoder
-      ..updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
+      .updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
           fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-    //decoder.merge(
-    //    sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("Z1"),
-    //    customValue: "$sheetName");
+    decoder.merge(
+        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("K1"),
+        customValue: "$sheetName");
     if (visitors == null || visitors.isEmpty) {
-      decoder.merge(sheetName, CellIndex.indexByString("A2"),
-          CellIndex.indexByString("Z2"),
-          customValue: "$sheetName");
       decoder
-        ..updateCell(sheetName, CellIndex.indexByString("A1"),
+        .updateCell(sheetName, CellIndex.indexByString("A3"),
             "You don't have visitor registered, please register your visitors to get log",
             fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
     } else {
       createTableTitles();
       var _cell = 4;
 
-      for (int i = 0; i <= visitors.length; i++) {
+      for (int i = 0; i < visitors.length; i++) {
         int j = 0;
         var visitor = visitors[i];
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
               visitor.firstName,
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
               visitor.lastName,
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.nationalId,
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.nationalId != null ? visitor.nationalId : "",
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.passportNumber,
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.passportNumber != null ? visitor.passportNumber : "",
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
               visitor.documentType,
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
               visitor.sex.toUpperCase(),
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              dateTimeToString(visitor.timeIn),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
         decoder
-          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              dateTimeToString(visitor.timeOut),
+          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
               fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j = 0;
         _cell += 1;

@@ -20,7 +20,7 @@ class Visitors extends Table {
 
   // These are the visitor's personal informantion
   TextColumn get firstName => text().withLength(min: 3, max: 50)();
-  TextColumn get middleName => text().withLength(min: 3, max: 50)();
+  TextColumn get middleName => text().withLength(min: 3, max: 50).nullable()();
   TextColumn get lastName => text().withLength(min: 3, max: 50)();
   TextColumn get sex => text().withLength(min: 1, max: 1)();
   DateTimeColumn get birthday => dateTime().nullable()();

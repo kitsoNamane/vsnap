@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vsnap/models/mrz_document.dart';
+import 'package:vsnap/ui/material/widgets/manual_visitor.dart';
 
 import 'camera_page.dart';
 import 'home_page.dart';
@@ -13,7 +14,7 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(builder: (context) => HomePage());
       case '/scan':
         // Validation of correct data type
         if (args is CameraArguments) {
@@ -36,6 +37,11 @@ class RouteGenerator {
             ),
           );
         }
+        return _errorRoute();
+      case '/manual':
+        return MaterialPageRoute(
+          builder: (context) => ManualVisitor(),
+        );
         return _errorRoute();
       default:
         // If there is no such named route in the switch statement, e.g. /third
