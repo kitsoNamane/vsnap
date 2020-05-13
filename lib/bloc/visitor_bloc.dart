@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/models/visitor.dart' as model;
@@ -42,6 +44,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
   Stream<VisitorState> _mapSignInToState(VisitorSignIn event) async* {
     // update database
     yield VisitorLoading();
+    developer.log("$event", name: "AppMain");
     var names = event.visitor.person.names.split(" ");
     Visitor visitor = Visitor(
       nationalId: event.visitor.person.primaryId,

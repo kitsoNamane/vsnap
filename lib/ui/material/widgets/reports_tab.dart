@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/excel_bloc.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
-import 'package:vsnap/data/excel_data_source.dart';
+import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/ui/material/widgets/permission_error_tab.dart';
 import 'package:vsnap/utils/utils.dart';
 
 import 'permissions_tab.dart';
 
 class ReportsTab extends StatelessWidget {
-  List<Permission> _permissions = [Permission.storage];
+  final List<Permission> _permissions = [Permission.storage];
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -58,7 +58,7 @@ class EmailReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExcelBloc()..add(BuildExcel()),
+      create: (context) => ExcelBloc(RepositoryProvider.of<VisitorDao>(context))..add(BuildExcel()),
       child: BlocBuilder<ExcelBloc, ExcelState>(
         builder: (context, state) {
           if (state is ExcelLoading || state is ExcelInitial) {
@@ -84,7 +84,22 @@ class EmailReport extends StatelessWidget {
             // assume state is ExcelFileBuildError
             return Container(
               child: Center(
-                child: Text("Something went wrong"),
+                child: Column(
+                  children: <Widget>[
+                    Text("Something went wrong, refresh"),
+                    MaterialButton(
+                      child: Icon(
+                        Icons.refresh,
+                        size: 24,
+                        color: Colors.blueAccent,
+                      ),
+                      onPressed: () {
+                        BlocProvider.of<ExcelBloc>(context)
+                            .add(BuildExcel());
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -103,7 +118,8 @@ class ReportsForm extends StatefulWidget {
 
 class _ReportsFormState extends State<ReportsForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailTextController = TextEditingController(text: "info@abstractclass.co");
+  final _emailTextController =
+      TextEditingController(text: "info@abstractclass.co");
   @override
   Widget build(BuildContext context) {
     return Container(

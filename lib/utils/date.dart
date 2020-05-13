@@ -9,3 +9,8 @@ String getCurrentTime() {
 DateTime getCurrentDate() {
   return DateTime.now().toLocal();
 }
+
+String dateTimeToString(DateTime dateTime){
+  var format = DateFormat().add_d().add_M().add_y().add_Hms();
+  return format.format(dateTime);
+}

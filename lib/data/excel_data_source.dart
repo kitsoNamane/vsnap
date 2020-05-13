@@ -5,36 +5,139 @@ import 'package:vsnap/utils/utils.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 
 class ExcelDataSource {
+  Future<File> file;
+  String sheetName;
+  var decoder = Excel.createExcel();
   var _extension = ".xlsx";
   final List<Visitor> visitors;
+  final List<String> cells = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    /*
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    */
+  ];
 
   ExcelDataSource(this.visitors);
 
+  void createTableTitles() {
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("A3"), "NAME",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("B3"), "SURNAME",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("C3"), "ID",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("D3"), "PASSPORT ID",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("E3"), "DOCUMENT TYPE",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("F3"), "SEX",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("A3"), "TIME IN",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("H3"), "TIME OUT",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+  }
+
   Future<File> createExcelFile(String filename) {
-    var decoder = Excel.createExcel();
-    var file = getFile(filename + _extension);
-    var sheetName = "$filename Visitors";
+    file = getFile(filename + _extension);
+    sheetName = "$filename Visitors";
 
     decoder.merge(
-        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("A5"),
+        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("Z1"),
         customValue: "$sheetName");
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
           fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-    /*
-    decoder
-      ..updateCell(sheetName, CellIndex.indexByString("A1"), "Here value of A1",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-      ..updateCell(
-          sheetName,
-          CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 0),
-          "Here value of C1",
-          wrap: TextWrapping.WrapText)
-      ..updateCell(sheetName, CellIndex.indexByString("A2"), "Here value of A2",
-          backgroundColorHex: "#1AFF1A")
-      ..updateCell(sheetName, CellIndex.indexByString("E5"), "Here value of E5",
-          horizontalAlign: HorizontalAlign.Right);
-          */
+    if (visitors == null || visitors.isEmpty) {
+      decoder.merge(sheetName, CellIndex.indexByString("A2"),
+          CellIndex.indexByString("Z2"),
+          customValue: "$sheetName");
+      decoder
+        ..updateCell(sheetName, CellIndex.indexByString("A1"),
+            "You don't have visitor registered, please register your visitors to get log",
+            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    } else {
+      createTableTitles();
+      var _cell = 4;
+
+      for (int i = 0; i <= visitors.length; i++) {
+        int j = 0;
+        var visitor = visitors[i];
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.firstName,
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.lastName,
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.nationalId,
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.passportNumber,
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.documentType,
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              visitor.sex.toUpperCase(),
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              dateTimeToString(visitor.timeIn),
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j += 1;
+        decoder
+          ..updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
+              dateTimeToString(visitor.timeOut),
+              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        j = 0;
+        _cell += 1;
+      }
+    }
+
     try {
       decoder.encode().then((onValue) {
         file.then((file) {
@@ -47,22 +150,5 @@ class ExcelDataSource {
     } catch (_) {
       return null;
     }
-  }
-
-  Future<void> readExcel(String filename) {
-    //var bytes = File(filename).readAsBytesSync();
-    //var decoder = Excel.decodeBytes(bytes, update: true);
-    print("$filename");
-    print("printing excel content");
-    //
-    //for (var table in decoder.tables.keys) {
-    // print(table);
-    //print(decoder.tables[table].maxCols);
-    //print(decoder.tables[table].maxRows);
-    //for (var row in decoder.tables[table].rows) {
-    //print("$row");
-    //}
-    //}
-    return Future.value();
   }
 }

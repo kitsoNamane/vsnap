@@ -18,15 +18,6 @@ Future<PermissionStatus> requestPermissions(
     }
   });
   return state;
-  //var checkStatus = await hasPermission(permission);
-  //if (checkStatus) return true;
-
-  // get permissions if not already granted
-  //var status = await permission.request();
-  //if (status == PermissionStatus.granted) {
-  //  return true;
-  //}
-  //return false;
 }
 
 Future<bool> hasPermission(Permission permission) async {

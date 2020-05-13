@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vsnap/data/excel_data_source.dart';
+import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/utils/utils.dart';
-import 'package:vsnap/utils/visitor_log.dart';
 
 part 'excel_event.dart';
 part 'excel_state.dart';
 
 class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
+  final VisitorDao dao;
+
+  ExcelBloc(this.dao);
   @override
   ExcelState get initialState => ExcelInitial();
 
@@ -25,7 +28,7 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
 
   Stream<ExcelState> _buildExcel() async* {
     yield ExcelLoading();
-    String file = await getVisitors().then((visitors) {
+    String file = await dao.getAllVisitors().then((visitors) {
       return ExcelDataSource(visitors)
           .createExcelFile(getCurrentTime())
           .then((excel) {
@@ -40,6 +43,6 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
         print(file);
         return ExcelFileBuildError();
       }
-    }).catchError((_)=>print("error occured help"));
+    }).catchError((_) => print("error occured help"));
   }
 }

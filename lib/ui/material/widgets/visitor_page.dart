@@ -22,7 +22,7 @@ class _VisitorPageState extends State<VisitorPage> {
         elevation: 0.0,
       ),
       body: BlocProvider(
-        create: (context) => VisitorBloc(dao: AppDatabase().visitorDao),
+        create: (context) => VisitorBloc(dao: RepositoryProvider.of<VisitorDao>(context)),
         child: Container(
           child: BlocConsumer<VisitorBloc, VisitorState>(
             builder: (context, state) {

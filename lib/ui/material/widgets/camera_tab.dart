@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vsnap/data/local/moor_database.dart';
 
 import 'package:vsnap/models/detectors.dart';
 import 'package:vsnap/models/mrz_document.dart';
@@ -69,7 +71,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     if (args.scanType == "Sign In") {
       Navigator.of(context).pushNamed('/visitor', arguments: document);
     } else {
-      var updated = updateVisitor(document);
+      var updated = updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
       Navigator.of(context).pop();
     }
   }
