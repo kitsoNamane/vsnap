@@ -58,22 +58,20 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
       phoneNumber: event.visitor.phone,
       id: null,
     );
-    var result = await dao
+    yield await dao
         .insertVisitor(visitor)
         .then((_) => VisitorSignedIn(visitor: event.visitor))
         .catchError((_) => VisitorError());
-    yield result;
   }
 
   Stream<VisitorState> _mapSignOutToState(VisitorSignOut event) async* {
     yield VisitorLoading();
     var visitor =
-        await dao.getLastSignedVisitor(event.visitor.person.primaryId);
+        await dao.getLastSignedVisitor(event.document.primaryId);
     var updatedVisitor = visitor.copyWith(timeOut: DateTime.now());
-    var result = await dao
+    yield await dao
         .updateVisitor(updatedVisitor)
-        .then((_) => VisitorSignedOut(visitor: event.visitor))
+        .then((_) => VisitorSignedOut())
         .catchError((_) => VisitorError());
-    yield result;
   }
 }

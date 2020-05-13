@@ -100,7 +100,8 @@ class _VisitorPageState extends State<VisitorPage> {
                     size: 20.0,
                     color: Colors.green,
                   ),
-                ).then((value) => null);
+                ).then((value){
+                });
               }
               if (state is VisitorError) {
                 showDialog(

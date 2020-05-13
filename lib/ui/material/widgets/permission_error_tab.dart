@@ -7,15 +7,27 @@ class PermissionErrorTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          message,
-          softWrap: true,
-          style: TextStyle(
-            fontSize: 24.0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              message,
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+            ),
           ),
-        ),
+          MaterialButton(
+            padding: EdgeInsets.all(16),
+            child: Text("home page"),
+            onPressed: () => Navigator.of(context).pushNamed(
+              "/",
+            ),
+          ),
+        ],
       ),
     );
   }

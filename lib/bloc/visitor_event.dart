@@ -28,10 +28,10 @@ class VisitorSignIn extends VisitorEvent {
 }
 
 class VisitorSignOut extends VisitorEvent {
-  final model.Visitor visitor;
+  final Document document;
 
-  const VisitorSignOut({this.visitor});
+  const VisitorSignOut({this.document});
 
   @override
-  List<Object> get props => [visitor];
+  List<Object> get props => [document];
 }

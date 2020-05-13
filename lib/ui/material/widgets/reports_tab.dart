@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vsnap/bloc/excel_bloc.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/data/excel_data_source.dart';
 import 'package:vsnap/ui/material/widgets/permission_error_tab.dart';
@@ -18,17 +17,17 @@ class ReportsTab extends StatelessWidget {
     return BlocProvider(
       create: (context) => PermissionBloc()
         ..add(RequestPermissions(
-          permissions:_permissions,
+          permissions: _permissions,
         )),
       child: BlocBuilder<PermissionBloc, PermissionState>(
         builder: (context, state) {
           if (state is PermissionInitial || state is PermissionLoading) {
             return Container();
           } else if (state is PermissionGranted) {
-            return ReportsForm();
+            return EmailReport();
           } else if (state is PermissionDenied) {
             return PermissionsTab(
-              permissions:_permissions,
+              permissions: _permissions,
               message:
                   "Enable access so you can create, save and send report files",
               action: "Enable Storage Access",
@@ -55,6 +54,46 @@ class ReportsTab extends StatelessWidget {
   }
 }
 
+class EmailReport extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ExcelBloc()..add(BuildExcel()),
+      child: BlocBuilder<ExcelBloc, ExcelState>(
+        builder: (context, state) {
+          if (state is ExcelLoading || state is ExcelInitial) {
+            return Container(
+              child: Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Creating Excel File..."),
+                  ),
+                  CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ],
+              )),
+            );
+          } else if (state is ExcelFileBuilt) {
+            return ReportsForm();
+          } else {
+            // assume state is ExcelFileBuildError
+            return Container(
+              child: Center(
+                child: Text("Something went wrong"),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
 class ReportsForm extends StatefulWidget {
   const ReportsForm({Key key}) : super(key: key);
 
@@ -64,7 +103,7 @@ class ReportsForm extends StatefulWidget {
 
 class _ReportsFormState extends State<ReportsForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailTextController = TextEditingController();
+  final _emailTextController = TextEditingController(text: "info@abstractclass.co");
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,11 +138,15 @@ class _ReportsFormState extends State<ReportsForm> {
                 child: Text("Email Report"),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
+                    ExcelFileBuilt _state = BlocProvider.of(context).state;
+                    sendEMail(_state.filepath);
+                    /*
                     ExcelDataSource()
                         .createExcelFile(getCurrentTime())
-                        .then((file) {
+                      /  .then((file) {
                       sendEMail(file.path);
                     }).catchError((error) => print("try again later"));
+                    */
                   }
                 },
               ),

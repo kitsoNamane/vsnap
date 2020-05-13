@@ -2,18 +2,29 @@ import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:vsnap/utils/utils.dart';
+import 'package:vsnap/data/local/moor_database.dart';
 
 class ExcelDataSource {
   var _extension = ".xlsx";
+  final List<Visitor> visitors;
+
+  ExcelDataSource(this.visitors);
 
   Future<File> createExcelFile(String filename) {
     var decoder = Excel.createExcel();
     var file = getFile(filename + _extension);
     var sheetName = "$filename Visitors";
 
+    decoder.merge(
+        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("A5"),
+        customValue: "$sheetName");
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    /*
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("A1"), "Here value of A1",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top)
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
       ..updateCell(
           sheetName,
           CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 0),
@@ -23,15 +34,19 @@ class ExcelDataSource {
           backgroundColorHex: "#1AFF1A")
       ..updateCell(sheetName, CellIndex.indexByString("E5"), "Here value of E5",
           horizontalAlign: HorizontalAlign.Right);
-
-    decoder.encode().then((onValue) {
-      file.then((file) {
-        file
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(onValue);
+          */
+    try {
+      decoder.encode().then((onValue) {
+        file.then((file) {
+          file
+            ..createSync(recursive: true)
+            ..writeAsBytesSync(onValue);
+        });
       });
-    });
-    return file;
+      return file;
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> readExcel(String filename) {

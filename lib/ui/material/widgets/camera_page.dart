@@ -5,7 +5,6 @@ import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/ui/material/widgets/permissions_tab.dart';
 
 import 'camera_tab.dart';
-import 'navigation.dart';
 import 'permission_error_tab.dart';
 
 class CameraPage extends StatefulWidget {
@@ -44,7 +43,7 @@ class CameraPageState extends State<CameraPage> {
             } else if (state is PermissionPermanentlyDenied) {
               return PermissionErrorTab(
                 message:
-                    "You permenetly denied permissions for camera, to continue using our service go to your device setting and give us storage permissions",
+                    "You permenetly denied permissions for camera, to continue using our service go to your device setting and give us camera permissions",
               );
             } else if (state is PermissionRestricted) {
               return PermissionErrorTab(

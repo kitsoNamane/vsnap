@@ -2,11 +2,14 @@ import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:vsnap/models/detectors.dart';
 
+import 'package:vsnap/models/detectors.dart';
+import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/utils/mrz.dart';
+import 'package:vsnap/utils/visitor_log.dart';
 
 import 'custom_painter.dart';
+import 'navigation.dart';
 import 'scan_utils.dart';
 
 class CameraPreviewScanner extends StatefulWidget {
@@ -61,22 +64,27 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     });
   }
 
+  void _scanType(Document document) {
+    CameraArguments args = ModalRoute.of(context).settings.arguments;
+    if (args.scanType == "Sign In") {
+      Navigator.of(context).pushNamed('/visitor', arguments: document);
+    } else {
+      var updated = updateVisitor(document);
+      Navigator.of(context).pop();
+    }
+  }
+
   void _processResults(VisionText scanResults) {
     if (scanResults == null) return;
     if (scanResults.blocks.isEmpty) return;
-    for(TextBlock block in scanResults.blocks) {
+    for (TextBlock block in scanResults.blocks) {
       var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
-      if(isMRTD(mrtd)){
+      if (isMRTD(mrtd)) {
         var document = decodeMRTD(mrtd);
         if (document == null) return;
-        Navigator.of(context).pushNamed('/visitor', arguments: document);
+        _scanType(document);
       }
     }
-    //var mrtd =
-    //    scanResults.blocks.last.text.toUpperCase().replaceAll(" ", "").trim();
-    //var document = decodeMRTD(mrtd);
-    //if (document == null) return;
-    //Navigator.of(context).pushNamed('/visitor', arguments: document);
   }
 
   Widget _buildResults() {

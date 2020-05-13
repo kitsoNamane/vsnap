@@ -19,13 +19,6 @@ class VisitorSignedIn extends VisitorState {
   List<Object> get props => [visitor];
 }
 
-class VisitorSignedOut extends VisitorState {
-  final model.Visitor visitor;
-
-  const VisitorSignedOut({this.visitor});
-
-  @override
-  List<Object> get props => [visitor];
-}
+class VisitorSignedOut extends VisitorState {}
 
 class VisitorError extends VisitorState {}

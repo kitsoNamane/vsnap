@@ -22,10 +22,17 @@ String getAppDir() {
 
 // will create a new file if doesn't exist
 Future<File> getFile(String filename) async {
-  final path = await _localPath.then((dir) {
-    return dir.path;
+  return await _localPath.then((dir) {
+    return File("${dir.path}/$filename")
+        .create(recursive: true)
+        .then((value) => value);
   });
-  return File("$path/$filename").create();
+}
+
+Future<bool> fileExists(String filepath) async {
+  return await _localPath.then((dir) {
+    return File(filepath).exists().then((value) => value);
+  });
 }
 
 Future<void> removeAllFiles() {
