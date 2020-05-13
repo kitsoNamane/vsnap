@@ -41,8 +41,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     _camera = CameraController(
       description,
       defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.veryHigh
-          : ResolutionPreset.ultraHigh,
+          ? ResolutionPreset.low
+          : ResolutionPreset.medium,
       enableAudio: false,
     );
     await _camera.initialize();
