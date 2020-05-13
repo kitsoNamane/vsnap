@@ -130,6 +130,7 @@ class VisitorTab extends StatelessWidget {
             );
             // Find the Scaffold in the widget tree and use it to show a SnackBar.
             Scaffold.of(context).showSnackBar(snackBar);
+            Navigator.of(context).popAndPushNamed("/");
           }
           if (state is VisitorError) {
             final snackBar = SnackBar(
@@ -138,6 +139,7 @@ class VisitorTab extends StatelessWidget {
             );
             // Find the Scaffold in the widget tree and use it to show a SnackBar.
             Scaffold.of(context).showSnackBar(snackBar);
+            Navigator.of(context).popAndPushNamed("/");
           }
         },
       ),

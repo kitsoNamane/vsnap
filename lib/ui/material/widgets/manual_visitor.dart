@@ -147,22 +147,26 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: RaisedButton(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    _date,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: RaisedButton(
+                    child: Text(
+                      _date,
+                    ),
+                    onPressed: () {
+                      showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2021),
+                      ).then((value) {
+                        _birth = value;
+                        setState(() {
+                          _date = dateTimeToString(value);
+                        });
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2020),
-                    ).then((value) {
-                      _birth = value;
-                      _date = dateTimeToString(value);
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -174,15 +178,16 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                         names: _fullnamesController.text.split(" ")[0],
                         primaryId: _idController.text,
                         secondaryId: null,
-                        nationalityCountryCode: _nationalityController.text.substring(0, 3),
+                        nationalityCountryCode:
+                            _nationalityController.text.substring(0, 3),
                         sex: _genderController.text,
                         surname: _fullnamesController.text.split(" ")[1],
                         documentNumber: "",
                         documentType: "I",
-                        countryCode: _nationalityController.text.substring(0, 3),
+                        countryCode:
+                            _nationalityController.text.substring(0, 3),
                         birthDate: _birth,
                         expiryDate: null,
-
                       );
                       if (state is! VisitorLoading) {
                         BlocProvider.of<VisitorBloc>(context)

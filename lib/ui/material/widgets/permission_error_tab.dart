@@ -23,7 +23,7 @@ class PermissionErrorTab extends StatelessWidget {
           MaterialButton(
             padding: EdgeInsets.all(16),
             child: Text("home page"),
-            onPressed: () => Navigator.of(context).pushNamed(
+            onPressed: () => Navigator.of(context).popAndPushNamed(
               "/",
             ),
           ),

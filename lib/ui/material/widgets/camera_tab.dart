@@ -69,7 +69,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   void _scanType(Document document) {
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     if (args.scanType == "Sign In") {
-      Navigator.of(context).pushNamed('/visitor', arguments: document);
+      Navigator.of(context).popAndPushNamed('/visitor', arguments: document);
     } else {
       var updated =
           updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
