@@ -73,12 +73,12 @@ class ExcelDataSource {
     file = getFile(filename + _extension);
     sheetName = "$filename Visitors";
 
-    decoder.merge(
-        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("Z1"),
-        customValue: "$sheetName");
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
           fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    //decoder.merge(
+    //    sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("Z1"),
+    //    customValue: "$sheetName");
     if (visitors == null || visitors.isEmpty) {
       decoder.merge(sheetName, CellIndex.indexByString("A2"),
           CellIndex.indexByString("Z2"),
