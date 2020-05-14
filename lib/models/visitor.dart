@@ -8,6 +8,7 @@ class Visitor extends Equatable {
   final int phone;
   final DateTime timeIn;
   final DateTime timeOut;
+  final double temperature;
 
   const Visitor({
     this.person,
@@ -15,6 +16,7 @@ class Visitor extends Equatable {
     this.phone,
     this.timeIn,
     this.timeOut,
+    this.temperature,
   });
 
   @override
@@ -25,7 +27,7 @@ class Visitor extends Equatable {
 
     return Visitor(
       person: doc,
-      purpose: map['purpose'].toString().toLowerCase(),
+      temperature: double.tryParse(map['purpose']),
       phone: int.tryParse(map['phone']),
       timeIn: DateTime.now(),
       timeOut: null,

@@ -20,7 +20,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
   final String lastName;
   final String sex;
   final DateTime birthday;
-  final String purpose;
+  final double temperature;
   final DateTime timeIn;
   final DateTime timeOut;
   final String plateNumber;
@@ -29,26 +29,27 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       {@required this.id,
       this.nationalId,
       this.passportNumber,
-      @required this.documentType,
-      @required this.documentNumber,
-      @required this.nationalityCountryCode,
+      this.documentType,
+      this.documentNumber,
+      this.nationalityCountryCode,
       this.expiryDate,
-      @required this.firstName,
-      @required this.middleName,
-      @required this.lastName,
-      @required this.sex,
+      this.firstName,
+      this.middleName,
+      this.lastName,
+      this.sex,
       this.birthday,
-      @required this.purpose,
+      this.temperature,
       this.timeIn,
       this.timeOut,
       this.plateNumber,
-      @required this.phoneNumber});
+      this.phoneNumber});
   factory Visitor.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final doubleType = db.typeSystem.forDartType<double>();
     return Visitor(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       nationalId: stringType
@@ -72,8 +73,8 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       sex: stringType.mapFromDatabaseResponse(data['${effectivePrefix}sex']),
       birthday: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}birthday']),
-      purpose:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}purpose']),
+      temperature: doubleType
+          .mapFromDatabaseResponse(data['${effectivePrefix}temperature']),
       timeIn: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}time_in']),
       timeOut: dateTimeType
@@ -101,7 +102,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       lastName: serializer.fromJson<String>(json['lastName']),
       sex: serializer.fromJson<String>(json['sex']),
       birthday: serializer.fromJson<DateTime>(json['birthday']),
-      purpose: serializer.fromJson<String>(json['purpose']),
+      temperature: serializer.fromJson<double>(json['temperature']),
       timeIn: serializer.fromJson<DateTime>(json['timeIn']),
       timeOut: serializer.fromJson<DateTime>(json['timeOut']),
       plateNumber: serializer.fromJson<String>(json['plateNumber']),
@@ -125,7 +126,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       'lastName': serializer.toJson<String>(lastName),
       'sex': serializer.toJson<String>(sex),
       'birthday': serializer.toJson<DateTime>(birthday),
-      'purpose': serializer.toJson<String>(purpose),
+      'temperature': serializer.toJson<double>(temperature),
       'timeIn': serializer.toJson<DateTime>(timeIn),
       'timeOut': serializer.toJson<DateTime>(timeOut),
       'plateNumber': serializer.toJson<String>(plateNumber),
@@ -168,9 +169,9 @@ class Visitor extends DataClass implements Insertable<Visitor> {
       birthday: birthday == null && nullToAbsent
           ? const Value.absent()
           : Value(birthday),
-      purpose: purpose == null && nullToAbsent
+      temperature: temperature == null && nullToAbsent
           ? const Value.absent()
-          : Value(purpose),
+          : Value(temperature),
       timeIn:
           timeIn == null && nullToAbsent ? const Value.absent() : Value(timeIn),
       timeOut: timeOut == null && nullToAbsent
@@ -198,7 +199,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
           String lastName,
           String sex,
           DateTime birthday,
-          String purpose,
+          double temperature,
           DateTime timeIn,
           DateTime timeOut,
           String plateNumber,
@@ -217,7 +218,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
         lastName: lastName ?? this.lastName,
         sex: sex ?? this.sex,
         birthday: birthday ?? this.birthday,
-        purpose: purpose ?? this.purpose,
+        temperature: temperature ?? this.temperature,
         timeIn: timeIn ?? this.timeIn,
         timeOut: timeOut ?? this.timeOut,
         plateNumber: plateNumber ?? this.plateNumber,
@@ -238,7 +239,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
           ..write('lastName: $lastName, ')
           ..write('sex: $sex, ')
           ..write('birthday: $birthday, ')
-          ..write('purpose: $purpose, ')
+          ..write('temperature: $temperature, ')
           ..write('timeIn: $timeIn, ')
           ..write('timeOut: $timeOut, ')
           ..write('plateNumber: $plateNumber, ')
@@ -273,7 +274,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
                                               $mrjc(
                                                   birthday.hashCode,
                                                   $mrjc(
-                                                      purpose.hashCode,
+                                                      temperature.hashCode,
                                                       $mrjc(
                                                           timeIn.hashCode,
                                                           $mrjc(
@@ -299,7 +300,7 @@ class Visitor extends DataClass implements Insertable<Visitor> {
           other.lastName == this.lastName &&
           other.sex == this.sex &&
           other.birthday == this.birthday &&
-          other.purpose == this.purpose &&
+          other.temperature == this.temperature &&
           other.timeIn == this.timeIn &&
           other.timeOut == this.timeOut &&
           other.plateNumber == this.plateNumber &&
@@ -319,7 +320,7 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
   final Value<String> lastName;
   final Value<String> sex;
   final Value<DateTime> birthday;
-  final Value<String> purpose;
+  final Value<double> temperature;
   final Value<DateTime> timeIn;
   final Value<DateTime> timeOut;
   final Value<String> plateNumber;
@@ -337,7 +338,7 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
     this.lastName = const Value.absent(),
     this.sex = const Value.absent(),
     this.birthday = const Value.absent(),
-    this.purpose = const Value.absent(),
+    this.temperature = const Value.absent(),
     this.timeIn = const Value.absent(),
     this.timeOut = const Value.absent(),
     this.plateNumber = const Value.absent(),
@@ -347,29 +348,21 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
     this.id = const Value.absent(),
     this.nationalId = const Value.absent(),
     this.passportNumber = const Value.absent(),
-    @required String documentType,
-    @required String documentNumber,
-    @required String nationalityCountryCode,
+    this.documentType = const Value.absent(),
+    this.documentNumber = const Value.absent(),
+    this.nationalityCountryCode = const Value.absent(),
     this.expiryDate = const Value.absent(),
-    @required String firstName,
-    @required String middleName,
-    @required String lastName,
-    @required String sex,
+    this.firstName = const Value.absent(),
+    this.middleName = const Value.absent(),
+    this.lastName = const Value.absent(),
+    this.sex = const Value.absent(),
     this.birthday = const Value.absent(),
-    @required String purpose,
+    this.temperature = const Value.absent(),
     this.timeIn = const Value.absent(),
     this.timeOut = const Value.absent(),
     this.plateNumber = const Value.absent(),
-    @required int phoneNumber,
-  })  : documentType = Value(documentType),
-        documentNumber = Value(documentNumber),
-        nationalityCountryCode = Value(nationalityCountryCode),
-        firstName = Value(firstName),
-        middleName = Value(middleName),
-        lastName = Value(lastName),
-        sex = Value(sex),
-        purpose = Value(purpose),
-        phoneNumber = Value(phoneNumber);
+    this.phoneNumber = const Value.absent(),
+  });
   VisitorsCompanion copyWith(
       {Value<int> id,
       Value<String> nationalId,
@@ -383,7 +376,7 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
       Value<String> lastName,
       Value<String> sex,
       Value<DateTime> birthday,
-      Value<String> purpose,
+      Value<double> temperature,
       Value<DateTime> timeIn,
       Value<DateTime> timeOut,
       Value<String> plateNumber,
@@ -402,7 +395,7 @@ class VisitorsCompanion extends UpdateCompanion<Visitor> {
       lastName: lastName ?? this.lastName,
       sex: sex ?? this.sex,
       birthday: birthday ?? this.birthday,
-      purpose: purpose ?? this.purpose,
+      temperature: temperature ?? this.temperature,
       timeIn: timeIn ?? this.timeIn,
       timeOut: timeOut ?? this.timeOut,
       plateNumber: plateNumber ?? this.plateNumber,
@@ -429,8 +422,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get nationalId => _nationalId ??= _constructNationalId();
   GeneratedTextColumn _constructNationalId() {
-    return GeneratedTextColumn('national_id', $tableName, true,
-        minTextLength: 2, maxTextLength: 16);
+    return GeneratedTextColumn(
+      'national_id',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _passportNumberMeta =
@@ -440,8 +436,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   GeneratedTextColumn get passportNumber =>
       _passportNumber ??= _constructPassportNumber();
   GeneratedTextColumn _constructPassportNumber() {
-    return GeneratedTextColumn('passport_number', $tableName, true,
-        minTextLength: 2, maxTextLength: 16);
+    return GeneratedTextColumn(
+      'passport_number',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _documentTypeMeta =
@@ -451,8 +450,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   GeneratedTextColumn get documentType =>
       _documentType ??= _constructDocumentType();
   GeneratedTextColumn _constructDocumentType() {
-    return GeneratedTextColumn('document_type', $tableName, false,
-        minTextLength: 2, maxTextLength: 6);
+    return GeneratedTextColumn(
+      'document_type',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _documentNumberMeta =
@@ -462,8 +464,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   GeneratedTextColumn get documentNumber =>
       _documentNumber ??= _constructDocumentNumber();
   GeneratedTextColumn _constructDocumentNumber() {
-    return GeneratedTextColumn('document_number', $tableName, false,
-        minTextLength: 2, maxTextLength: 16);
+    return GeneratedTextColumn(
+      'document_number',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _nationalityCountryCodeMeta =
@@ -473,8 +478,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   GeneratedTextColumn get nationalityCountryCode =>
       _nationalityCountryCode ??= _constructNationalityCountryCode();
   GeneratedTextColumn _constructNationalityCountryCode() {
-    return GeneratedTextColumn('nationality_country_code', $tableName, false,
-        minTextLength: 2, maxTextLength: 50);
+    return GeneratedTextColumn(
+      'nationality_country_code',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _expiryDateMeta = const VerificationMeta('expiryDate');
@@ -495,8 +503,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get firstName => _firstName ??= _constructFirstName();
   GeneratedTextColumn _constructFirstName() {
-    return GeneratedTextColumn('first_name', $tableName, false,
-        minTextLength: 3, maxTextLength: 50);
+    return GeneratedTextColumn(
+      'first_name',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _middleNameMeta = const VerificationMeta('middleName');
@@ -504,8 +515,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get middleName => _middleName ??= _constructMiddleName();
   GeneratedTextColumn _constructMiddleName() {
-    return GeneratedTextColumn('middle_name', $tableName, false,
-        minTextLength: 3, maxTextLength: 50);
+    return GeneratedTextColumn(
+      'middle_name',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _lastNameMeta = const VerificationMeta('lastName');
@@ -513,8 +527,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get lastName => _lastName ??= _constructLastName();
   GeneratedTextColumn _constructLastName() {
-    return GeneratedTextColumn('last_name', $tableName, false,
-        minTextLength: 3, maxTextLength: 50);
+    return GeneratedTextColumn(
+      'last_name',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _sexMeta = const VerificationMeta('sex');
@@ -522,8 +539,11 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
   @override
   GeneratedTextColumn get sex => _sex ??= _constructSex();
   GeneratedTextColumn _constructSex() {
-    return GeneratedTextColumn('sex', $tableName, false,
-        minTextLength: 1, maxTextLength: 1);
+    return GeneratedTextColumn(
+      'sex',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _birthdayMeta = const VerificationMeta('birthday');
@@ -538,15 +558,17 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     );
   }
 
-  final VerificationMeta _purposeMeta = const VerificationMeta('purpose');
-  GeneratedTextColumn _purpose;
+  final VerificationMeta _temperatureMeta =
+      const VerificationMeta('temperature');
+  GeneratedRealColumn _temperature;
   @override
-  GeneratedTextColumn get purpose => _purpose ??= _constructPurpose();
-  GeneratedTextColumn _constructPurpose() {
-    return GeneratedTextColumn(
-      'purpose',
+  GeneratedRealColumn get temperature =>
+      _temperature ??= _constructTemperature();
+  GeneratedRealColumn _constructTemperature() {
+    return GeneratedRealColumn(
+      'temperature',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -598,7 +620,7 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     return GeneratedIntColumn(
       'phone_number',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -616,7 +638,7 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
         lastName,
         sex,
         birthday,
-        purpose,
+        temperature,
         timeIn,
         timeOut,
         plateNumber,
@@ -650,24 +672,18 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
           _documentTypeMeta,
           documentType.isAcceptableValue(
               d.documentType.value, _documentTypeMeta));
-    } else if (isInserting) {
-      context.missing(_documentTypeMeta);
     }
     if (d.documentNumber.present) {
       context.handle(
           _documentNumberMeta,
           documentNumber.isAcceptableValue(
               d.documentNumber.value, _documentNumberMeta));
-    } else if (isInserting) {
-      context.missing(_documentNumberMeta);
     }
     if (d.nationalityCountryCode.present) {
       context.handle(
           _nationalityCountryCodeMeta,
           nationalityCountryCode.isAcceptableValue(
               d.nationalityCountryCode.value, _nationalityCountryCodeMeta));
-    } else if (isInserting) {
-      context.missing(_nationalityCountryCodeMeta);
     }
     if (d.expiryDate.present) {
       context.handle(_expiryDateMeta,
@@ -676,35 +692,25 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     if (d.firstName.present) {
       context.handle(_firstNameMeta,
           firstName.isAcceptableValue(d.firstName.value, _firstNameMeta));
-    } else if (isInserting) {
-      context.missing(_firstNameMeta);
     }
     if (d.middleName.present) {
       context.handle(_middleNameMeta,
           middleName.isAcceptableValue(d.middleName.value, _middleNameMeta));
-    } else if (isInserting) {
-      context.missing(_middleNameMeta);
     }
     if (d.lastName.present) {
       context.handle(_lastNameMeta,
           lastName.isAcceptableValue(d.lastName.value, _lastNameMeta));
-    } else if (isInserting) {
-      context.missing(_lastNameMeta);
     }
     if (d.sex.present) {
       context.handle(_sexMeta, sex.isAcceptableValue(d.sex.value, _sexMeta));
-    } else if (isInserting) {
-      context.missing(_sexMeta);
     }
     if (d.birthday.present) {
       context.handle(_birthdayMeta,
           birthday.isAcceptableValue(d.birthday.value, _birthdayMeta));
     }
-    if (d.purpose.present) {
-      context.handle(_purposeMeta,
-          purpose.isAcceptableValue(d.purpose.value, _purposeMeta));
-    } else if (isInserting) {
-      context.missing(_purposeMeta);
+    if (d.temperature.present) {
+      context.handle(_temperatureMeta,
+          temperature.isAcceptableValue(d.temperature.value, _temperatureMeta));
     }
     if (d.timeIn.present) {
       context.handle(
@@ -721,8 +727,6 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     if (d.phoneNumber.present) {
       context.handle(_phoneNumberMeta,
           phoneNumber.isAcceptableValue(d.phoneNumber.value, _phoneNumberMeta));
-    } else if (isInserting) {
-      context.missing(_phoneNumberMeta);
     }
     return context;
   }
@@ -777,8 +781,8 @@ class $VisitorsTable extends Visitors with TableInfo<$VisitorsTable, Visitor> {
     if (d.birthday.present) {
       map['birthday'] = Variable<DateTime, DateTimeType>(d.birthday.value);
     }
-    if (d.purpose.present) {
-      map['purpose'] = Variable<String, StringType>(d.purpose.value);
+    if (d.temperature.present) {
+      map['temperature'] = Variable<double, RealType>(d.temperature.value);
     }
     if (d.timeIn.present) {
       map['time_in'] = Variable<DateTime, DateTimeType>(d.timeIn.value);

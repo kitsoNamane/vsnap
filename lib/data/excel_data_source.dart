@@ -70,7 +70,7 @@ class ExcelDataSource {
   }
 
   Future<File> createExcelFile(String filename) {
-    file = getFile(filename + _extension);
+    final file = getFile(filename + _extension);
     sheetName = "$filename Visitors";
 
     decoder

@@ -45,7 +45,7 @@ class Document extends Equatable {
 
   static Document fromMRTD(MRZResult result) {
     if (result == null) return null;
-    String sex = result.sex == Sex.male ? 'm' : 'f';
+    String sex = result.sex == Sex.male ? 'M' : 'F';
     return Document(
       names: result.givenNames.toLowerCase(),
       surname: result.surnames.toLowerCase(),
