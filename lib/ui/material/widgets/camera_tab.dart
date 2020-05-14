@@ -1,12 +1,12 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 
 import 'package:vsnap/models/detectors.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/repository/CameraRepository.dart';
 import 'package:vsnap/utils/mrz.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 import 'package:vsnap/utils/visitor_log.dart';
@@ -21,7 +21,7 @@ class CameraPreviewScanner extends StatefulWidget {
 
 class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   dynamic _scanResults;
-  CameraController camera;
+  CameraController _camera;
   Detector _detector = Detector.text;
   bool _isDetecting = false;
   CameraLensDirection _direction = CameraLensDirection.back;
@@ -30,8 +30,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   final TextRecognizer _textRecognizer =
       FirebaseVision.instance.textRecognizer();
 
-  _CameraPreviewScannerState({this.camera});
-
   @override
   void initState() {
     _initializeCamera();
@@ -39,20 +37,20 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   }
 
   void _initializeCamera() async {
-    camera = await RepositoryProvider.of<CameraRepository>(context).getCamera();
-    //camera = CameraController(
-    //  description,
-    //  defaultTargetPlatform == TargetPlatform.iOS
-    //      ? ResolutionPreset.medium
-    //      : ResolutionPreset.medium,
-    //  enableAudio: false,
-    //);
-    //await camera.initialize();
+    description = RepositoryProvider.of<CameraDescription>(context);
+    _camera = CameraController(
+      description,
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? ResolutionPreset.medium
+          : ResolutionPreset.medium,
+      enableAudio: false,
+    );
+    await _camera.initialize();
     await _startImageStream();
   }
 
   Future<void> _startImageStream() async {
-    camera.startImageStream((CameraImage image) {
+    _camera.startImageStream((CameraImage image) {
       if (_isDetecting) return;
       _isDetecting = true;
       ScannerUtils.detect(
@@ -101,14 +99,16 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildResults() {
     const noResults = Text('No results!');
 
-    if (_scanResults == null || camera == null || !camera.value.isInitialized) {
+    if (_scanResults == null ||
+        _camera == null ||
+        !_camera.value.isInitialized) {
       return noResults;
     }
 
     CustomPainter painter;
     final Size imageSize = Size(
-      camera.value.previewSize.height,
-      camera.value.previewSize.width,
+      _camera.value.previewSize.height,
+      _camera.value.previewSize.width,
     );
 
     assert(_detector == Detector.text || _detector == Detector.cloudText);
@@ -123,7 +123,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildImage() {
     return Container(
       constraints: BoxConstraints.expand(),
-      child: !camera.value.isStreamingImages
+      child: !_camera.value.isInitialized
           ? Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +139,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
           : Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                CameraPreview(camera),
+                CameraPreview(_camera),
                 _buildResults(),
               ],
             ),
@@ -153,7 +153,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   @override
   void dispose() {
-    camera.dispose().then((_) {
+    _camera.dispose().then((_) {
       _textRecognizer.close();
     });
     _detector = null;
