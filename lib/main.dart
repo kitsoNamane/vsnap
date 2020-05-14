@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vsnap/ui/ui.dart';
@@ -30,7 +31,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final firstCamera = await ScannerUtils.getCamera();
+  final firstCamera = await ScannerUtils.getCamera(dir: CameraLensDirection.back);
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(AndroidApp(camera: firstCamera));
 }

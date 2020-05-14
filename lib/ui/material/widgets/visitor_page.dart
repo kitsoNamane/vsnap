@@ -78,8 +78,8 @@ class VisitorTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: BlocConsumer<VisitorBloc, VisitorState>(
+    return ListView(children: [
+      BlocConsumer<VisitorBloc, VisitorState>(
         builder: (context, state) {
           return Form(
             key: _formKey,
@@ -190,6 +190,6 @@ class VisitorTab extends StatelessWidget {
           }
         },
       ),
-    );
+    ]);
   }
 }

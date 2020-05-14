@@ -24,7 +24,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   CameraController _camera;
   Detector _detector = Detector.text;
   bool _isDetecting = false;
-  CameraLensDirection _direction = CameraLensDirection.back;
   CameraDescription description;
 
   final TextRecognizer _textRecognizer =
@@ -32,8 +31,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   @override
   void initState() {
-    _initializeCamera();
     super.initState();
+    _initializeCamera();
   }
 
   void _initializeCamera() async {
@@ -42,14 +41,10 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
       description,
       defaultTargetPlatform == TargetPlatform.iOS
           ? ResolutionPreset.medium
-          : ResolutionPreset.medium,
+          : ResolutionPreset.high,
       enableAudio: false,
     );
     await _camera.initialize();
-    await _startImageStream();
-  }
-
-  Future<void> _startImageStream() async {
     _camera.startImageStream((CameraImage image) {
       if (_isDetecting) return;
       _isDetecting = true;
@@ -59,26 +54,77 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         imageRotation: description.sensorOrientation,
       ).then((dynamic results) {
         if (_detector == null) return;
-        _processResults(results);
         setState(() {
           _scanResults = results;
         });
+        _processResults(results);
       }).whenComplete(() => _isDetecting = false);
     });
+    //await _startImageStream();
   }
 
-  void _scanType(Document document) {
+  void _showDialog({
+    int type,
+    dynamic action,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          //title: Text('AlertDialog Title'),
+          content: Container(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                Icon(Icons.check, color: Colors.green, size: 56),
+                Text("Success")
+              ])),
+          actions: <Widget>[
+            type != null
+                ? FlatButton(
+                    color: Colors.red,
+                    child: Text('cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                : null,
+            FlatButton(
+              color: Colors.green,
+              child: Text('continue'),
+              onPressed: () {
+                action;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _scanType(Document document) async {
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     if (args.scanType == "Sign In") {
-      Navigator.of(context).popAndPushNamed('/visitor', arguments: document);
+      _showDialog(
+        type: 1,
+        action: Navigator.of(context)
+            .popAndPushNamed('/visitor', arguments: document),
+      );
+      //Navigator.of(context).popAndPushNamed('/visitor', arguments: document);
     } else {
-      updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
+      await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
       final snackBar = SnackBar(
         backgroundColor: Colors.green,
         content: Text('Visitor Signed Out'),
       );
       // Find the Scaffold in the widget tree and use it to show a SnackBar.
-      Scaffold.of(context).showSnackBar(snackBar);
+      //Scaffold.of(context).showSnackBar(snackBar);
+      _showDialog(
+        action:
+            Navigator.of(context).popAndPushNamed("/"),
+      );
       Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pop());
     }
   }
@@ -102,7 +148,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     if (_scanResults == null ||
         _camera == null ||
         !_camera.value.isInitialized) {
-      return noResults;
+      return Container(color: Colors.transparent);
     }
 
     CustomPainter painter;
@@ -123,7 +169,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildImage() {
     return Container(
       constraints: BoxConstraints.expand(),
-      child: !_camera.value.isInitialized
+      child: _camera == null
           ? Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
