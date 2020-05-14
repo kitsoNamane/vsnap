@@ -94,7 +94,7 @@ class EmailReport extends StatelessWidget {
                         size: 24,
                         color: Colors.blueAccent,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         BlocProvider.of<ExcelBloc>(context).add(BuildExcel());
                       },
                     ),
@@ -156,7 +156,7 @@ class _ReportsFormState extends State<ReportsForm> {
               ),
               RaisedButton(
                 child: Text("Email Report"),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     sendEMail(filepath).then((value) => Navigator.of(context).popAndPushNamed("/"));
                   }

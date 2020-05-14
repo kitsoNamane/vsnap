@@ -171,7 +171,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 child: RaisedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState.validate() && _birth != null) {
                       var document = Document(
                         names: _fullnamesController.text.split(" ")[0],

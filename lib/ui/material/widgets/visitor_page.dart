@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mrz_parser/mrz_parser.dart';
+
 import 'package:vsnap/bloc/visitor_bloc.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/utils/date.dart';
+import 'package:vsnap/utils/utils.dart';
 
 class VisitorPage extends StatefulWidget {
   @override
@@ -38,6 +38,27 @@ class _VisitorPageState extends State<VisitorPage> {
   }
 }
 
+class DocumentText extends StatelessWidget {
+  final String dataKey;
+  final String data;
+  const DocumentText({
+    Key key,
+    this.data,
+    this.dataKey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[Text(dataKey), Text(data)],
+      ),
+    );
+  }
+}
+
 class VisitorTab extends StatelessWidget {
   const VisitorTab({
     Key key,
@@ -66,41 +87,25 @@ class VisitorTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    "Names: ${document.names}",
-                    textAlign: TextAlign.justify,
-                  ),
+                DocumentText(
+                    dataKey: "Name",
+                    data: document.names + " " + document.surname),
+                DocumentText(
+                  dataKey: "ID Number",
+                  data: document.primaryId != null
+                      ? document.primaryId
+                      : document.secondaryId,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    "ID Number: ${document.primaryId}",
-                    textAlign: TextAlign.justify,
-                  ),
+                DocumentText(
+                  dataKey: "Date Of Birth",
+                  data: dateToString(document.birthDate),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    "Date of Birth: ${document.birthDate}",
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    "Gender: ${document.sex == Sex.male ? "Male" : "Female"}",
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    "Nationality ${document.nationalityCountryCode}",
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
+                DocumentText(dataKey: "Gender", data: document.sex),
+                DocumentText(
+                    dataKey: "Nationality",
+                    data: document.countryCode != null
+                        ? document.countryCode
+                        : document.nationalityCountryCode),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: TextFormField(
@@ -122,12 +127,15 @@ class VisitorTab extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'purpose'),
+                    decoration: InputDecoration(labelText: 'temperatue'),
+                    keyboardType: TextInputType.number,
                     controller: _purposeController,
                     textInputAction: TextInputAction.done,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return "purpose required";
+                        return "temperature required";
+                      } else if (double.tryParse(value) == null) {
+                        return "invalid temperature";
                       }
                       return null;
                     },
@@ -136,7 +144,7 @@ class VisitorTab extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         if (state is! VisitorLoading) {
                           BlocProvider.of<VisitorBloc>(context)
@@ -168,6 +176,7 @@ class VisitorTab extends StatelessWidget {
             );
             // Find the Scaffold in the widget tree and use it to show a SnackBar.
             Scaffold.of(context).showSnackBar(snackBar);
+
             Navigator.of(context).popAndPushNamed("/");
           }
           if (state is VisitorError) {

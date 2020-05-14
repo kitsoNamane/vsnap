@@ -8,11 +8,11 @@ import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/detectors.dart';
 import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/utils/mrz.dart';
+import 'package:vsnap/utils/scan_utils.dart';
 import 'package:vsnap/utils/visitor_log.dart';
 
 import 'custom_painter.dart';
 import 'navigation.dart';
-import 'scan_utils.dart';
 
 class CameraPreviewScanner extends StatefulWidget {
   @override
@@ -37,11 +37,14 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   void _initializeCamera() async {
     final CameraDescription description =
-        await ScannerUtils.getCamera(_direction);
+        RepositoryProvider.of<CameraDescription>(context);
+
+    // keave only this line
+
     _camera = CameraController(
       description,
       defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.low
+          ? ResolutionPreset.medium
           : ResolutionPreset.medium,
       enableAudio: false,
     );
@@ -98,10 +101,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildResults() {
     const noResults = Text('No results!');
 
-    if (_scanResults == null ||
-        _camera == null ||
-        !_camera.value.isInitialized) {
-      return noResults;
+    if (_scanResults == null) {
+      return Container(color: Colors.transparent);
     }
 
     CustomPainter painter;
@@ -122,14 +123,17 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildImage() {
     return Container(
       constraints: BoxConstraints.expand(),
-      child: _camera == null
+      child: _camera == null 
           ? Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CircularProgressIndicator(strokeWidth: 2.0),
-                    Text('Loading Camera...')
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text('Loading Camera...'),
+                    )
                   ]),
             )
           : Stack(

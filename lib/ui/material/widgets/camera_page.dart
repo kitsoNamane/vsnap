@@ -31,7 +31,7 @@ class CameraPage extends StatelessWidget {
                         Icons.edit,
                         color: Colors.white,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.of(context).popAndPushNamed("/manual");
                       },
                     )

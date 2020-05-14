@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vsnap/ui/ui.dart';
 import 'dart:developer' as developer;
 
+import 'package:vsnap/utils/scan_utils.dart';
+
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
@@ -25,7 +27,10 @@ class SimpleBlocDelegate extends BlocDelegate {
     super.onError(bloc, error, stackTrace);
   }
 }
-void main() {
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final firstCamera = await ScannerUtils.getCamera();
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(AndroidApp());
+  runApp(AndroidApp(camera: firstCamera));
 }

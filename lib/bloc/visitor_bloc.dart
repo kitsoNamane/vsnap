@@ -45,7 +45,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
     // update database
     yield VisitorLoading();
     developer.log("$event", name: "AppMain");
-    var names = event.visitor.person.names.split(" ").length == 2
+    var names = event.visitor.person.names.trim().split(" ").length == 2
         ? event.visitor.person.names.split(" ")
         : [
             event.visitor.person.names,
