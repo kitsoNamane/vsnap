@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 String getCurrentTime() {
   var now = DateTime.now().toLocal();
-  var format = DateFormat().add_d().add_M().add_y().add_Hms();
+  var format = DateFormat().add_d().addPattern("-").add_M().addPattern("-").add_Hms();
   return format.format(now);
 }
 
@@ -11,11 +11,11 @@ DateTime getCurrentDate() {
 }
 
 String dateTimeToString(DateTime dateTime){
-  var format = DateFormat().add_d().add_M().add_y().add_Hms();
+  var format = DateFormat()..add_d().addPattern("-").add_M().addPattern("-").add_y().addPattern("-").add_Hms();
   return format.format(dateTime);
 }
 
 String dateToString(DateTime dateTime){
-  var format = DateFormat().add_d().add_M().add_y();
+  var format = DateFormat().add_d().addPattern("-").add_M().addPattern("-").add_y();
   return format.format(dateTime);
 }

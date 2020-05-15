@@ -40,11 +40,14 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     _camera = CameraController(
       description,
       defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.medium
+          ? ResolutionPreset.high
           : ResolutionPreset.high,
       enableAudio: false,
     );
     await _camera.initialize();
+    if (mounted) {
+      setState(() {});
+    }
     _camera.startImageStream((CameraImage image) {
       if (_isDetecting) return;
       _isDetecting = true;
@@ -52,23 +55,23 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         image: image,
         detectInImage: _textRecognizer.processImage,
         imageRotation: description.sensorOrientation,
-      ).then((dynamic results) {
+      ).then((dynamic results) async {
         if (_detector == null) return;
         setState(() {
           _scanResults = results;
         });
-        _processResults(results);
+        await _processResults(results);
       }).whenComplete(() => _isDetecting = false);
     });
     //await _startImageStream();
   }
 
-  void _showDialog({
-    int type,
-    dynamic action,
-  }) {
+  void _showDialog(
+    Document document,
+  ) {
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
@@ -82,7 +85,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
                 Text("Success")
               ])),
           actions: <Widget>[
-            type != null
+            document != null
                 ? FlatButton(
                     color: Colors.red,
                     child: Text('cancel'),
@@ -95,7 +98,13 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
               color: Colors.green,
               child: Text('continue'),
               onPressed: () {
-                action;
+                if (document == null) {
+                  Navigator.of(context).popAndPushNamed("/");
+                } else {
+                  Navigator.of(context).pop();
+                  Navigator.of(context)
+                      .pushNamed('/visitor', arguments: document);
+                }
               },
             ),
           ],
@@ -104,40 +113,25 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     );
   }
 
-  void _scanType(Document document) async {
+  Future<void> _scanType(Document document) async {
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     if (args.scanType == "Sign In") {
-      _showDialog(
-        type: 1,
-        action: Navigator.of(context)
-            .popAndPushNamed('/visitor', arguments: document),
-      );
-      //Navigator.of(context).popAndPushNamed('/visitor', arguments: document);
+      _showDialog(document);
     } else {
       await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
-      final snackBar = SnackBar(
-        backgroundColor: Colors.green,
-        content: Text('Visitor Signed Out'),
-      );
-      // Find the Scaffold in the widget tree and use it to show a SnackBar.
-      //Scaffold.of(context).showSnackBar(snackBar);
-      _showDialog(
-        action:
-            Navigator.of(context).popAndPushNamed("/"),
-      );
-      Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pop());
+      _showDialog(null);
     }
   }
 
-  void _processResults(VisionText scanResults) {
+  Future<void> _processResults(VisionText scanResults) async {
     if (scanResults == null) return;
     if (scanResults.blocks.isEmpty) return;
     for (TextBlock block in scanResults.blocks) {
       var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
       if (isMRTD(mrtd)) {
+        _isDetecting = true;
         var document = decodeMRTD(mrtd);
-        if (document == null) return;
-        _scanType(document);
+        await _scanType(document);
       }
     }
   }
@@ -169,7 +163,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   Widget _buildImage() {
     return Container(
       constraints: BoxConstraints.expand(),
-      child: _camera == null
+      child: !_camera.value.isInitialized
           ? Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
