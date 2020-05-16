@@ -6,9 +6,10 @@ abstract class VisitorEvent with _$VisitorEvent {
           String phone, String purpose, Document document) =
       AddVisitorButtonPressed;
 
-  const factory VisitorEvent.visitorSignIn(Visitor visitor) =
-      VisitorSignIn;
+  const factory VisitorEvent.visitorSignIn(Visitor visitor) = VisitorSignIn;
 
-  const factory VisitorEvent.visitorSignOut(Document document) =
-      VisitorSignOut;
+  const factory VisitorEvent.visitorSignOut(Document document) = VisitorSignOut;
+
+  const factory VisitorEvent.getVisitors({DateTime from, DateTime to}) =
+      GetVisitors;
 }

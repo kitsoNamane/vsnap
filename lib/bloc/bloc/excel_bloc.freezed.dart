@@ -12,20 +12,27 @@ T _$identity<T>(T value) => value;
 class _$ExcelEventTearOff {
   const _$ExcelEventTearOff();
 
-  BuildExcel buildExcel() {
-    return const BuildExcel();
+  BuildExcel buildExcel(List<Visitor> visitors) {
+    return BuildExcel(
+      visitors,
+    );
   }
 }
 
 // ignore: unused_element
 const $ExcelEvent = _$ExcelEventTearOff();
 
-mixin _$ExcelEvent {}
+mixin _$ExcelEvent {
+  List<Visitor> get visitors;
+
+  $ExcelEventCopyWith<ExcelEvent> get copyWith;
+}
 
 abstract class $ExcelEventCopyWith<$Res> {
   factory $ExcelEventCopyWith(
           ExcelEvent value, $Res Function(ExcelEvent) then) =
       _$ExcelEventCopyWithImpl<$Res>;
+  $Res call({List<Visitor> visitors});
 }
 
 class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
@@ -34,12 +41,24 @@ class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
   final ExcelEvent _value;
   // ignore: unused_field
   final $Res Function(ExcelEvent) _then;
+
+  @override
+  $Res call({
+    Object visitors = freezed,
+  }) {
+    return _then(_value.copyWith(
+      visitors:
+          visitors == freezed ? _value.visitors : visitors as List<Visitor>,
+    ));
+  }
 }
 
-abstract class $BuildExcelCopyWith<$Res> {
+abstract class $BuildExcelCopyWith<$Res> implements $ExcelEventCopyWith<$Res> {
   factory $BuildExcelCopyWith(
           BuildExcel value, $Res Function(BuildExcel) then) =
       _$BuildExcelCopyWithImpl<$Res>;
+  @override
+  $Res call({List<Visitor> visitors});
 }
 
 class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
@@ -49,27 +68,53 @@ class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
 
   @override
   BuildExcel get _value => super._value as BuildExcel;
+
+  @override
+  $Res call({
+    Object visitors = freezed,
+  }) {
+    return _then(BuildExcel(
+      visitors == freezed ? _value.visitors : visitors as List<Visitor>,
+    ));
+  }
 }
 
 class _$BuildExcel implements BuildExcel {
-  const _$BuildExcel();
+  const _$BuildExcel(this.visitors) : assert(visitors != null);
+
+  @override
+  final List<Visitor> visitors;
 
   @override
   String toString() {
-    return 'ExcelEvent.buildExcel()';
+    return 'ExcelEvent.buildExcel(visitors: $visitors)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is BuildExcel);
+    return identical(this, other) ||
+        (other is BuildExcel &&
+            (identical(other.visitors, visitors) ||
+                const DeepCollectionEquality()
+                    .equals(other.visitors, visitors)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(visitors);
+
+  @override
+  $BuildExcelCopyWith<BuildExcel> get copyWith =>
+      _$BuildExcelCopyWithImpl<BuildExcel>(this, _$identity);
 }
 
 abstract class BuildExcel implements ExcelEvent {
-  const factory BuildExcel() = _$BuildExcel;
+  const factory BuildExcel(List<Visitor> visitors) = _$BuildExcel;
+
+  @override
+  List<Visitor> get visitors;
+  @override
+  $BuildExcelCopyWith<BuildExcel> get copyWith;
 }
 
 class _$ExcelStateTearOff {

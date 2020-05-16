@@ -12,6 +12,11 @@ abstract class VisitorState with _$VisitorState {
         isSubmitting: false,
       );
 
+  factory VisitorState.visitorLoading() => VisitorState(
+        showErrorMessages: false,
+        isSubmitting: true,
+      );
+
   factory VisitorState.visitorSignedIn({
     @required bool showErrorMessages,
     @required bool isSubmitting,
@@ -24,4 +29,11 @@ abstract class VisitorState with _$VisitorState {
     @required
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption,
   }) = VisitorSignedOut;
+
+  factory VisitorState.getVisitorsDone({
+    @required bool showErrorMessages,
+    @required bool isSubmitting,
+    @required
+        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption,
+  }) = GetVisitorDone;
 }

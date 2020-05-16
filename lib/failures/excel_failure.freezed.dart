@@ -23,6 +23,10 @@ class _$ExcelFailureTearOff {
   ExcelFormatError excelFormatError() {
     return const ExcelFormatError();
   }
+
+  NoDataAvailable noDataAvailable() {
+    return const NoDataAvailable();
+  }
 }
 
 // ignore: unused_element
@@ -34,12 +38,14 @@ mixin _$ExcelFailure {
     @required Result failedToWrite(),
     @required Result failedToCreateFile(),
     @required Result excelFormatError(),
+    @required Result noDataAvailable(),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result failedToWrite(),
     Result failedToCreateFile(),
     Result excelFormatError(),
+    Result noDataAvailable(),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -47,12 +53,14 @@ mixin _$ExcelFailure {
     @required Result failedToWrite(FailedToWrite value),
     @required Result failedToCreateFile(FailedToCreate value),
     @required Result excelFormatError(ExcelFormatError value),
+    @required Result noDataAvailable(NoDataAvailable value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result failedToWrite(FailedToWrite value),
     Result failedToCreateFile(FailedToCreate value),
     Result excelFormatError(ExcelFormatError value),
+    Result noDataAvailable(NoDataAvailable value),
     @required Result orElse(),
   });
 }
@@ -109,10 +117,12 @@ class _$FailedToWrite implements FailedToWrite {
     @required Result failedToWrite(),
     @required Result failedToCreateFile(),
     @required Result excelFormatError(),
+    @required Result noDataAvailable(),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return failedToWrite();
   }
 
@@ -122,6 +132,7 @@ class _$FailedToWrite implements FailedToWrite {
     Result failedToWrite(),
     Result failedToCreateFile(),
     Result excelFormatError(),
+    Result noDataAvailable(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -137,10 +148,12 @@ class _$FailedToWrite implements FailedToWrite {
     @required Result failedToWrite(FailedToWrite value),
     @required Result failedToCreateFile(FailedToCreate value),
     @required Result excelFormatError(ExcelFormatError value),
+    @required Result noDataAvailable(NoDataAvailable value),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return failedToWrite(this);
   }
 
@@ -150,6 +163,7 @@ class _$FailedToWrite implements FailedToWrite {
     Result failedToWrite(FailedToWrite value),
     Result failedToCreateFile(FailedToCreate value),
     Result excelFormatError(ExcelFormatError value),
+    Result noDataAvailable(NoDataAvailable value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -203,10 +217,12 @@ class _$FailedToCreate implements FailedToCreate {
     @required Result failedToWrite(),
     @required Result failedToCreateFile(),
     @required Result excelFormatError(),
+    @required Result noDataAvailable(),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return failedToCreateFile();
   }
 
@@ -216,6 +232,7 @@ class _$FailedToCreate implements FailedToCreate {
     Result failedToWrite(),
     Result failedToCreateFile(),
     Result excelFormatError(),
+    Result noDataAvailable(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -231,10 +248,12 @@ class _$FailedToCreate implements FailedToCreate {
     @required Result failedToWrite(FailedToWrite value),
     @required Result failedToCreateFile(FailedToCreate value),
     @required Result excelFormatError(ExcelFormatError value),
+    @required Result noDataAvailable(NoDataAvailable value),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return failedToCreateFile(this);
   }
 
@@ -244,6 +263,7 @@ class _$FailedToCreate implements FailedToCreate {
     Result failedToWrite(FailedToWrite value),
     Result failedToCreateFile(FailedToCreate value),
     Result excelFormatError(ExcelFormatError value),
+    Result noDataAvailable(NoDataAvailable value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -297,10 +317,12 @@ class _$ExcelFormatError implements ExcelFormatError {
     @required Result failedToWrite(),
     @required Result failedToCreateFile(),
     @required Result excelFormatError(),
+    @required Result noDataAvailable(),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return excelFormatError();
   }
 
@@ -310,6 +332,7 @@ class _$ExcelFormatError implements ExcelFormatError {
     Result failedToWrite(),
     Result failedToCreateFile(),
     Result excelFormatError(),
+    Result noDataAvailable(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -325,10 +348,12 @@ class _$ExcelFormatError implements ExcelFormatError {
     @required Result failedToWrite(FailedToWrite value),
     @required Result failedToCreateFile(FailedToCreate value),
     @required Result excelFormatError(ExcelFormatError value),
+    @required Result noDataAvailable(NoDataAvailable value),
   }) {
     assert(failedToWrite != null);
     assert(failedToCreateFile != null);
     assert(excelFormatError != null);
+    assert(noDataAvailable != null);
     return excelFormatError(this);
   }
 
@@ -338,6 +363,7 @@ class _$ExcelFormatError implements ExcelFormatError {
     Result failedToWrite(FailedToWrite value),
     Result failedToCreateFile(FailedToCreate value),
     Result excelFormatError(ExcelFormatError value),
+    Result noDataAvailable(NoDataAvailable value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -350,4 +376,104 @@ class _$ExcelFormatError implements ExcelFormatError {
 
 abstract class ExcelFormatError implements ExcelFailure {
   const factory ExcelFormatError() = _$ExcelFormatError;
+}
+
+abstract class $NoDataAvailableCopyWith<$Res> {
+  factory $NoDataAvailableCopyWith(
+          NoDataAvailable value, $Res Function(NoDataAvailable) then) =
+      _$NoDataAvailableCopyWithImpl<$Res>;
+}
+
+class _$NoDataAvailableCopyWithImpl<$Res>
+    extends _$ExcelFailureCopyWithImpl<$Res>
+    implements $NoDataAvailableCopyWith<$Res> {
+  _$NoDataAvailableCopyWithImpl(
+      NoDataAvailable _value, $Res Function(NoDataAvailable) _then)
+      : super(_value, (v) => _then(v as NoDataAvailable));
+
+  @override
+  NoDataAvailable get _value => super._value as NoDataAvailable;
+}
+
+class _$NoDataAvailable implements NoDataAvailable {
+  const _$NoDataAvailable();
+
+  @override
+  String toString() {
+    return 'ExcelFailure.noDataAvailable()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is NoDataAvailable);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result failedToWrite(),
+    @required Result failedToCreateFile(),
+    @required Result excelFormatError(),
+    @required Result noDataAvailable(),
+  }) {
+    assert(failedToWrite != null);
+    assert(failedToCreateFile != null);
+    assert(excelFormatError != null);
+    assert(noDataAvailable != null);
+    return noDataAvailable();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result failedToWrite(),
+    Result failedToCreateFile(),
+    Result excelFormatError(),
+    Result noDataAvailable(),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (noDataAvailable != null) {
+      return noDataAvailable();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result failedToWrite(FailedToWrite value),
+    @required Result failedToCreateFile(FailedToCreate value),
+    @required Result excelFormatError(ExcelFormatError value),
+    @required Result noDataAvailable(NoDataAvailable value),
+  }) {
+    assert(failedToWrite != null);
+    assert(failedToCreateFile != null);
+    assert(excelFormatError != null);
+    assert(noDataAvailable != null);
+    return noDataAvailable(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result failedToWrite(FailedToWrite value),
+    Result failedToCreateFile(FailedToCreate value),
+    Result excelFormatError(ExcelFormatError value),
+    Result noDataAvailable(NoDataAvailable value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (noDataAvailable != null) {
+      return noDataAvailable(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NoDataAvailable implements ExcelFailure {
+  const factory NoDataAvailable() = _$NoDataAvailable;
 }
