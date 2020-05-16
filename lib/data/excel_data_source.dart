@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:excel/excel.dart';
+import 'package:flutter/material.dart';
 import 'package:vsnap/utils/utils.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 
 class ExcelDataSource {
   Future<File> file;
   String sheetName;
-  var decoder = Excel.createExcel();
+  Excel decoder;
   var _extension = ".xlsx";
   final List<Visitor> visitors;
   final List<String> cells = [
@@ -19,8 +20,8 @@ class ExcelDataSource {
     'F',
     'G',
     'H',
-    /*
     'I',
+    /*
     'J',
     'K',
     'L',
@@ -40,7 +41,16 @@ class ExcelDataSource {
     */
   ];
 
-  ExcelDataSource(this.visitors);
+  ExcelDataSource(this.visitors, String filename) {
+    sheetName = "$filename Visitors";
+    decoder = Excel.createExcel()..setDefaultSheet(sheetName);
+    file = getFile(filename + _extension);
+    decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
+        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder.merge(
+        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("K1"),
+        customValue: "$sheetName");
+  }
 
   void createTableTitles() {
     decoder
@@ -67,23 +77,16 @@ class ExcelDataSource {
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("H3"), "TIME OUT",
           fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+    decoder
+      ..updateCell(sheetName, CellIndex.indexByString("I3"), "BODY TEMPERATURE",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
   }
 
-  Future<File> createExcelFile(String filename) {
-    final file = getFile(filename + _extension);
-    sheetName = "$filename Visitors";
-
-    decoder
-      .updateCell(sheetName, CellIndex.indexByString("A1"), "$filename",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-    decoder.merge(
-        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("K1"),
-        customValue: "$sheetName");
+  Future<File> createExcelFile() {
     if (visitors == null || visitors.isEmpty) {
-      decoder
-        .updateCell(sheetName, CellIndex.indexByString("A3"),
-            "You don't have visitor registered, please register your visitors to get log",
-            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+      decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
+          "You don't have visitor registered, please register your visitors to get log",
+          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
     } else {
       createTableTitles();
       var _cell = 4;
@@ -91,45 +94,52 @@ class ExcelDataSource {
       for (int i = 0; i < visitors.length; i++) {
         int j = 0;
         var visitor = visitors[i];
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.firstName,
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"), visitor.firstName,
+            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.lastName,
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"), visitor.lastName,
+            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.nationalId != null ? visitor.nationalId : "",
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(
+            sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"),
+            visitor.nationalId != null ? visitor.nationalId : "",
+            fontColorHex: "#1AFF1A",
+            verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.passportNumber != null ? visitor.passportNumber : "",
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(
+            sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"),
+            visitor.passportNumber != null ? visitor.passportNumber : "",
+            fontColorHex: "#1AFF1A",
+            verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.documentType,
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"), visitor.documentType,
+            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.sex.toUpperCase(),
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(
+            sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"),
+            visitor.sex.toUpperCase(),
+            fontColorHex: "#1AFF1A",
+            verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(
+            sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"),
+            visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
+            fontColorHex: "#1AFF1A",
+            verticalAlign: VerticalAlign.Top);
         j += 1;
-        decoder
-          .updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-              visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
-              fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        decoder.updateCell(
+            sheetName,
+            CellIndex.indexByString("${cells[j]}$_cell"),
+            visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
+            fontColorHex: "#1AFF1A",
+            verticalAlign: VerticalAlign.Top);
         j = 0;
         _cell += 1;
       }

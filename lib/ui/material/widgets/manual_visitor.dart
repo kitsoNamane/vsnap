@@ -133,12 +133,12 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 child: TextFormField(
-                  decoration: InputDecoration(labelText: 'purpose'),
+                  decoration: InputDecoration(labelText: 'temperature'),
                   controller: _purposeController,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return "purpose required";
+                      return "temperature required";
                     }
                     return null;
                   },

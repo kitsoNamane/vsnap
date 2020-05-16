@@ -6,9 +6,11 @@ abstract class VisitorState extends Equatable {
   List<Object> get props => [];
 }
 
-class VisitorInitial extends VisitorState {}
+class VisitorInitial extends VisitorState {
+}
 
-class VisitorLoading extends VisitorState {}
+class VisitorLoading extends VisitorState {
+}
 
 class VisitorSignedIn extends VisitorState {
   final model.Visitor visitor;

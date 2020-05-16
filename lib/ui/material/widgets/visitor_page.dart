@@ -127,7 +127,7 @@ class VisitorTab extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'temperatue'),
+                    decoration: InputDecoration(labelText: 'body temperatue'),
                     keyboardType: TextInputType.number,
                     controller: _purposeController,
                     textInputAction: TextInputAction.done,

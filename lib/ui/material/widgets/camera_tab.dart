@@ -55,12 +55,12 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         image: image,
         detectInImage: _textRecognizer.processImage,
         imageRotation: description.sensorOrientation,
-      ).then((dynamic results) async {
+      ).then((dynamic results) {
         if (_detector == null) return;
         setState(() {
           _scanResults = results;
         });
-        await _processResults(results);
+        _processResults(results);
       }).whenComplete(() => _isDetecting = false);
     });
     //await _startImageStream();
@@ -77,13 +77,16 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         return AlertDialog(
           //title: Text('AlertDialog Title'),
           content: Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                Icon(Icons.check, color: Colors.green, size: 56),
-                Text("Success")
-              ])),
+            height: 100,
+              child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.check, color: Colors.green, size: 56),
+                  Text("Success", style: TextStyle(fontSize: 24),)
+                ]),
+          )),
           actions: <Widget>[
             document != null
                 ? FlatButton(
@@ -103,7 +106,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
                 } else {
                   Navigator.of(context).pop();
                   Navigator.of(context)
-                      .pushNamed('/visitor', arguments: document);
+                      .popAndPushNamed('/visitor', arguments: document);
                 }
               },
             ),
@@ -113,17 +116,20 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     );
   }
 
-  Future<void> _scanType(Document document) async {
+  void _scanType(Document document) async {
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     if (args.scanType == "Sign In") {
-      _showDialog(document);
+      //_showDialog(document);
+      Navigator.of(context).popAndPushNamed("/visitor", arguments: document);
     } else {
       await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
       _showDialog(null);
+      //Navigator.of(context).popAndPushNamed("/");
+      //Navigator.of(context).popAndPushNamed('/',);
     }
   }
 
-  Future<void> _processResults(VisionText scanResults) async {
+  void _processResults(VisionText scanResults) async {
     if (scanResults == null) return;
     if (scanResults.blocks.isEmpty) return;
     for (TextBlock block in scanResults.blocks) {
@@ -131,7 +137,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
       if (isMRTD(mrtd)) {
         _isDetecting = true;
         var document = decodeMRTD(mrtd);
-        await _scanType(document);
+        if (document == null) return;
+        _scanType(document);
       }
     }
   }
