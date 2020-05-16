@@ -7,9 +7,12 @@ const String _td1_pattern =
     r"([A|C|I][A-Z0-9<]{1})([A-Z]{3})([A-Z0-9<]{9})([0-9]{1})([A-Z0-9<]{15})\n([0-9]{6})([0-9]{1})([M|F|X|<]{1})([0-9]{6})([0-9]{1})([A-Z]{3})([A-Z0-9<]{11})([0-9]{1})\n([A-Z0-9<]{30})";
 const String _td2_pattern =
     "([A|C|I][A-Z0-9<]{1})([A-Z]{3})([A-Z0-9<]{31})\n([A-Z0-9<]{9})([0-9]{1})([A-Z]{3})([0-9]{6})([0-9]{1})([M|F|X|<]{1})([0-9]{6})([0-9]{1})([A-Z0-9<]{7})([0-9]{1})";
-const String _td1_or_td2 = "$_td1_pattern|$_td2_pattern";
 
-final RegExp regex = new RegExp(_td1_or_td2);
+const String _td3_pattern = "(P[A-Z0-9<]{1})([A-Z]{3})([A-Z0-9<]{39})\n ([A-Z0-9<]{9})([0-9]{1})([A-Z]{3})([0-9]{6})([0-9]{1})([M|F|X|<]{1})([0-9]{6})([0-9]{1})([A-Z0-9<]{14})([0-9]{1})([0-9]{1})";
+
+const String _td1_or_td2_or_td3 = "$_td1_pattern|$_td2_pattern|$_td3_pattern";
+
+final RegExp regex = new RegExp(_td1_or_td2_or_td3);
 
 // MRTD -> Machine Readable Travel Document such as passports and national IDs
 bool isMRTD(String input) {
