@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vsnap/data/local/moor_database.dart';
-import 'package:vsnap/ui/material/widgets/widgets.dart';
+
+import 'navigation/router.dart';
+import 'pages/home_page.dart';
 
 class AndroidApp extends StatelessWidget {
   final CameraDescription camera;

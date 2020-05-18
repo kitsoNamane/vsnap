@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
-import 'package:vsnap/ui/material/widgets/navigation.dart';
-import 'package:vsnap/ui/material/widgets/permissions_tab.dart';
-
-import 'camera_tab.dart';
-import 'permission_error_tab.dart';
+import 'package:vsnap/ui/material/navigation/navigation_args.dart';
+import 'package:vsnap/ui/material/tabs/camera_tab.dart';
+import 'package:vsnap/ui/material/tabs/permission_error_tab.dart';
+import 'package:vsnap/ui/material/tabs/permissions_tab.dart';
 
 class CameraPage extends StatelessWidget {
-  List<Permission> _permissions = [Permission.camera];
   CameraPage({Key key}) : super(key: key);
   Widget build(BuildContext context) {
+    List<Permission> _permissions = [Permission.camera];
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     return BlocProvider(
         create: (context) => PermissionBloc()
@@ -25,23 +24,24 @@ class CameraPage extends StatelessWidget {
                 title: const Text('Camera'),
                 elevation: 0.0,
               ),
-              floatingActionButton: state == PermissionGranted() && args.scanType == "Sign In"
-                  ? FloatingActionButton(
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        Navigator.of(context).popAndPushNamed("/manual");
-                      },
-                    )
-                  : null,
+              floatingActionButton:
+                  state == PermissionGranted() && args.scanType == "Sign In"
+                      ? FloatingActionButton(
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                          onPressed: () async {
+                            Navigator.of(context).popAndPushNamed("/manual");
+                          },
+                        )
+                      : null,
               body: BlocBuilder<PermissionBloc, PermissionState>(
                   builder: (BuildContext context, state) {
                 if (state is PermissionInitial || state is PermissionLoading) {
                   return Container();
                 } else if (state is PermissionGranted) {
-                  return CameraPreviewScanner();
+                  return CameraPreviewTab();
                 } else if (state is PermissionDenied) {
                   return PermissionsTab(
                     permissions: _permissions,

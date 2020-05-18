@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vsnap/ui/material/widgets/scan_button.dart';
 
-import 'scan_button.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({

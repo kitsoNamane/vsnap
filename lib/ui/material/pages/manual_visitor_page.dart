@@ -5,12 +5,12 @@ import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/utils/utils.dart';
 
-class ManualVisitor extends StatefulWidget {
+class ManualVisitorPage extends StatefulWidget {
   @override
-  _ManualVisitorState createState() => _ManualVisitorState();
+  _ManualVisitorPageState createState() => _ManualVisitorPageState();
 }
 
-class _ManualVisitorState extends State<ManualVisitor> {
+class _ManualVisitorPageState extends State<ManualVisitorPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

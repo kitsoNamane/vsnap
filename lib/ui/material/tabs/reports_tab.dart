@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/excel_bloc.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/data/local/moor_database.dart';
-import 'package:vsnap/ui/material/widgets/permission_error_tab.dart';
+import 'package:vsnap/ui/material/tabs/permission_error_tab.dart';
 import 'package:vsnap/utils/utils.dart';
 
 import 'permissions_tab.dart';
@@ -158,7 +158,9 @@ class _ReportsFormState extends State<ReportsForm> {
                 child: const Text("Email Report"),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    sendEMail(filepath).then((value) => Navigator.of(context).popAndPushNamed("/"));
+                    sendEMail(filepath, [_emailTextController.text]).then(
+                      (value) => Navigator.of(context).popAndPushNamed("/"),
+                    );
                   }
                 },
               ),

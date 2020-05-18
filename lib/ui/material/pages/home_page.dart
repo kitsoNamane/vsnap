@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vsnap/ui/material/tabs/home_tab.dart';
+import 'package:vsnap/ui/material/tabs/reports_tab.dart';
 
-import 'home_tab.dart';
-import 'reports_tab.dart';
 
 class TabContent {
   final Text title;

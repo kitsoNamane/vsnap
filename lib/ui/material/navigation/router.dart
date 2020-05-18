@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/ui/material/widgets/manual_visitor.dart';
+import 'package:vsnap/ui/material/pages/camera_page.dart';
+import 'package:vsnap/ui/material/pages/home_page.dart';
+import 'package:vsnap/ui/material/pages/manual_visitor_page.dart';
+import 'package:vsnap/ui/material/pages/visitor_page.dart';
 
-import 'camera_page.dart';
-import 'home_page.dart';
-import 'navigation.dart';
-import 'visitor_page.dart';
+import 'navigation_args.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -40,7 +40,7 @@ class RouteGenerator {
         return _errorRoute();
       case '/manual':
         return MaterialPageRoute(
-          builder: (context) => ManualVisitor(),
+          builder: (context) => ManualVisitorPage(),
         );
       default:
         // If there is no such named route in the switch statement, e.g. /third

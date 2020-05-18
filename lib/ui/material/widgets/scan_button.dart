@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vsnap/ui/material/navigation/navigation_args.dart';
 
-import 'navigation.dart';
 
 class ScanBtn extends StatelessWidget {
   final String navRoute;
