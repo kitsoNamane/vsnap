@@ -1,14 +1,12 @@
 import 'dart:io';
-
+import 'package:flutter/services.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-//Sorry, Visitor(id: null, nationalId: 382212211, passportNumber: 04000694, documentType: ac, documentNumber: d0091889, nationalityCountryCode: bwa, expiryDate: null, firstName: kitso gidion k, middleName: , lastName: namane, sex: m, birthday: null, purpose: 75, timeIn: null, timeOut: null, plateNumber: null, phoneNumber: 45454159) cannot be used for that because: 
-//• middleName: Must at least be 3 characters long.
-
 part 'moor_database.g.dart';
+
 class Visitors extends Table {
   IntColumn get id => integer().autoIncrement()();
 
@@ -47,9 +45,13 @@ class VisitorDao extends DatabaseAccessor<AppDatabase> with _$VisitorDaoMixin {
   Future<List<Visitor>> getAllVisitors() => select(visitors).get();
   Stream<List<Visitor>> watchAllVisitors() => select(visitors).watch();
   Future<Visitor> getLastSignedVisitor(String _id) {
-    return (select(visitors)..where((t) => t.nationalId.equals(_id))..orderBy([
-      (t) => OrderingTerm(expression: t.timeIn, mode: OrderingMode.desc),
-    ])..limit(1)).getSingle();
+    return (select(visitors)
+          ..where((t) => t.nationalId.equals(_id))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.timeIn, mode: OrderingMode.desc),
+          ])
+          ..limit(1))
+        .getSingle();
   }
 
   Future insertVisitor(Visitor visitor) => into(visitors).insert(visitor);
@@ -63,7 +65,23 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final path = p.join(dbFolder.path, 'db.sqlite');
+    final file = File(path);
+    if (!await file.exists()) {
+      // Make sure the parent directory exists
+      try {
+        await Directory(p.dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      // Copy from asset
+      var data =
+          await rootBundle.load(p.join('assets', 'database', 'db.sqlite'));
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      // Write and flush the bytes written
+      await file.writeAsBytes(bytes, flush: true);
+    }
     return VmDatabase(file);
   });
 }

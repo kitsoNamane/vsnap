@@ -8,12 +8,12 @@ abstract class VisitorEvent extends Equatable {
 
 class AddVisitorButtonPressed extends VisitorEvent {
   final String phone;
-  final String purpose;
+  final String temperature;
   final Document document;
 
   AddVisitorButtonPressed({
     this.phone,
-    this.purpose,
+    this.temperature,
     this.document,
   });
 }

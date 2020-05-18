@@ -36,7 +36,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
   Stream<VisitorState> _mapButtonPressedToState(
       AddVisitorButtonPressed event) async* {
     yield VisitorLoading();
-    Map<String, String> map = {'purpose': event.purpose, 'phone': event.phone};
+    Map<String, String> map = {'purpose': event.temperature, 'phone': event.phone};
     var visitor = model.Visitor.create(event.document, map);
     this.add(VisitorSignIn(visitor: visitor));
   }

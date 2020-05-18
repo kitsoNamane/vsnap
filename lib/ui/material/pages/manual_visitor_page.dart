@@ -192,7 +192,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                         BlocProvider.of<VisitorBloc>(context)
                             .add(AddVisitorButtonPressed(
                           phone: _phoneController.text,
-                          purpose: _purposeController.text,
+                          temperature: _purposeController.text,
                           document: document,
                         ));
                       }

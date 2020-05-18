@@ -13,10 +13,10 @@ class _$VisitorEventTearOff {
   const _$VisitorEventTearOff();
 
   AddVisitorButtonPressed addVisitorButtonPressed(
-      String phone, String purpose, Document document) {
+      String phone, String temperature, Document document) {
     return AddVisitorButtonPressed(
       phone,
-      purpose,
+      temperature,
       document,
     );
   }
@@ -49,7 +49,7 @@ mixin _$VisitorEvent {
   Result when<Result extends Object>({
     @required
         Result addVisitorButtonPressed(
-            String phone, String purpose, Document document),
+            String phone, String temperature, Document document),
     @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
@@ -57,7 +57,7 @@ mixin _$VisitorEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
-        String phone, String purpose, Document document),
+        String phone, String temperature, Document document),
     Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
@@ -98,7 +98,7 @@ abstract class $AddVisitorButtonPressedCopyWith<$Res> {
   factory $AddVisitorButtonPressedCopyWith(AddVisitorButtonPressed value,
           $Res Function(AddVisitorButtonPressed) then) =
       _$AddVisitorButtonPressedCopyWithImpl<$Res>;
-  $Res call({String phone, String purpose, Document document});
+  $Res call({String phone, String temperature, Document document});
 }
 
 class _$AddVisitorButtonPressedCopyWithImpl<$Res>
@@ -114,33 +114,33 @@ class _$AddVisitorButtonPressedCopyWithImpl<$Res>
   @override
   $Res call({
     Object phone = freezed,
-    Object purpose = freezed,
+    Object temperature = freezed,
     Object document = freezed,
   }) {
     return _then(AddVisitorButtonPressed(
       phone == freezed ? _value.phone : phone as String,
-      purpose == freezed ? _value.purpose : purpose as String,
+      temperature == freezed ? _value.temperature : temperature as String,
       document == freezed ? _value.document : document as Document,
     ));
   }
 }
 
 class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
-  const _$AddVisitorButtonPressed(this.phone, this.purpose, this.document)
+  const _$AddVisitorButtonPressed(this.phone, this.temperature, this.document)
       : assert(phone != null),
-        assert(purpose != null),
+        assert(temperature != null),
         assert(document != null);
 
   @override
   final String phone;
   @override
-  final String purpose;
+  final String temperature;
   @override
   final Document document;
 
   @override
   String toString() {
-    return 'VisitorEvent.addVisitorButtonPressed(phone: $phone, purpose: $purpose, document: $document)';
+    return 'VisitorEvent.addVisitorButtonPressed(phone: $phone, temperature: $temperature, document: $document)';
   }
 
   @override
@@ -149,9 +149,9 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
         (other is AddVisitorButtonPressed &&
             (identical(other.phone, phone) ||
                 const DeepCollectionEquality().equals(other.phone, phone)) &&
-            (identical(other.purpose, purpose) ||
+            (identical(other.temperature, temperature) ||
                 const DeepCollectionEquality()
-                    .equals(other.purpose, purpose)) &&
+                    .equals(other.temperature, temperature)) &&
             (identical(other.document, document) ||
                 const DeepCollectionEquality()
                     .equals(other.document, document)));
@@ -161,7 +161,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(phone) ^
-      const DeepCollectionEquality().hash(purpose) ^
+      const DeepCollectionEquality().hash(temperature) ^
       const DeepCollectionEquality().hash(document);
 
   @override
@@ -174,7 +174,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
   Result when<Result extends Object>({
     @required
         Result addVisitorButtonPressed(
-            String phone, String purpose, Document document),
+            String phone, String temperature, Document document),
     @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
@@ -183,14 +183,14 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
     assert(visitorSignIn != null);
     assert(visitorSignOut != null);
     assert(getVisitors != null);
-    return addVisitorButtonPressed(phone, purpose, document);
+    return addVisitorButtonPressed(phone, temperature, document);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
-        String phone, String purpose, Document document),
+        String phone, String temperature, Document document),
     Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
@@ -198,7 +198,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
   }) {
     assert(orElse != null);
     if (addVisitorButtonPressed != null) {
-      return addVisitorButtonPressed(phone, purpose, document);
+      return addVisitorButtonPressed(phone, temperature, document);
     }
     return orElse();
   }
@@ -237,11 +237,11 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
 
 abstract class AddVisitorButtonPressed implements VisitorEvent {
   const factory AddVisitorButtonPressed(
-          String phone, String purpose, Document document) =
+          String phone, String temperature, Document document) =
       _$AddVisitorButtonPressed;
 
   String get phone;
-  String get purpose;
+  String get temperature;
   Document get document;
   $AddVisitorButtonPressedCopyWith<AddVisitorButtonPressed> get copyWith;
 }
@@ -304,7 +304,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   Result when<Result extends Object>({
     @required
         Result addVisitorButtonPressed(
-            String phone, String purpose, Document document),
+            String phone, String temperature, Document document),
     @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
@@ -320,7 +320,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
-        String phone, String purpose, Document document),
+        String phone, String temperature, Document document),
     Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
@@ -432,7 +432,7 @@ class _$VisitorSignOut implements VisitorSignOut {
   Result when<Result extends Object>({
     @required
         Result addVisitorButtonPressed(
-            String phone, String purpose, Document document),
+            String phone, String temperature, Document document),
     @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
@@ -448,7 +448,7 @@ class _$VisitorSignOut implements VisitorSignOut {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
-        String phone, String purpose, Document document),
+        String phone, String temperature, Document document),
     Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
@@ -566,7 +566,7 @@ class _$GetVisitors implements GetVisitors {
   Result when<Result extends Object>({
     @required
         Result addVisitorButtonPressed(
-            String phone, String purpose, Document document),
+            String phone, String temperature, Document document),
     @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
@@ -582,7 +582,7 @@ class _$GetVisitors implements GetVisitors {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
-        String phone, String purpose, Document document),
+        String phone, String temperature, Document document),
     Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
