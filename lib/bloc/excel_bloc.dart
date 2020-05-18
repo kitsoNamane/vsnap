@@ -29,8 +29,8 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
   Stream<ExcelState> _buildExcel() async* {
     yield ExcelLoading();
     String file = await dao.getAllVisitors().then((visitors) {
-      return ExcelDataSource(visitors, getCurrentTime())
-          .createExcelFile()
+      return ExcelDataSource()
+          .createExcelFile(visitors, getCurrentTime())
           .then((excel) {
         return excel.path;
       });

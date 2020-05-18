@@ -18,7 +18,6 @@ class ScanBtn extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: Container(
-          //padding: EdgeInsets.only(left: 16.0, right: 16.0),
           width: double.infinity,
           child: MaterialButton(
             color: btnColor,

@@ -24,7 +24,7 @@ class PermissionsTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("Scan With VSnap"),
+            const Text("Scan With VSnap"),
             //Text("Enable access so you can start scanning ID's"),
             Text(message),
             MaterialButton(

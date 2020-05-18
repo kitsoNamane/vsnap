@@ -40,7 +40,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     _camera = CameraController(
       description,
       defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.high
+          ? ResolutionPreset.medium
           : ResolutionPreset.high,
       enableAudio: false,
     );
@@ -48,7 +48,11 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     if (mounted) {
       setState(() {});
     }
-    _camera.startImageStream((CameraImage image) {
+    await _startCameraStream();
+  }
+
+  Future<void> _startCameraStream() async {
+    _camera.startImageStream((CameraImage image) async {
       if (_isDetecting) return;
       _isDetecting = true;
       ScannerUtils.detect(
@@ -63,7 +67,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         _processResults(results);
       }).whenComplete(() => _isDetecting = false);
     });
-    //await _startImageStream();
   }
 
   void _showDialog(
@@ -75,23 +78,25 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          //title: Text('AlertDialog Title'),
           content: Container(
-            height: 100,
+              height: 100,
               child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.check, color: Colors.green, size: 56),
-                  Text("Success", style: TextStyle(fontSize: 24),)
-                ]),
-          )),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.check, color: Colors.green, size: 56),
+                      const Text(
+                        "Success",
+                        style: TextStyle(fontSize: 24),
+                      )
+                    ]),
+              )),
           actions: <Widget>[
             document != null
                 ? FlatButton(
                     color: Colors.red,
-                    child: Text('cancel'),
+                    child: const Text('cancel'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -99,7 +104,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
                 : null,
             FlatButton(
               color: Colors.green,
-              child: Text('continue'),
+              child: const Text('continue'),
               onPressed: () {
                 if (document == null) {
                   Navigator.of(context).popAndPushNamed("/");
@@ -119,13 +124,10 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   void _scanType(Document document) async {
     CameraArguments args = ModalRoute.of(context).settings.arguments;
     if (args.scanType == "Sign In") {
-      //_showDialog(document);
       Navigator.of(context).popAndPushNamed("/visitor", arguments: document);
     } else {
       await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
       _showDialog(null);
-      //Navigator.of(context).popAndPushNamed("/");
-      //Navigator.of(context).popAndPushNamed('/',);
     }
   }
 
@@ -135,16 +137,18 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     for (TextBlock block in scanResults.blocks) {
       var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
       if (isMRTD(mrtd)) {
-        _isDetecting = true;
+        _camera.stopImageStream();
+        setState(() {
+          _isDetecting = true;
+        });
         var document = decodeMRTD(mrtd);
-        if (document == null) return;
         _scanType(document);
       }
     }
   }
 
   Widget _buildResults() {
-    const noResults = Text('No results!');
+    const noResults = const Text('No results!');
 
     if (_scanResults == null ||
         _camera == null ||
@@ -179,7 +183,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
                     CircularProgressIndicator(strokeWidth: 2.0),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Text('Loading Camera...'),
+                      child: const Text('Loading Camera...'),
                     )
                   ]),
             )

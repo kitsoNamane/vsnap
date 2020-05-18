@@ -24,7 +24,7 @@ class _VisitorPageState extends State<VisitorPage> {
           VisitorBloc(dao: RepositoryProvider.of<VisitorDao>(context)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Add Visitor"),
+          title: const Text("Add Visitor"),
           elevation: 0.0,
         ),
         body: VisitorTab(
@@ -50,7 +50,7 @@ class DocumentText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+      padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[Text(dataKey), Text(data)],
@@ -156,7 +156,7 @@ class VisitorTab extends StatelessWidget {
                         }
                       }
                     },
-                    child: Text('Add Visitor'),
+                    child: const Text('Add Visitor'),
                   ),
                 ),
                 Container(
@@ -172,7 +172,7 @@ class VisitorTab extends StatelessWidget {
           if (state is VisitorSignedIn) {
             final snackBar = SnackBar(
               backgroundColor: Colors.greenAccent,
-              content: Text('Sign In Success'),
+              content: const Text('Sign In Success'),
             );
             // Find the Scaffold in the widget tree and use it to show a SnackBar.
             Scaffold.of(context).showSnackBar(snackBar);
@@ -182,7 +182,7 @@ class VisitorTab extends StatelessWidget {
           if (state is VisitorError) {
             final snackBar = SnackBar(
               backgroundColor: Colors.redAccent,
-              content: Text('Sign In Failed'),
+              content: const Text('Sign In Failed'),
             );
             // Find the Scaffold in the widget tree and use it to show a SnackBar.
             Scaffold.of(context).showSnackBar(snackBar);

@@ -22,7 +22,7 @@ class CameraPage extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
-                title: Text('Camera'),
+                title: const Text('Camera'),
                 elevation: 0.0,
               ),
               floatingActionButton: state == PermissionGranted() && args.scanType == "Sign In"

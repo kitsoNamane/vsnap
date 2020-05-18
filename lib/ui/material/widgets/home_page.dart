@@ -10,8 +10,8 @@ class TabContent {
 }
 
 List<TabContent> _pages = [
-  TabContent(title: Text("Select Scan"), content: HomeTab()),
-  TabContent(title: Text("Reports"), content: ReportsTab()),
+  TabContent(title: const Text("Select Scan"), content: HomeTab()),
+  TabContent(title: const Text("Reports"), content: ReportsTab()),
 ];
 
 class HomePage extends StatefulWidget {
@@ -42,9 +42,9 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _currentIndex, // new
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home), title: Text("Scan")),
+                icon: Icon(Icons.home), title: const Text("Scan")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.email), title: Text("Reports")),
+                icon: Icon(Icons.email), title: const Text("Reports")),
           ],
         ),
     );

@@ -18,7 +18,7 @@ class _ManualVisitorState extends State<ManualVisitor> {
           VisitorBloc(dao: RepositoryProvider.of<VisitorDao>(context)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Add Visitor"),
+          title: const Text("Add Visitor"),
           elevation: 0.0,
         ),
         body: ListView(
@@ -198,7 +198,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                       }
                     }
                   },
-                  child: Text('Add Visitor'),
+                  child: const Text('Add Visitor'),
                 ),
               ),
               Container(
@@ -214,7 +214,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
         if (state is VisitorSignedIn) {
           final snackBar = SnackBar(
             backgroundColor: Colors.greenAccent,
-            content: Text('Sign In Success'),
+            content: const Text('Sign In Success'),
           );
           // Find the Scaffold in the widget tree and use it to show a SnackBar.
           Scaffold.of(context).showSnackBar(snackBar);
@@ -223,7 +223,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
         if (state is VisitorError) {
           final snackBar = SnackBar(
             backgroundColor: Colors.redAccent,
-            content: Text('Sign In Failed'),
+            content: const Text('Sign In Failed'),
           );
           // Find the Scaffold in the widget tree and use it to show a SnackBar.
           Scaffold.of(context).showSnackBar(snackBar);

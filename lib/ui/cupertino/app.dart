@@ -7,7 +7,7 @@ class IOSApp extends StatelessWidget {
     return CupertinoApp(
       home: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text("VSnap"),
+          middle: const Text("VSnap"),
         ),
         child: Container()),
     );

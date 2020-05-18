@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:vsnap/models/mrz_document.dart';
+import 'package:vsnap/data/local/moor_database.dart' as db;
 
 class Visitor extends Equatable {
   final Document person;
@@ -27,11 +28,34 @@ class Visitor extends Equatable {
 
     return Visitor(
       person: doc,
-      temperature: double.tryParse(map['purpose']),
+      temperature: double.tryParse(map['temperature']),
       phone: int.tryParse(map['phone']),
       timeIn: DateTime.now(),
       timeOut: null,
     );
+  }
+
+  db.Visitor toDBVisitor() {
+    var names = person.names.trim().split(" ").length >= 2
+        ? person.names.split(" ")
+        : [
+            person.names,
+            null,
+          ];
+    final visitor = db.Visitor(
+      nationalId: person.primaryId,
+      passportNumber: person.secondaryId,
+      documentType: person.documentType,
+      documentNumber: person.documentNumber,
+      nationalityCountryCode: person.nationalityCountryCode,
+      firstName: names[0],
+      middleName: names[1],
+      lastName: person.surname,
+      sex: person.sex,
+      temperature: temperature,
+      phoneNumber: phone,
+    );
+    return visitor;
   }
 
   @override
@@ -73,6 +97,6 @@ class Visitor extends Equatable {
 
   @override
   String toString() {
-    return 'Visitor(person: $person, purpose: $purpose, phone: $phone, timeIn: $timeIn, timeOut: $timeOut)';
+    return 'Visitor(person: $person, temperature: $temperature, phone: $phone, timeIn: $timeIn, timeOut: $timeOut)';
   }
 }

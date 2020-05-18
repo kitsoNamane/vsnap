@@ -45,7 +45,7 @@ class ReportsTab extends StatelessWidget {
           } else {
             return PermissionErrorTab(
               message:
-                  "Something went wrong, contact our admin at kitso@abstractclass.co",
+                  "Something went wrong, contact our admin at info@abstractclass.co",
             );
           }
         },
@@ -71,7 +71,7 @@ class EmailReport extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Creating Excel File..."),
+                    child: const Text("Creating Excel File..."),
                   ),
                   CircularProgressIndicator(
                     strokeWidth: 2,
@@ -134,7 +134,7 @@ class _ReportsFormState extends State<ReportsForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
+              const Text(
                 "Enter the email address of relevent authorities",
                 style: TextStyle(fontSize: 18.0),
               ),
@@ -155,7 +155,7 @@ class _ReportsFormState extends State<ReportsForm> {
                 ),
               ),
               RaisedButton(
-                child: Text("Email Report"),
+                child: const Text("Email Report"),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     sendEMail(filepath).then((value) => Navigator.of(context).popAndPushNamed("/"));

@@ -27,7 +27,7 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
     yield* event.map(
       addVisitorButtonPressed: (e) async* {
         yield VisitorState.visitorLoading();
-        Map<String, String> map = {'purpose': e.purpose, 'phone': e.phone};
+        Map<String, String> map = {'temperature': e.purpose, 'phone': e.phone};
         var visitor = Visitor.create(e.document, map);
         this.add(VisitorSignIn(visitor));
       },
