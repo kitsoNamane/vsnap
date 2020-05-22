@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 
 import 'package:vsnap/failures/excel_failure.dart';
 import 'package:vsnap/models/visitor.dart';
-import 'package:vsnap/repository/i_excel_facade.dart';
+import 'package:vsnap/repository/i_excel_repository.dart';
 
 part 'excel_bloc.freezed.dart';
 part 'excel_event.dart';

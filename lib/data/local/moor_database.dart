@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -54,6 +53,13 @@ class VisitorDao extends DatabaseAccessor<AppDatabase> with _$VisitorDaoMixin {
         .getSingle();
   }
 
+  Future<Visitor> getVisitor(String _id) {
+    return (select(visitors)
+          ..where((t) => t.nationalId.equals(_id))
+          ..limit(1))
+        .getSingle();
+  }
+
   Future insertVisitor(Visitor visitor) => into(visitors).insert(visitor);
   Future updateVisitor(Visitor visitor) => update(visitors).replace(visitor);
   Future deleteVisitork(Visitor visitor) => delete(visitors).delete(visitor);
@@ -72,15 +78,6 @@ LazyDatabase _openConnection() {
       try {
         await Directory(p.dirname(path)).create(recursive: true);
       } catch (_) {}
-
-      // Copy from asset
-      var data =
-          await rootBundle.load(p.join('assets', 'database', 'db.sqlite'));
-      List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-
-      // Write and flush the bytes written
-      await file.writeAsBytes(bytes, flush: true);
     }
     return VmDatabase(file);
   });

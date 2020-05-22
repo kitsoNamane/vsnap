@@ -680,7 +680,7 @@ class _$VisitorStateTearOff {
       @required
           bool isSubmitting,
       @required
-          Option<Either<VisitorFailure, Unit>>
+          Option<Either<VisitorFailure, List<dynamic>>>
               getVisitorsFailureOrSuccessOption}) {
     return GetVisitorDone(
       showErrorMessages: showErrorMessages,
@@ -710,7 +710,7 @@ mixin _$VisitorState {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, Unit>>
+            Option<Either<VisitorFailure, List<dynamic>>>
                 getVisitorsFailureOrSuccessOption),
   });
   @optionalTypeArgs
@@ -720,8 +720,11 @@ mixin _$VisitorState {
         Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption),
     Result visitorSignedOut(bool showErrorMessages, bool isSubmitting,
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption),
-    Result getVisitorsDone(bool showErrorMessages, bool isSubmitting,
-        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption),
+    Result getVisitorsDone(
+        bool showErrorMessages,
+        bool isSubmitting,
+        Option<Either<VisitorFailure, List<dynamic>>>
+            getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -857,7 +860,7 @@ class _$_VisitorState implements _VisitorState {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, Unit>>
+            Option<Either<VisitorFailure, List<dynamic>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -875,8 +878,11 @@ class _$_VisitorState implements _VisitorState {
         Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption),
     Result visitorSignedOut(bool showErrorMessages, bool isSubmitting,
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption),
-    Result getVisitorsDone(bool showErrorMessages, bool isSubmitting,
-        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption),
+    Result getVisitorsDone(
+        bool showErrorMessages,
+        bool isSubmitting,
+        Option<Either<VisitorFailure, List<dynamic>>>
+            getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1036,7 +1042,7 @@ class _$VisitorSignedIn implements VisitorSignedIn {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, Unit>>
+            Option<Either<VisitorFailure, List<dynamic>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1055,8 +1061,11 @@ class _$VisitorSignedIn implements VisitorSignedIn {
         Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption),
     Result visitorSignedOut(bool showErrorMessages, bool isSubmitting,
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption),
-    Result getVisitorsDone(bool showErrorMessages, bool isSubmitting,
-        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption),
+    Result getVisitorsDone(
+        bool showErrorMessages,
+        bool isSubmitting,
+        Option<Either<VisitorFailure, List<dynamic>>>
+            getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1223,7 +1232,7 @@ class _$VisitorSignedOut implements VisitorSignedOut {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, Unit>>
+            Option<Either<VisitorFailure, List<dynamic>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1242,8 +1251,11 @@ class _$VisitorSignedOut implements VisitorSignedOut {
         Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption),
     Result visitorSignedOut(bool showErrorMessages, bool isSubmitting,
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption),
-    Result getVisitorsDone(bool showErrorMessages, bool isSubmitting,
-        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption),
+    Result getVisitorsDone(
+        bool showErrorMessages,
+        bool isSubmitting,
+        Option<Either<VisitorFailure, List<dynamic>>>
+            getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1314,7 +1326,8 @@ abstract class $GetVisitorDoneCopyWith<$Res>
   $Res call(
       {bool showErrorMessages,
       bool isSubmitting,
-      Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption});
+      Option<Either<VisitorFailure, List<dynamic>>>
+          getVisitorsFailureOrSuccessOption});
 }
 
 class _$GetVisitorDoneCopyWithImpl<$Res>
@@ -1343,7 +1356,7 @@ class _$GetVisitorDoneCopyWithImpl<$Res>
           getVisitorsFailureOrSuccessOption == freezed
               ? _value.getVisitorsFailureOrSuccessOption
               : getVisitorsFailureOrSuccessOption
-                  as Option<Either<VisitorFailure, Unit>>,
+                  as Option<Either<VisitorFailure, List<dynamic>>>,
     ));
   }
 }
@@ -1362,7 +1375,8 @@ class _$GetVisitorDone implements GetVisitorDone {
   @override
   final bool isSubmitting;
   @override
-  final Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption;
+  final Option<Either<VisitorFailure, List<dynamic>>>
+      getVisitorsFailureOrSuccessOption;
 
   @override
   String toString() {
@@ -1411,7 +1425,7 @@ class _$GetVisitorDone implements GetVisitorDone {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, Unit>>
+            Option<Either<VisitorFailure, List<dynamic>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1430,8 +1444,11 @@ class _$GetVisitorDone implements GetVisitorDone {
         Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption),
     Result visitorSignedOut(bool showErrorMessages, bool isSubmitting,
         Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption),
-    Result getVisitorsDone(bool showErrorMessages, bool isSubmitting,
-        Option<Either<VisitorFailure, Unit>> getVisitorsFailureOrSuccessOption),
+    Result getVisitorsDone(
+        bool showErrorMessages,
+        bool isSubmitting,
+        Option<Either<VisitorFailure, List<dynamic>>>
+            getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1481,14 +1498,15 @@ abstract class GetVisitorDone implements VisitorState {
       @required
           bool isSubmitting,
       @required
-          Option<Either<VisitorFailure, Unit>>
+          Option<Either<VisitorFailure, List<dynamic>>>
               getVisitorsFailureOrSuccessOption}) = _$GetVisitorDone;
 
   @override
   bool get showErrorMessages;
   @override
   bool get isSubmitting;
-  Option<Either<VisitorFailure, Unit>> get getVisitorsFailureOrSuccessOption;
+  Option<Either<VisitorFailure, List<dynamic>>>
+      get getVisitorsFailureOrSuccessOption;
   @override
   $GetVisitorDoneCopyWith<GetVisitorDone> get copyWith;
 }
