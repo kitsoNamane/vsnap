@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/repository/visitor_repository.dart';
 
 import 'navigation/router.dart';
 import 'pages/home_page.dart';
@@ -18,7 +19,7 @@ class AndroidApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => AppDatabase().visitorDao),
+        RepositoryProvider(create: (context) => VisitorRepository(AppDatabase().visitorDao)),
         RepositoryProvider(create: (context) => camera),
       ],
       child: MaterialApp(

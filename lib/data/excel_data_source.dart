@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:excel/excel.dart';
+import 'package:vsnap/failures/excel_failure.dart';
 import 'package:vsnap/utils/utils.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 
@@ -109,30 +111,35 @@ class ExcelDataSource {
         fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
   }
 
-  Future<File> createExcelFile(List<Visitor> visitors, String filename) {
-    sheetName = "$filename Visitors";
-    decoder = Excel.createExcel()..setDefaultSheet(sheetName);
-    file = getFile(filename + _extension);
-    decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-    decoder.merge(
-        sheetName, CellIndex.indexByString("A1"), CellIndex.indexByString("K1"),
-        customValue: "$sheetName");
-
-    if (visitors == null || visitors.isEmpty) {
-      decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
-          "You don't have visitor registered, please register your visitors to get log",
+  Future<Either<ExcelFailure, File>> createExcelFile(
+      List<Visitor> visitors, String filename) async {
+    try {
+      sheetName = "$filename Visitors";
+      decoder = Excel.createExcel()..setDefaultSheet(sheetName);
+      file = getFile(filename + _extension);
+      decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
           fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
-    } else {
-      createTableTitles();
-      var _cell = 4;
+      decoder.merge(sheetName, CellIndex.indexByString("A1"),
+          CellIndex.indexByString("K1"),
+          customValue: "$sheetName");
 
-      for (int i = 0; i < visitors.length; i++) {
-        writeVisitorRow(visitors[i], _cell);
-        _cell += 1;
+      if (visitors == null || visitors.isEmpty) {
+        decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
+            "You don't have visitor registered, please register your visitors to get log",
+            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+      } else {
+        createTableTitles();
+        var _cell = 4;
+
+        for (int i = 0; i < visitors.length; i++) {
+          writeVisitorRow(visitors[i], _cell);
+          _cell += 1;
+        }
       }
+      return right(await writeFile());
+    } catch (e) {
+      return left(ExcelFailure.failedToWrite());
     }
-    return writeFile();
   }
 
   Future<File> writeFile() {

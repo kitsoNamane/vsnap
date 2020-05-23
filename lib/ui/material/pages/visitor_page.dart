@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vsnap/bloc/visitor_bloc.dart';
-import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/mrz_document.dart';
+import 'package:vsnap/repository/visitor_repository.dart';
 import 'package:vsnap/utils/utils.dart';
 
 class VisitorPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _VisitorPageState extends State<VisitorPage> {
     final document = ModalRoute.of(context).settings.arguments;
     return BlocProvider(
       create: (context) =>
-          VisitorBloc(dao: RepositoryProvider.of<VisitorDao>(context)),
+          VisitorBloc(RepositoryProvider.of<VisitorRepository>(context)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Add Visitor"),
@@ -146,7 +146,7 @@ class VisitorTab extends StatelessWidget {
                   child: RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        if (state is! VisitorLoading) {
+                        if (state.isSubmitting == false) {
                           BlocProvider.of<VisitorBloc>(context)
                               .add(AddVisitorButtonPressed(
                             phone: _phoneController.text,
@@ -160,7 +160,7 @@ class VisitorTab extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  child: state is VisitorLoading
+                  child: state.isSubmitting == true
                       ? CircularProgressIndicator()
                       : null,
                 ),
@@ -170,23 +170,25 @@ class VisitorTab extends StatelessWidget {
         },
         listener: (context, state) {
           if (state is VisitorSignedIn) {
-            final snackBar = SnackBar(
-              backgroundColor: Colors.greenAccent,
-              content: const Text('Sign In Success'),
-            );
-            // Find the Scaffold in the widget tree and use it to show a SnackBar.
-            Scaffold.of(context).showSnackBar(snackBar);
+            state.signInFailureOrSuccessOption.fold(() {
+              final snackBar = SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: const Text('Sign In Failed'),
+              );
+              // Find the Scaffold in the widget tree and use it to show a SnackBar.
+              Scaffold.of(context).showSnackBar(snackBar);
+              Navigator.of(context).popAndPushNamed("/");
 
-            Navigator.of(context).popAndPushNamed("/");
-          }
-          if (state is VisitorError) {
-            final snackBar = SnackBar(
-              backgroundColor: Colors.redAccent,
-              content: const Text('Sign In Failed'),
-            );
-            // Find the Scaffold in the widget tree and use it to show a SnackBar.
-            Scaffold.of(context).showSnackBar(snackBar);
-            Navigator.of(context).popAndPushNamed("/");
+              Navigator.of(context).popAndPushNamed("/");
+            }, (signedIn) {
+              final snackBar = SnackBar(
+                backgroundColor: Colors.greenAccent,
+                content: const Text('Sign In Success'),
+              );
+              // Find the Scaffold in the widget tree and use it to show a SnackBar.
+              Scaffold.of(context).showSnackBar(snackBar);
+              Navigator.of(context).popAndPushNamed("/");
+            });
           }
         },
       ),

@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/excel_bloc.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
-import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/bloc/visitor_bloc.dart';
+import 'package:vsnap/repository/visitor_repository.dart';
 import 'package:vsnap/ui/material/tabs/permission_error_tab.dart';
 import 'package:vsnap/utils/utils.dart';
 
@@ -58,11 +59,12 @@ class EmailReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExcelBloc(RepositoryProvider.of<VisitorDao>(context))
-        ..add(BuildExcel()),
+      create: (context) => ExcelBloc(
+          visitorBloc:
+              VisitorBloc(RepositoryProvider.of<VisitorRepository>(context))),
       child: BlocBuilder<ExcelBloc, ExcelState>(
         builder: (context, state) {
-          if (state is ExcelLoading || state is ExcelInitial) {
+          if (state.isSubmitting || state.showErrorMessages == false) {
             return Container(
               child: Center(
                   child: Column(
@@ -79,31 +81,47 @@ class EmailReport extends StatelessWidget {
                 ],
               )),
             );
-          } else if (state is ExcelFileBuilt) {
-            return ReportsForm(filepath: state.filepath);
-          } else {
-            // assume state is ExcelFileBuildError
-            return Container(
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Text("Something went wrong, refresh"),
-                    MaterialButton(
-                      child: Icon(
-                        Icons.refresh,
-                        size: 24,
-                        color: Colors.blueAccent,
-                      ),
-                      onPressed: () async {
-                        BlocProvider.of<ExcelBloc>(context).add(BuildExcel());
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
+          } else if (state.isSubmitting == true &&
+              state.showErrorMessages == true) {
+            final _result = state.excelFailureOrSuccess.fold(() {
+              return ErrorTab();
+            },
+                (file) => file.fold(
+                    (l) => ErrorTab(), (r) => ReportsForm(filepath: r.path)));
+            return _result;
+          } else {return  ErrorTab();}
         },
+      ),
+    );
+  }
+}
+
+class ErrorTab extends StatelessWidget {
+  const ErrorTab({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text("Something went wrong, refresh"),
+            MaterialButton(
+              child: Icon(
+                Icons.refresh,
+                size: 24,
+                color: Colors.blueAccent,
+              ),
+              onPressed: () async {
+                BlocProvider.of<ExcelBloc>(context).refresh();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

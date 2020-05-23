@@ -1,26 +1,39 @@
 part of 'visitor_bloc.dart';
 
-abstract class VisitorState extends Equatable {
-  const VisitorState();
-  @override
-  List<Object> get props => [];
+@freezed
+abstract class VisitorState with _$VisitorState {
+  const factory VisitorState({
+    @required bool showErrorMessages,
+    @required bool isSubmitting,
+  }) = _VisitorState;
+
+  factory VisitorState.initial() => VisitorState(
+        showErrorMessages: false,
+        isSubmitting: false,
+      );
+
+  factory VisitorState.visitorLoading() => VisitorState(
+        showErrorMessages: false,
+        isSubmitting: true,
+      );
+
+  factory VisitorState.visitorSignedIn({
+    @required bool showErrorMessages,
+    @required bool isSubmitting,
+    @required Option<Either<VisitorFailure, Unit>> signInFailureOrSuccessOption,
+  }) = VisitorSignedIn;
+
+  factory VisitorState.visitorSignedOut({
+    @required bool showErrorMessages,
+    @required bool isSubmitting,
+    @required
+        Option<Either<VisitorFailure, Unit>> signOutFailureOrSuccessOption,
+  }) = VisitorSignedOut;
+
+  factory VisitorState.getVisitorsDone({
+    @required bool showErrorMessages,
+    @required bool isSubmitting,
+    @required
+        Option<Either<VisitorFailure, List<Visitor>>> getVisitorsFailureOrSuccessOption,
+  }) = GetVisitorDone;
 }
-
-class VisitorInitial extends VisitorState {
-}
-
-class VisitorLoading extends VisitorState {
-}
-
-class VisitorSignedIn extends VisitorState {
-  final model.Visitor visitor;
-
-  const VisitorSignedIn({this.visitor});
-
-  @override
-  List<Object> get props => [visitor];
-}
-
-class VisitorSignedOut extends VisitorState {}
-
-class VisitorError extends VisitorState {}

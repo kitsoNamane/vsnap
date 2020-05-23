@@ -12,7 +12,7 @@ T _$identity<T>(T value) => value;
 class _$ExcelEventTearOff {
   const _$ExcelEventTearOff();
 
-  BuildExcel buildExcel(List<Visitor> visitors) {
+  BuildExcel buildExcel(Either<VisitorFailure, List<dynamic>> visitors) {
     return BuildExcel(
       visitors,
     );
@@ -23,7 +23,7 @@ class _$ExcelEventTearOff {
 const $ExcelEvent = _$ExcelEventTearOff();
 
 mixin _$ExcelEvent {
-  List<Visitor> get visitors;
+  Either<VisitorFailure, List<dynamic>> get visitors;
 
   $ExcelEventCopyWith<ExcelEvent> get copyWith;
 }
@@ -32,7 +32,7 @@ abstract class $ExcelEventCopyWith<$Res> {
   factory $ExcelEventCopyWith(
           ExcelEvent value, $Res Function(ExcelEvent) then) =
       _$ExcelEventCopyWithImpl<$Res>;
-  $Res call({List<Visitor> visitors});
+  $Res call({Either<VisitorFailure, List<dynamic>> visitors});
 }
 
 class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
@@ -47,8 +47,9 @@ class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
     Object visitors = freezed,
   }) {
     return _then(_value.copyWith(
-      visitors:
-          visitors == freezed ? _value.visitors : visitors as List<Visitor>,
+      visitors: visitors == freezed
+          ? _value.visitors
+          : visitors as Either<VisitorFailure, List<dynamic>>,
     ));
   }
 }
@@ -58,7 +59,7 @@ abstract class $BuildExcelCopyWith<$Res> implements $ExcelEventCopyWith<$Res> {
           BuildExcel value, $Res Function(BuildExcel) then) =
       _$BuildExcelCopyWithImpl<$Res>;
   @override
-  $Res call({List<Visitor> visitors});
+  $Res call({Either<VisitorFailure, List<dynamic>> visitors});
 }
 
 class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
@@ -74,7 +75,9 @@ class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
     Object visitors = freezed,
   }) {
     return _then(BuildExcel(
-      visitors == freezed ? _value.visitors : visitors as List<Visitor>,
+      visitors == freezed
+          ? _value.visitors
+          : visitors as Either<VisitorFailure, List<dynamic>>,
     ));
   }
 }
@@ -83,7 +86,7 @@ class _$BuildExcel implements BuildExcel {
   const _$BuildExcel(this.visitors) : assert(visitors != null);
 
   @override
-  final List<Visitor> visitors;
+  final Either<VisitorFailure, List<dynamic>> visitors;
 
   @override
   String toString() {
@@ -109,10 +112,11 @@ class _$BuildExcel implements BuildExcel {
 }
 
 abstract class BuildExcel implements ExcelEvent {
-  const factory BuildExcel(List<Visitor> visitors) = _$BuildExcel;
+  const factory BuildExcel(Either<VisitorFailure, List<dynamic>> visitors) =
+      _$BuildExcel;
 
   @override
-  List<Visitor> get visitors;
+  Either<VisitorFailure, List<dynamic>> get visitors;
   @override
   $BuildExcelCopyWith<BuildExcel> get copyWith;
 }
@@ -123,7 +127,7 @@ class _$ExcelStateTearOff {
   _ExcelState call(
       {@required bool showErrorMessages,
       @required bool isSubmitting,
-      @required Option<Either<ExcelFailure, Unit>> excelFailureOrSuccess}) {
+      @required Option<Either<ExcelFailure, File>> excelFailureOrSuccess}) {
     return _ExcelState(
       showErrorMessages: showErrorMessages,
       isSubmitting: isSubmitting,
@@ -138,7 +142,7 @@ const $ExcelState = _$ExcelStateTearOff();
 mixin _$ExcelState {
   bool get showErrorMessages;
   bool get isSubmitting;
-  Option<Either<ExcelFailure, Unit>> get excelFailureOrSuccess;
+  Option<Either<ExcelFailure, File>> get excelFailureOrSuccess;
 
   $ExcelStateCopyWith<ExcelState> get copyWith;
 }
@@ -150,7 +154,7 @@ abstract class $ExcelStateCopyWith<$Res> {
   $Res call(
       {bool showErrorMessages,
       bool isSubmitting,
-      Option<Either<ExcelFailure, Unit>> excelFailureOrSuccess});
+      Option<Either<ExcelFailure, File>> excelFailureOrSuccess});
 }
 
 class _$ExcelStateCopyWithImpl<$Res> implements $ExcelStateCopyWith<$Res> {
@@ -174,7 +178,7 @@ class _$ExcelStateCopyWithImpl<$Res> implements $ExcelStateCopyWith<$Res> {
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       excelFailureOrSuccess: excelFailureOrSuccess == freezed
           ? _value.excelFailureOrSuccess
-          : excelFailureOrSuccess as Option<Either<ExcelFailure, Unit>>,
+          : excelFailureOrSuccess as Option<Either<ExcelFailure, File>>,
     ));
   }
 }
@@ -187,7 +191,7 @@ abstract class _$ExcelStateCopyWith<$Res> implements $ExcelStateCopyWith<$Res> {
   $Res call(
       {bool showErrorMessages,
       bool isSubmitting,
-      Option<Either<ExcelFailure, Unit>> excelFailureOrSuccess});
+      Option<Either<ExcelFailure, File>> excelFailureOrSuccess});
 }
 
 class __$ExcelStateCopyWithImpl<$Res> extends _$ExcelStateCopyWithImpl<$Res>
@@ -213,7 +217,7 @@ class __$ExcelStateCopyWithImpl<$Res> extends _$ExcelStateCopyWithImpl<$Res>
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       excelFailureOrSuccess: excelFailureOrSuccess == freezed
           ? _value.excelFailureOrSuccess
-          : excelFailureOrSuccess as Option<Either<ExcelFailure, Unit>>,
+          : excelFailureOrSuccess as Option<Either<ExcelFailure, File>>,
     ));
   }
 }
@@ -232,7 +236,7 @@ class _$_ExcelState implements _ExcelState {
   @override
   final bool isSubmitting;
   @override
-  final Option<Either<ExcelFailure, Unit>> excelFailureOrSuccess;
+  final Option<Either<ExcelFailure, File>> excelFailureOrSuccess;
 
   @override
   String toString() {
@@ -270,7 +274,7 @@ abstract class _ExcelState implements ExcelState {
   const factory _ExcelState(
           {@required bool showErrorMessages,
           @required bool isSubmitting,
-          @required Option<Either<ExcelFailure, Unit>> excelFailureOrSuccess}) =
+          @required Option<Either<ExcelFailure, File>> excelFailureOrSuccess}) =
       _$_ExcelState;
 
   @override
@@ -278,7 +282,7 @@ abstract class _ExcelState implements ExcelState {
   @override
   bool get isSubmitting;
   @override
-  Option<Either<ExcelFailure, Unit>> get excelFailureOrSuccess;
+  Option<Either<ExcelFailure, File>> get excelFailureOrSuccess;
   @override
   _$ExcelStateCopyWith<_ExcelState> get copyWith;
 }

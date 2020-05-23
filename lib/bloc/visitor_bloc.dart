@@ -1,82 +1,68 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-
+import 'package:dartz/dartz.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/failures/visitor_failure.dart';
 import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/models/visitor.dart' as model;
+import 'package:vsnap/repository/i_visitor_repository.dart';
 
 part 'visitor_event.dart';
 part 'visitor_state.dart';
+part 'visitor_bloc.freezed.dart';
 
 class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
-  VisitorDao dao;
-  VisitorBloc({this.dao});
+  final IVisitorRepository _visitorRepository;
 
+  VisitorBloc(this._visitorRepository);
   @override
-  VisitorState get initialState => VisitorInitial();
+  VisitorState get initialState => VisitorState.initial();
 
   @override
   Stream<VisitorState> mapEventToState(
     VisitorEvent event,
   ) async* {
-    if (event is VisitorSignIn) {
-      yield* _mapSignInToState(event);
-    } else if (event is VisitorSignOut) {
-      yield* _mapSignOutToState(event);
-    } else if (event is AddVisitorButtonPressed) {
-      yield* _mapButtonPressedToState(event);
-    } else {
-      yield VisitorError();
-    }
-  }
-
-  Stream<VisitorState> _mapButtonPressedToState(
-      AddVisitorButtonPressed event) async* {
-    yield VisitorLoading();
-    Map<String, String> map = {'purpose': event.temperature, 'phone': event.phone};
-    var visitor = model.Visitor.create(event.document, map);
-    this.add(VisitorSignIn(visitor: visitor));
-  }
-
-  Stream<VisitorState> _mapSignInToState(VisitorSignIn event) async* {
-    // update database
-    yield VisitorLoading();
-    developer.log("$event", name: "AppMain");
-    var names = event.visitor.person.names.trim().split(" ").length >= 2
-        ? event.visitor.person.names.split(" ")
-        : [
-            event.visitor.person.names,
-            null,
-          ];
-    final visitor = Visitor(
-      nationalId: event.visitor.person.primaryId,
-      passportNumber: event.visitor.person.secondaryId,
-      documentType: event.visitor.person.documentType,
-      documentNumber: event.visitor.person.documentNumber,
-      nationalityCountryCode: event.visitor.person.nationalityCountryCode,
-      firstName: names[0],
-      middleName: names[1],
-      lastName: event.visitor.person.surname,
-      sex: event.visitor.person.sex,
-      temperature: event.visitor.temperature,
-      phoneNumber: event.visitor.phone,
+    yield* event.map(
+      addVisitorButtonPressed: (e) async* {
+        yield VisitorState.visitorLoading();
+        Map<String, String> map = {'temperature': e.temperature, 'phone': e.phone};
+        final _visitor = model.Visitor.create(e.document, map);
+        this.add(VisitorSignIn(_visitor.toDBVisitor()));
+      },
+      visitorSignIn: (e) async* {
+        yield VisitorState.visitorLoading();
+        final failureOrSuccess =
+            await _visitorRepository.visitorSignIn(e.visitor);
+        yield VisitorSignedIn(
+          showErrorMessages: true,
+          isSubmitting: false,
+          signInFailureOrSuccessOption: some(failureOrSuccess),
+        );
+      },
+      visitorSignOut: (e) async* {
+        yield VisitorState.visitorLoading();
+        final failureOrSuccess = await _visitorRepository.visitorSignOut(
+            e.document.primaryId != null
+                ? e.document.primaryId
+                : e.document.secondaryId);
+        yield VisitorSignedOut(
+          showErrorMessages: true,
+          isSubmitting: false,
+          signOutFailureOrSuccessOption: some(failureOrSuccess),
+        );
+      },
+      getVisitors: (e) async* {
+        yield VisitorState.visitorLoading();
+        final failureOrSuccess = await _visitorRepository.getAllVisitors(null, null);
+        yield GetVisitorDone(
+          showErrorMessages: true,
+          isSubmitting: false,
+          getVisitorsFailureOrSuccessOption: some(failureOrSuccess),
+        );
+      },
     );
-    yield await dao
-        .insertVisitor(visitor)
-        .then((_) => VisitorSignedIn(visitor: event.visitor))
-        .catchError((_) => VisitorError());
-  }
-
-  Stream<VisitorState> _mapSignOutToState(VisitorSignOut event) async* {
-    yield VisitorLoading();
-    var visitor = await dao.getLastSignedVisitor(event.document.primaryId);
-    var updatedVisitor = visitor.copyWith(timeOut: DateTime.now());
-    yield await dao
-        .updateVisitor(updatedVisitor)
-        .then((_) => VisitorSignedOut())
-        .catchError((_) => VisitorError());
   }
 }

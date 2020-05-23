@@ -13,11 +13,11 @@ class _$VisitorEventTearOff {
   const _$VisitorEventTearOff();
 
   AddVisitorButtonPressed addVisitorButtonPressed(
-      String phone, String temperature, Document document) {
+      {String phone, String temperature, Document document}) {
     return AddVisitorButtonPressed(
-      phone,
-      temperature,
-      document,
+      phone: phone,
+      temperature: temperature,
+      document: document,
     );
   }
 
@@ -118,18 +118,17 @@ class _$AddVisitorButtonPressedCopyWithImpl<$Res>
     Object document = freezed,
   }) {
     return _then(AddVisitorButtonPressed(
-      phone == freezed ? _value.phone : phone as String,
-      temperature == freezed ? _value.temperature : temperature as String,
-      document == freezed ? _value.document : document as Document,
+      phone: phone == freezed ? _value.phone : phone as String,
+      temperature:
+          temperature == freezed ? _value.temperature : temperature as String,
+      document: document == freezed ? _value.document : document as Document,
     ));
   }
 }
 
 class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
-  const _$AddVisitorButtonPressed(this.phone, this.temperature, this.document)
-      : assert(phone != null),
-        assert(temperature != null),
-        assert(document != null);
+  const _$AddVisitorButtonPressed(
+      {this.phone, this.temperature, this.document});
 
   @override
   final String phone;
@@ -237,8 +236,9 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
 
 abstract class AddVisitorButtonPressed implements VisitorEvent {
   const factory AddVisitorButtonPressed(
-          String phone, String temperature, Document document) =
-      _$AddVisitorButtonPressed;
+      {String phone,
+      String temperature,
+      Document document}) = _$AddVisitorButtonPressed;
 
   String get phone;
   String get temperature;

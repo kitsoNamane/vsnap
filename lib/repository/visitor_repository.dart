@@ -1,5 +1,4 @@
 import 'package:vsnap/data/local/moor_database.dart';
-import 'package:vsnap/models/visitor.dart' as model;
 import 'package:vsnap/failures/visitor_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:vsnap/repository/i_visitor_repository.dart';
