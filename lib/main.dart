@@ -1,9 +1,12 @@
-import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vsnap/ui/ui.dart';
+import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:camera/camera.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:vsnap/ui/material/app.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -30,8 +33,14 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final firstCamera = await ScannerUtils.getCamera(dir: CameraLensDirection.back);
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(AndroidApp(camera: firstCamera));
+  Crashlytics.instance.enableInDevMode = true;
+  // Pass all uncaught errors to Crashlytics.
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  runZoned(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final firstCamera =
+        await ScannerUtils.getCamera(dir: CameraLensDirection.back);
+    BlocSupervisor.delegate = SimpleBlocDelegate();
+    runApp(AndroidApp(camera: firstCamera));
+  }, onError: Crashlytics.instance.recordError);
 }

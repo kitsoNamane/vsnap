@@ -23,6 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -47,11 +48,42 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("/home/kitso/Dropbox/keys/abstract-keystore.jks")
+            storePassword "namane20#!"
+            keyAlias "abstractclass"
+            keyPassword "namane20#!"
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
+        }
+    }
+
+    splits{
+        abi {
+
+            Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86 and x86_64.
+
+            // Resets the list of ABIs that Gradle should create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include "x86", "x86_64", "arm64-v8a", "armabi-v7a" 
+
+            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+            universalApk false
         }
     }
 
@@ -68,9 +100,9 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    //implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    //implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.2'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     api 'com.google.firebase:firebase-ml-vision-image-label-model:18.0.0'
 }
