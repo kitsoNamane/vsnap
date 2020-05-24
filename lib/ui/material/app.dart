@@ -14,6 +14,9 @@ class AndroidApp extends StatelessWidget {
     Key key,
     this.camera,
   }) : assert(camera != null), super(key: key);
+  // TODO: app
+  // FIXME: vscode
+
 
   @override
   Widget build(BuildContext context) {
