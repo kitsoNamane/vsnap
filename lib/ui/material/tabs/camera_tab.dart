@@ -7,12 +7,12 @@ import 'package:vsnap/data/local/moor_database.dart';
 
 import 'package:vsnap/models/detectors.dart';
 import 'package:vsnap/models/mrz_document.dart';
+import 'package:vsnap/repository/visitor_repository.dart';
 import 'package:vsnap/ui/material/navigation/navigation_args.dart';
 import 'package:vsnap/ui/material/widgets/custom_painter.dart';
 import 'package:vsnap/utils/mrz.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 import 'package:vsnap/utils/visitor_log.dart';
-
 
 class CameraPreviewTab extends StatefulWidget {
   @override
@@ -126,7 +126,9 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
     if (args.scanType == "Sign In") {
       Navigator.of(context).popAndPushNamed("/visitor", arguments: document);
     } else {
-      await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
+      //await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
+      await RepositoryProvider.of<VisitorRepository>(context)
+          .visitorSignOut(document.primaryId);
       _showDialog(null);
     }
   }
@@ -142,6 +144,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
           _isDetecting = true;
         });
         var document = decodeMRTD(mrtd);
+        if (document == null) return;
         _scanType(document);
       }
     }
@@ -204,6 +207,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
 
   @override
   void dispose() {
+    _camera.stopImageStream();
     _camera.dispose().then((_) {
       _textRecognizer.close();
     });
