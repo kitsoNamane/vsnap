@@ -84,31 +84,31 @@ class ExcelDataSource {
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.nationalId != null ? visitor.nationalId : "",
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.passportNumber != null ? visitor.passportNumber : "",
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.documentType,
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.sex.toUpperCase(),
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
 
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.temperature,
-        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
   }
 
   Future<Either<ExcelFailure, File>> createExcelFile(
@@ -118,7 +118,7 @@ class ExcelDataSource {
       decoder = Excel.createExcel()..setDefaultSheet(sheetName);
       file = getFile(filename + _extension);
       decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
-          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
       decoder.merge(sheetName, CellIndex.indexByString("A1"),
           CellIndex.indexByString("K1"),
           customValue: "$sheetName");
@@ -126,7 +126,7 @@ class ExcelDataSource {
       if (visitors == null || visitors.isEmpty) {
         decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
             "You don't have visitor registered, please register your visitors to get log",
-            fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
+            fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
       } else {
         createTableTitles();
         var _cell = 4;
