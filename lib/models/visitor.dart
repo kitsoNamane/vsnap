@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 
 import 'package:vsnap/models/mrz_document.dart';
@@ -38,8 +36,6 @@ class Visitor extends Equatable {
   }
 
   db.Visitor toDBVisitor() {
-    log("Names: "+person.names, name: "APPMAIN");
-    log("Surname: "+person.surname,  name: "APPMAIN");
     //! this is the only place I'm calling length
     var names = person.names.split(" ").length >= 2
         ? person.names.split(" ")
@@ -56,6 +52,7 @@ class Visitor extends Equatable {
       firstName: names[0],
       middleName: names[1],
       lastName: person.surname,
+      birthday: person.birthDate,
       sex: person.sex,
       temperature: temperature,
       phoneNumber: phone,

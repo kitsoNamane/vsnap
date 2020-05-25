@@ -53,6 +53,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
    
+   /*
     splits{
         abi {
 
@@ -72,10 +73,11 @@ android {
             universalApk true
         }
     }
+    */
 
     signingConfigs {
         release {
-            storeFile file("/home/kitso/Dropbox/keys/abstract-keystore.jks")
+            storeFile file("abstract-keystore.jks")
             storePassword "namane20#!"
             keyAlias "abstractclass"
             keyPassword "namane20#!"
@@ -85,7 +87,7 @@ android {
     buildTypes {
         release {
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             firebaseCrashlytics {
                 nativeSymbolUploadEnabled true
             }
