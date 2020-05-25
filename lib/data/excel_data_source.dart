@@ -45,70 +45,70 @@ class ExcelDataSource {
   void createTableTitles() {
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("A3"), "NAME",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("B3"), "SURNAME",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("C3"), "ID",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("D3"), "PASSPORT ID",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("E3"), "DOCUMENT TYPE",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("F3"), "SEX",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("A3"), "TIME IN",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("H3"), "TIME OUT",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     decoder
       ..updateCell(sheetName, CellIndex.indexByString("I3"), "BODY TEMPERATURE",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
   }
 
   void writeVisitorRow(Visitor visitor, int _cell) {
     int j = 0;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.firstName,
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.lastName,
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.nationalId != null ? visitor.nationalId : "",
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.passportNumber != null ? visitor.passportNumber : "",
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.documentType,
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.sex.toUpperCase(),
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
 
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.temperature,
-        fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
   }
 
   Future<Either<ExcelFailure, File>> createExcelFile(
@@ -118,7 +118,7 @@ class ExcelDataSource {
       decoder = Excel.createExcel()..setDefaultSheet(sheetName);
       file = getFile(filename + _extension);
       decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
-          fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
       decoder.merge(sheetName, CellIndex.indexByString("A1"),
           CellIndex.indexByString("K1"),
           customValue: "$sheetName");
@@ -126,7 +126,7 @@ class ExcelDataSource {
       if (visitors == null || visitors.isEmpty) {
         decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
             "You don't have visitor registered, please register your visitors to get log",
-            fontColorHex: "#1AFF1A", verticalAlign: VerticalAlign.Top);
+            fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
       } else {
         createTableTitles();
         var _cell = 4;
