@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -70,16 +71,20 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final path = p.join(dbFolder.path, 'db.sqlite');
-    final file = File(path);
-    if (!await file.exists()) {
-      // Make sure the parent directory exists
-      try {
+    try {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final path = p.join(dbFolder.path, 'db.sqlite');
+      final file = File(path);
+      if (!await file.exists()) {
+        // Make sure the parent directory exists
         await Directory(p.dirname(path)).create(recursive: true);
-      } catch (_) {}
+      }
+      return VmDatabase(file);
+    } on MissingPluginException catch (_) {
+      return VmDatabase.memory();
+    } catch (_) {
+      return VmDatabase.memory();
     }
-    return VmDatabase(file);
   });
 }
 
@@ -87,6 +92,5 @@ LazyDatabase _openConnection() {
 // _$AppDatabase is the name of the generated class
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
-  @override
   int get schemaVersion => 1;
 }
