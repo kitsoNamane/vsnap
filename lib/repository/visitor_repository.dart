@@ -2,6 +2,7 @@ import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/failures/visitor_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:vsnap/repository/i_visitor_repository.dart';
+import 'package:vsnap/models/visitor.dart';
 
 class VisitorRepository implements IVisitorRepository {
   final VisitorDao visitorDao;
@@ -30,10 +31,9 @@ class VisitorRepository implements IVisitorRepository {
   }
 
   @override
-  Future<Either<VisitorFailure, Unit>> visitorSignIn(
-      Visitor visitor) async {
+  Future<Either<VisitorFailure, Unit>> visitorSignIn(VisitorModel visitor) async {
     try {
-      await visitorDao.insertVisitor(visitor);
+      await visitorDao.insertVisitor(visitor.toDBVisitor());
       return right(unit);
     } catch (e) {
       return left(VisitorFailure.databaseError());
@@ -41,11 +41,11 @@ class VisitorRepository implements IVisitorRepository {
   }
 
   @override
-  Future<Either<VisitorFailure, Unit>> visitorSignOut(
-      String visitorId) async {
+  Future<Either<VisitorFailure, Unit>> visitorSignOut(String visitorId) async {
     try {
       final _visitor = await visitorDao.getLastSignedVisitor(visitorId);
-      await visitorDao.updateVisitor(_visitor.copyWith(timeOut: DateTime.now()));
+      await visitorDao
+          .updateVisitor(_visitor.copyWith(timeOut: DateTime.now()));
       return right(unit);
     } catch (e) {
       return left(VisitorFailure.databaseError());

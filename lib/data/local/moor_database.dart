@@ -61,9 +61,9 @@ class VisitorDao extends DatabaseAccessor<AppDatabase> with _$VisitorDaoMixin {
         .getSingle();
   }
 
-  Future insertVisitor(Visitor visitor) => into(visitors).insert(visitor);
-  Future updateVisitor(Visitor visitor) => update(visitors).replace(visitor);
-  Future deleteVisitork(Visitor visitor) => delete(visitors).delete(visitor);
+  Future insertVisitor(Insertable<Visitor> visitor) => into(visitors).insert(visitor);
+  Future updateVisitor(Insertable<Visitor> visitor) => update(visitors).replace(visitor);
+  Future deleteVisitork(Insertable<Visitor> visitor) => delete(visitors).delete(visitor);
 }
 
 LazyDatabase _openConnection() {

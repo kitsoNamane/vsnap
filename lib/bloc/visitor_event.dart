@@ -7,7 +7,8 @@ abstract class VisitorEvent with _$VisitorEvent {
       String temperature,
       Document document}) = AddVisitorButtonPressed;
 
-  const factory VisitorEvent.visitorSignIn(Visitor visitor) = VisitorSignIn;
+  const factory VisitorEvent.visitorSignIn(VisitorModel visitor) =
+      VisitorSignIn;
 
   const factory VisitorEvent.visitorSignOut(Document document) = VisitorSignOut;
 

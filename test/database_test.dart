@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/models/visitor.dart' as model;
+import 'package:vsnap/models/visitor.dart';
+
 
 // tests
 void main() {
@@ -11,7 +12,7 @@ void main() {
   VisitorDao visitorDao;
   Document document;
   Map<String, String> map;
-  model.Visitor visitor;
+  VisitorModel visitor;
 
   setUp(() async {
     appDatabase = AppDatabase();
@@ -29,7 +30,7 @@ void main() {
         documentType: "I",
         documentNumber: "382212211");
     map = {"temperature": "39", "phone": "75757459"};
-    visitor = model.Visitor.create(document, map);
+    visitor = VisitorModel.create(document, map);
   });
 
   tearDown(() async {

@@ -137,11 +137,10 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
     for (TextBlock block in scanResults.blocks) {
       var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
       if (isMRTD(mrtd)) {
-        _camera.stopImageStream();
         setState(() {
           _isDetecting = true;
         });
-        var document = decodeMRTD(mrtd);
+        final document = decodeMRTD(mrtd);
         if (document == null) return;
         _scanType(document);
       }

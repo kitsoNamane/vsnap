@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 
-import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/data/local/moor_database.dart' as db;
 
-class Visitor extends Equatable {
+import 'mrz_document.dart';
+
+
+class VisitorModel extends Equatable {
   final Document person;
   final String purpose;
   final int phone;
@@ -11,7 +14,8 @@ class Visitor extends Equatable {
   final DateTime timeOut;
   final double temperature;
 
-  const Visitor({
+
+  const VisitorModel({
     this.person,
     this.purpose,
     this.phone,
@@ -23,10 +27,10 @@ class Visitor extends Equatable {
   @override
   List<Object> get props => [person, purpose, phone, timeIn, timeOut];
 
-  static Visitor create(Document doc, Map<String, String> map) {
+  static VisitorModel create(Document doc, Map<String, String> map) {
     if (doc == null) return null;
 
-    return Visitor(
+    return VisitorModel(
       person: doc,
       temperature: double.tryParse(map['temperature']),
       phone: int.tryParse(map['phone']),
@@ -35,7 +39,7 @@ class Visitor extends Equatable {
     );
   }
 
-  db.Visitor toDBVisitor() {
+  db.VisitorsCompanion toDBVisitor() {
     //! this is the only place I'm calling length
     var names = person.names.split(" ").length >= 2
         ? person.names.split(" ")
@@ -43,19 +47,19 @@ class Visitor extends Equatable {
             person.names,
             null,
           ];
-    final visitor = db.Visitor(
-      nationalId: person.primaryId,
-      passportNumber: person.secondaryId,
-      documentType: person.documentType,
-      documentNumber: person.documentNumber,
-      nationalityCountryCode: person.nationalityCountryCode,
-      firstName: names[0],
-      middleName: names[1],
-      lastName: person.surname,
-      birthday: person.birthDate,
-      sex: person.sex,
-      temperature: temperature,
-      phoneNumber: phone,
+    final visitor = db.VisitorsCompanion(
+      nationalId: Value(person.primaryId),
+      passportNumber: Value(person.secondaryId),
+      documentType: Value(person.documentType),
+      documentNumber: Value(person.documentNumber),
+      nationalityCountryCode: Value(person.nationalityCountryCode),
+      firstName: Value(names[0]),
+      middleName: Value(names[1]),
+      lastName: Value(person.surname),
+      birthday: Value(person.birthDate),
+      sex: Value(person.sex),
+      temperature: Value(temperature),
+      phoneNumber: Value(phone),
     );
     return visitor;
   }
@@ -64,7 +68,7 @@ class Visitor extends Equatable {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Visitor &&
+    return o is VisitorModel &&
         o.person == person &&
         o.purpose == purpose &&
         o.phone == phone &&
@@ -72,14 +76,14 @@ class Visitor extends Equatable {
         o.timeOut == timeOut;
   }
 
-  Visitor copyWith({
+  VisitorModel copyWith({
     Document person,
     String purpose,
     int phone,
     DateTime timeIn,
     DateTime timeOut,
   }) {
-    return Visitor(
+    return VisitorModel(
       person: person ?? this.person,
       purpose: purpose ?? this.purpose,
       phone: phone ?? this.phone,

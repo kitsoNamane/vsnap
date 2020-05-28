@@ -21,7 +21,7 @@ class _$VisitorEventTearOff {
     );
   }
 
-  VisitorSignIn visitorSignIn(Visitor visitor) {
+  VisitorSignIn visitorSignIn(VisitorModel visitor) {
     return VisitorSignIn(
       visitor,
     );
@@ -50,7 +50,7 @@ mixin _$VisitorEvent {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(Visitor visitor),
+    @required Result visitorSignIn(VisitorModel visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   });
@@ -58,7 +58,7 @@ mixin _$VisitorEvent {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(Visitor visitor),
+    Result visitorSignIn(VisitorModel visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -174,7 +174,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(Visitor visitor),
+    @required Result visitorSignIn(VisitorModel visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -190,7 +190,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(Visitor visitor),
+    Result visitorSignIn(VisitorModel visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -250,7 +250,7 @@ abstract class $VisitorSignInCopyWith<$Res> {
   factory $VisitorSignInCopyWith(
           VisitorSignIn value, $Res Function(VisitorSignIn) then) =
       _$VisitorSignInCopyWithImpl<$Res>;
-  $Res call({Visitor visitor});
+  $Res call({VisitorModel visitor});
 }
 
 class _$VisitorSignInCopyWithImpl<$Res> extends _$VisitorEventCopyWithImpl<$Res>
@@ -267,7 +267,7 @@ class _$VisitorSignInCopyWithImpl<$Res> extends _$VisitorEventCopyWithImpl<$Res>
     Object visitor = freezed,
   }) {
     return _then(VisitorSignIn(
-      visitor == freezed ? _value.visitor : visitor as Visitor,
+      visitor == freezed ? _value.visitor : visitor as VisitorModel,
     ));
   }
 }
@@ -276,7 +276,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   const _$VisitorSignIn(this.visitor) : assert(visitor != null);
 
   @override
-  final Visitor visitor;
+  final VisitorModel visitor;
 
   @override
   String toString() {
@@ -305,7 +305,7 @@ class _$VisitorSignIn implements VisitorSignIn {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(Visitor visitor),
+    @required Result visitorSignIn(VisitorModel visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -321,7 +321,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(Visitor visitor),
+    Result visitorSignIn(VisitorModel visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -366,9 +366,9 @@ class _$VisitorSignIn implements VisitorSignIn {
 }
 
 abstract class VisitorSignIn implements VisitorEvent {
-  const factory VisitorSignIn(Visitor visitor) = _$VisitorSignIn;
+  const factory VisitorSignIn(VisitorModel visitor) = _$VisitorSignIn;
 
-  Visitor get visitor;
+  VisitorModel get visitor;
   $VisitorSignInCopyWith<VisitorSignIn> get copyWith;
 }
 
@@ -433,7 +433,7 @@ class _$VisitorSignOut implements VisitorSignOut {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(Visitor visitor),
+    @required Result visitorSignIn(VisitorModel visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -449,7 +449,7 @@ class _$VisitorSignOut implements VisitorSignOut {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(Visitor visitor),
+    Result visitorSignIn(VisitorModel visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -567,7 +567,7 @@ class _$GetVisitors implements GetVisitors {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(Visitor visitor),
+    @required Result visitorSignIn(VisitorModel visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -583,7 +583,7 @@ class _$GetVisitors implements GetVisitors {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(Visitor visitor),
+    Result visitorSignIn(VisitorModel visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),

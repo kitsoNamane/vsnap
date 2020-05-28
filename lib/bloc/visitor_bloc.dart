@@ -7,12 +7,12 @@ import 'package:meta/meta.dart';
 import 'package:vsnap/data/local/moor_database.dart';
 import 'package:vsnap/failures/visitor_failure.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/models/visitor.dart' as model;
+import 'package:vsnap/models/visitor.dart';
 import 'package:vsnap/repository/i_visitor_repository.dart';
 
+part 'visitor_bloc.freezed.dart';
 part 'visitor_event.dart';
 part 'visitor_state.dart';
-part 'visitor_bloc.freezed.dart';
 
 class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
   final IVisitorRepository _visitorRepository;
@@ -28,9 +28,12 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
     yield* event.map(
       addVisitorButtonPressed: (e) async* {
         yield VisitorState.visitorLoading();
-        Map<String, String> map = {'temperature': e.temperature, 'phone': e.phone};
-        final _visitor = model.Visitor.create(e.document, map);
-        this.add(VisitorSignIn(_visitor.toDBVisitor()));
+        Map<String, String> map = {
+          'temperature': e.temperature,
+          'phone': e.phone
+        };
+        final _visitor = VisitorModel.create(e.document, map);
+        this.add(VisitorSignIn(_visitor));
       },
       visitorSignIn: (e) async* {
         yield VisitorState.visitorLoading();
@@ -56,7 +59,8 @@ class VisitorBloc extends Bloc<VisitorEvent, VisitorState> {
       },
       getVisitors: (e) async* {
         yield VisitorState.visitorLoading();
-        final failureOrSuccess = await _visitorRepository.getAllVisitors(null, null);
+        final failureOrSuccess =
+            await _visitorRepository.getAllVisitors(null, null);
         yield GetVisitorDone(
           showErrorMessages: true,
           isSubmitting: false,

@@ -27,7 +27,9 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
     visitorSubscription = visitorBloc.listen((state) {
       if (state is GetVisitorDone) {
         add(BuildExcel(
-            state.getVisitorsFailureOrSuccessOption.getOrElse(() => null)));
+            //state.getVisitorsFailureOrSuccessOption.getOrElse(() => null)));
+            state.getVisitorsFailureOrSuccessOption
+                .fold(() => null, (visitors) => visitors)));
       }
     });
   }
@@ -55,7 +57,9 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
       );
     } else {
       final failureOrSuccess = await ExcelDataSource().createExcelFile(
-          event.visitors.getOrElse(() => null), getCurrentTime());
+          event.visitors
+              .fold((failure) => List<Visitor>(), (visitors) => visitors),
+          getCurrentTime());
       yield state.copyWith(
         showErrorMessages: true,
         isSubmitting: false,
