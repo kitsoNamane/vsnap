@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:developer' as developer;
 
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -17,6 +19,21 @@ import 'package:vsnap/ui/material/widgets/custom_painter.dart';
 import 'package:vsnap/utils/dialog.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 
+class CameraIsolateArgs {
+  final Detector detector;
+  final CameraDescription description;
+  final TextRecognizer textRecognizer;
+  bool isDetecting;
+  final CameraController camera;
+
+  CameraIsolateArgs(
+      {this.camera,
+      this.description,
+      this.textRecognizer,
+      this.detector,
+      this.isDetecting});
+}
+
 class CameraPreviewTab extends StatefulWidget {
   @override
   _CameraPreviewTabState createState() => _CameraPreviewTabState();
@@ -26,17 +43,44 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
   StreamSubscription visitorSubscription;
   dynamic _scanResults;
   CameraController _camera;
+
   Detector _detector = Detector.text;
   bool _isDetecting = false;
   CameraDescription description;
   final TextRecognizer _textRecognizer =
       FirebaseVision.instance.textRecognizer();
   CameraArguments _args;
+  CameraIsolateArgs isolateArgs;
+  int path = 1000;
+
+  // isolate camera stream
+  final isolates = IsolateHandler();
 
   @override
   void initState() {
     super.initState();
     _initializeCamera();
+    //await _startCameraStream();
+    isolateArgs = CameraIsolateArgs(
+      description: description,
+      textRecognizer: _textRecognizer,
+      detector: _detector,
+      isDetecting: _isDetecting,
+      camera: _camera,
+    );
+
+    isolates.spawn<CameraIsolateArgs>(entryPoint,
+        errorsAreFatal: true,
+        // Here we give a name to the isolate, by which we can access is later,
+        // for example when sending it data and when disposing of it.
+        name: 'cameraStream',
+        // onReceive is executed every time data is received from the spawned
+        // isolate. We will let the setPath function deal with any incoming
+        // data.
+        onReceive: setScanResults,
+        // Executed once when spawned isolate is ready for communication. We will
+        // send the isolate a request to perform its task right away.
+        onInitialized: () => isolates.send(isolateArgs, to: 'cameraStream'));
   }
 
   void _initializeCamera() async {
@@ -52,25 +96,14 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
     if (mounted) {
       setState(() {});
     }
-    await _startCameraStream();
   }
 
-  Future<void> _startCameraStream() async {
-    _camera.startImageStream((CameraImage image) async {
-      if (_isDetecting) return;
-      _isDetecting = true;
-      ScannerUtils.detect(
-        image: image,
-        detectInImage: _textRecognizer.processImage,
-        imageRotation: description.sensorOrientation,
-      ).then((dynamic results) async {
-        if (_detector == null) return;
-        setState(() {
-          _scanResults = results;
-        });
-        await _processResults(results);
-      }).whenComplete(() => _isDetecting = false);
+  void setScanResults(dynamic results) {
+    setState(() {
+      //_scanResults = results;
+      path = results;
     });
+    isolates.kill('cameraStream');
   }
 
   void _scanType(Document document) async {
@@ -82,7 +115,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
       final _visitorBloc =
           VisitorBloc(RepositoryProvider.of<VisitorRepository>(context));
       _visitorBloc.add(VisitorSignOut(document));
-      visitorSubscription = _visitorBloc.listen((state) {
+      visitorSubscription = _visitorBloc.asBroadcastStream().listen((state) {
         if (state is VisitorSignedOut) {
           final result = state.signOutFailureOrSuccessOption
               .fold(() => false, (r) => r.fold((l) => false, (r) => true));
@@ -114,30 +147,21 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
     for (TextBlock block in scanResults.blocks) {
       var mrtd = block.text.toUpperCase().replaceAll(" ", "").trim();
       if (isMRTD(mrtd)) {
-        setState(() {
-          _isDetecting = true;
-        });
         final document = decodeMRTD(mrtd);
-        if (document == null) {
-          setState() {
-            _isDetecting = false;
-          }
-
-          ;
-          break;
-        }
+        if (document == null) return;
         _scanType(document);
       }
     }
   }
 
   Widget _buildResults() {
-    const noResults = const Text('No results!');
+    final noResults = Text("no results ${path.toString()}");
 
     if (_scanResults == null ||
         _camera == null ||
         !_camera.value.isInitialized) {
-      return Container(color: Colors.transparent);
+      //return Container(color: Colors.transparent);
+      return noResults;
     }
 
     CustomPainter painter;
@@ -157,8 +181,14 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
 
   Widget _buildImage() {
     return Container(
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
       constraints: BoxConstraints.expand(),
-      child: !_camera.value.isInitialized
+      child: _camera == null
           ? Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -189,10 +219,36 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
   @override
   void dispose() {
     if (_args.scanType == 'Sign Out') visitorSubscription.cancel();
+    isolates.kill('cameraStream');
     _camera.dispose().then((_) {
       _textRecognizer.close();
     });
     _detector = null;
     super.dispose();
   }
+}
+
+void entryPoint(SendPort context) {
+  final messenger = HandledIsolate.initialize(context);
+  // Triggered every time data is received from the main isolate.
+  messenger.listen((cameraArgs) async {
+    // Use a plugin to get some new value to send back to the main isolate.
+    //final dir = await getApplicationDocumentsDirectory();
+    //messenger.send(camera + dir.path);
+    //messenger.send(cameraArgs + 500);
+    await cameraArgs.camera.startImageStream((CameraImage image) async {
+      developer.log("CameraArguments Initialized, now processing Image",
+          name: "AppMain");
+      if (cameraArgs.isDetecting) return;
+      cameraArgs.isDetecting = true;
+      ScannerUtils.detect(
+        image: image,
+        detectInImage: cameraArgs.textRecognizer.processImage,
+        imageRotation: cameraArgs.description.sensorOrientation,
+      ).then((dynamic results) {
+        if (cameraArgs.detector == null) return;
+        messenger.send(results);
+      }).whenComplete(() => cameraArgs.isDetecting = false);
+    });
+  });
 }
