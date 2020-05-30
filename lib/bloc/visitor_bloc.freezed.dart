@@ -21,7 +21,7 @@ class _$VisitorEventTearOff {
     );
   }
 
-  VisitorSignIn visitorSignIn(VisitorModel visitor) {
+  VisitorSignIn visitorSignIn(Visitor visitor) {
     return VisitorSignIn(
       visitor,
     );
@@ -50,7 +50,7 @@ mixin _$VisitorEvent {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(VisitorModel visitor),
+    @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   });
@@ -58,7 +58,7 @@ mixin _$VisitorEvent {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(VisitorModel visitor),
+    Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -174,7 +174,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(VisitorModel visitor),
+    @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -190,7 +190,7 @@ class _$AddVisitorButtonPressed implements AddVisitorButtonPressed {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(VisitorModel visitor),
+    Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -250,7 +250,7 @@ abstract class $VisitorSignInCopyWith<$Res> {
   factory $VisitorSignInCopyWith(
           VisitorSignIn value, $Res Function(VisitorSignIn) then) =
       _$VisitorSignInCopyWithImpl<$Res>;
-  $Res call({VisitorModel visitor});
+  $Res call({Visitor visitor});
 }
 
 class _$VisitorSignInCopyWithImpl<$Res> extends _$VisitorEventCopyWithImpl<$Res>
@@ -267,7 +267,7 @@ class _$VisitorSignInCopyWithImpl<$Res> extends _$VisitorEventCopyWithImpl<$Res>
     Object visitor = freezed,
   }) {
     return _then(VisitorSignIn(
-      visitor == freezed ? _value.visitor : visitor as VisitorModel,
+      visitor == freezed ? _value.visitor : visitor as Visitor,
     ));
   }
 }
@@ -276,7 +276,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   const _$VisitorSignIn(this.visitor) : assert(visitor != null);
 
   @override
-  final VisitorModel visitor;
+  final Visitor visitor;
 
   @override
   String toString() {
@@ -305,7 +305,7 @@ class _$VisitorSignIn implements VisitorSignIn {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(VisitorModel visitor),
+    @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -321,7 +321,7 @@ class _$VisitorSignIn implements VisitorSignIn {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(VisitorModel visitor),
+    Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -366,9 +366,9 @@ class _$VisitorSignIn implements VisitorSignIn {
 }
 
 abstract class VisitorSignIn implements VisitorEvent {
-  const factory VisitorSignIn(VisitorModel visitor) = _$VisitorSignIn;
+  const factory VisitorSignIn(Visitor visitor) = _$VisitorSignIn;
 
-  VisitorModel get visitor;
+  Visitor get visitor;
   $VisitorSignInCopyWith<VisitorSignIn> get copyWith;
 }
 
@@ -433,7 +433,7 @@ class _$VisitorSignOut implements VisitorSignOut {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(VisitorModel visitor),
+    @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -449,7 +449,7 @@ class _$VisitorSignOut implements VisitorSignOut {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(VisitorModel visitor),
+    Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -567,7 +567,7 @@ class _$GetVisitors implements GetVisitors {
     @required
         Result addVisitorButtonPressed(
             String phone, String temperature, Document document),
-    @required Result visitorSignIn(VisitorModel visitor),
+    @required Result visitorSignIn(Visitor visitor),
     @required Result visitorSignOut(Document document),
     @required Result getVisitors(DateTime from, DateTime to),
   }) {
@@ -583,7 +583,7 @@ class _$GetVisitors implements GetVisitors {
   Result maybeWhen<Result extends Object>({
     Result addVisitorButtonPressed(
         String phone, String temperature, Document document),
-    Result visitorSignIn(VisitorModel visitor),
+    Result visitorSignIn(Visitor visitor),
     Result visitorSignOut(Document document),
     Result getVisitors(DateTime from, DateTime to),
     @required Result orElse(),
@@ -680,7 +680,7 @@ class _$VisitorStateTearOff {
       @required
           bool isSubmitting,
       @required
-          Option<Either<VisitorFailure, List<dynamic>>>
+          Option<Either<VisitorFailure, List<Visitor>>>
               getVisitorsFailureOrSuccessOption}) {
     return GetVisitorDone(
       showErrorMessages: showErrorMessages,
@@ -710,7 +710,7 @@ mixin _$VisitorState {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, List<dynamic>>>
+            Option<Either<VisitorFailure, List<Visitor>>>
                 getVisitorsFailureOrSuccessOption),
   });
   @optionalTypeArgs
@@ -723,7 +723,7 @@ mixin _$VisitorState {
     Result getVisitorsDone(
         bool showErrorMessages,
         bool isSubmitting,
-        Option<Either<VisitorFailure, List<dynamic>>>
+        Option<Either<VisitorFailure, List<Visitor>>>
             getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   });
@@ -860,7 +860,7 @@ class _$_VisitorState implements _VisitorState {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, List<dynamic>>>
+            Option<Either<VisitorFailure, List<Visitor>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -881,7 +881,7 @@ class _$_VisitorState implements _VisitorState {
     Result getVisitorsDone(
         bool showErrorMessages,
         bool isSubmitting,
-        Option<Either<VisitorFailure, List<dynamic>>>
+        Option<Either<VisitorFailure, List<Visitor>>>
             getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
@@ -1042,7 +1042,7 @@ class _$VisitorSignedIn implements VisitorSignedIn {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, List<dynamic>>>
+            Option<Either<VisitorFailure, List<Visitor>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1064,7 +1064,7 @@ class _$VisitorSignedIn implements VisitorSignedIn {
     Result getVisitorsDone(
         bool showErrorMessages,
         bool isSubmitting,
-        Option<Either<VisitorFailure, List<dynamic>>>
+        Option<Either<VisitorFailure, List<Visitor>>>
             getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
@@ -1232,7 +1232,7 @@ class _$VisitorSignedOut implements VisitorSignedOut {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, List<dynamic>>>
+            Option<Either<VisitorFailure, List<Visitor>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1254,7 +1254,7 @@ class _$VisitorSignedOut implements VisitorSignedOut {
     Result getVisitorsDone(
         bool showErrorMessages,
         bool isSubmitting,
-        Option<Either<VisitorFailure, List<dynamic>>>
+        Option<Either<VisitorFailure, List<Visitor>>>
             getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
@@ -1326,7 +1326,7 @@ abstract class $GetVisitorDoneCopyWith<$Res>
   $Res call(
       {bool showErrorMessages,
       bool isSubmitting,
-      Option<Either<VisitorFailure, List<dynamic>>>
+      Option<Either<VisitorFailure, List<Visitor>>>
           getVisitorsFailureOrSuccessOption});
 }
 
@@ -1356,7 +1356,7 @@ class _$GetVisitorDoneCopyWithImpl<$Res>
           getVisitorsFailureOrSuccessOption == freezed
               ? _value.getVisitorsFailureOrSuccessOption
               : getVisitorsFailureOrSuccessOption
-                  as Option<Either<VisitorFailure, List<dynamic>>>,
+                  as Option<Either<VisitorFailure, List<Visitor>>>,
     ));
   }
 }
@@ -1375,7 +1375,7 @@ class _$GetVisitorDone implements GetVisitorDone {
   @override
   final bool isSubmitting;
   @override
-  final Option<Either<VisitorFailure, List<dynamic>>>
+  final Option<Either<VisitorFailure, List<Visitor>>>
       getVisitorsFailureOrSuccessOption;
 
   @override
@@ -1425,7 +1425,7 @@ class _$GetVisitorDone implements GetVisitorDone {
         Result getVisitorsDone(
             bool showErrorMessages,
             bool isSubmitting,
-            Option<Either<VisitorFailure, List<dynamic>>>
+            Option<Either<VisitorFailure, List<Visitor>>>
                 getVisitorsFailureOrSuccessOption),
   }) {
     assert($default != null);
@@ -1447,7 +1447,7 @@ class _$GetVisitorDone implements GetVisitorDone {
     Result getVisitorsDone(
         bool showErrorMessages,
         bool isSubmitting,
-        Option<Either<VisitorFailure, List<dynamic>>>
+        Option<Either<VisitorFailure, List<Visitor>>>
             getVisitorsFailureOrSuccessOption),
     @required Result orElse(),
   }) {
@@ -1498,14 +1498,14 @@ abstract class GetVisitorDone implements VisitorState {
       @required
           bool isSubmitting,
       @required
-          Option<Either<VisitorFailure, List<dynamic>>>
+          Option<Either<VisitorFailure, List<Visitor>>>
               getVisitorsFailureOrSuccessOption}) = _$GetVisitorDone;
 
   @override
   bool get showErrorMessages;
   @override
   bool get isSubmitting;
-  Option<Either<VisitorFailure, List<dynamic>>>
+  Option<Either<VisitorFailure, List<Visitor>>>
       get getVisitorsFailureOrSuccessOption;
   @override
   $GetVisitorDoneCopyWith<GetVisitorDone> get copyWith;

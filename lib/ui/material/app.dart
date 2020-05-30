@@ -1,7 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vsnap/data/local/moor_database.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:vsnap/data/local/database.dart';
 import 'package:vsnap/repository/visitor_repository.dart';
 import 'package:vsnap/services/firebase_services.dart';
 
@@ -10,9 +11,10 @@ import 'pages/home_page.dart';
 
 class AndroidApp extends StatelessWidget {
   final CameraDescription camera;
+  final Database database;
   const AndroidApp({
     Key key,
-    this.camera,
+    this.camera, this.database,
   })  : assert(camera != null),
         super(key: key);
 
@@ -21,7 +23,7 @@ class AndroidApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-            create: (context) => VisitorRepository(AppDatabase().visitorDao)),
+            create: (context) => VisitorRepository(VisitorDao(db: database))),
         RepositoryProvider(create: (context) => camera),
         RepositoryProvider(create: (context) => FirebaseServices.initAnalytics),
       ],

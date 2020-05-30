@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vsnap/ui/material/app.dart';
 import 'package:vsnap/utils/scan_utils.dart';
+import 'package:vsnap/data/local/database.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -33,14 +34,18 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final firstCamera =
+      await ScannerUtils.getCamera(dir: CameraLensDirection.back);
+  final database = initDB();
   Crashlytics.instance.enableInDevMode = true;
   // Pass all uncaught errors to Crashlytics.
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   runZoned(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final firstCamera =
-        await ScannerUtils.getCamera(dir: CameraLensDirection.back);
     BlocSupervisor.delegate = SimpleBlocDelegate();
-    runApp(AndroidApp(camera: firstCamera));
+    runApp(AndroidApp(
+      camera: firstCamera,
+      database: await database,
+    ));
   }, onError: Crashlytics.instance.recordError);
 }

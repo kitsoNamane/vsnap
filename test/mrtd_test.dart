@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mrz_parser/mrz_parser.dart';
 import 'package:vsnap/models/mrz_document.dart';
-import 'package:vsnap/utils/mrz.dart';
+import 'package:vsnap/services/mrtd.dart';
 
 void main() {
   final testTD1String = '''ACBWAD0091889<8382212211<<<<<<

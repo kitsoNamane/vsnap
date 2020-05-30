@@ -5,9 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:vsnap/models/visitor.dart';
 import 'package:vsnap/data/excel_data_source.dart';
-import 'package:vsnap/data/local/moor_database.dart';
-
 import 'package:vsnap/failures/excel_failure.dart';
 import 'package:vsnap/failures/visitor_failure.dart';
 import 'package:vsnap/utils/utils.dart';

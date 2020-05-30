@@ -81,7 +81,7 @@ class EmailReport extends StatelessWidget {
                 ],
               )),
             );
-          } else if (state.isSubmitting == true &&
+          } else if (state.isSubmitting == false &&
               state.showErrorMessages == true) {
             final _result = state.excelFailureOrSuccess.fold(() {
               return ErrorTab();
@@ -89,7 +89,9 @@ class EmailReport extends StatelessWidget {
                 (file) => file.fold(
                     (l) => ErrorTab(), (r) => ReportsForm(filepath: r.path)));
             return _result;
-          } else {return  ErrorTab();}
+          } else {
+            return ErrorTab();
+          }
         },
       ),
     );

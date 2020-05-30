@@ -1,15 +1,20 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:isolate_handler/isolate_handler.dart';
+import 'package:vsnap/bloc/visitor_bloc.dart';
 
 import 'package:vsnap/models/detectors.dart';
 import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/repository/visitor_repository.dart';
+import 'package:vsnap/services/mrtd.dart';
 import 'package:vsnap/ui/material/navigation/navigation_args.dart';
 import 'package:vsnap/ui/material/widgets/custom_painter.dart';
-import 'package:vsnap/utils/mrz.dart';
+import 'package:vsnap/utils/dialog.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 
 class CameraPreviewTab extends StatefulWidget {
@@ -18,14 +23,15 @@ class CameraPreviewTab extends StatefulWidget {
 }
 
 class _CameraPreviewTabState extends State<CameraPreviewTab> {
+  StreamSubscription visitorSubscription;
   dynamic _scanResults;
   CameraController _camera;
   Detector _detector = Detector.text;
   bool _isDetecting = false;
   CameraDescription description;
-
   final TextRecognizer _textRecognizer =
       FirebaseVision.instance.textRecognizer();
+  CameraArguments _args;
 
   @override
   void initState() {
@@ -57,81 +63,52 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
         image: image,
         detectInImage: _textRecognizer.processImage,
         imageRotation: description.sensorOrientation,
-      ).then((dynamic results) {
+      ).then((dynamic results) async {
         if (_detector == null) return;
         setState(() {
           _scanResults = results;
         });
-        _processResults(results);
+        await _processResults(results);
       }).whenComplete(() => _isDetecting = false);
     });
   }
 
-  void _showDialog(
-    Document document,
-  ) {
-    showDialog(
-      context: context,
-      useRootNavigator: false,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-              height: 100,
-              child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.check, color: Colors.green, size: 56),
-                      const Text(
-                        "Success",
-                        style: TextStyle(fontSize: 24),
-                      )
-                    ]),
-              )),
-          actions: <Widget>[
-            document != null
-                ? FlatButton(
-                    color: Colors.red,
-                    child: const Text('cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                : null,
-            FlatButton(
-              color: Colors.green,
-              child: const Text('continue'),
-              onPressed: () {
-                if (document == null) {
-                  Navigator.of(context).popAndPushNamed("/");
-                } else {
-                  Navigator.of(context).pop();
-                  Navigator.of(context)
-                      .popAndPushNamed('/visitor', arguments: document);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _scanType(Document document) async {
-    CameraArguments args = ModalRoute.of(context).settings.arguments;
-    if (args.scanType == "Sign In") {
+    _args = ModalRoute.of(context).settings.arguments;
+    if (_args.scanType == "Sign In") {
       Navigator.of(context).popAndPushNamed("/visitor", arguments: document);
     } else {
       //await updateVisitor(document, RepositoryProvider.of<VisitorDao>(context));
-      await RepositoryProvider.of<VisitorRepository>(context)
-          .visitorSignOut(document.primaryId);
-      _showDialog(null);
+      final _visitorBloc =
+          VisitorBloc(RepositoryProvider.of<VisitorRepository>(context));
+      _visitorBloc.add(VisitorSignOut(document));
+      visitorSubscription = _visitorBloc.listen((state) {
+        if (state is VisitorSignedOut) {
+          final result = state.signOutFailureOrSuccessOption
+              .fold(() => false, (r) => r.fold((l) => false, (r) => true));
+          if (result) {
+            //_showDialog(null);
+            dialogue(
+              message: "success",
+              type: 0,
+              successful: true,
+              dismissable: false,
+            );
+          } else {
+            // show appropriate error
+            dialogue(
+              message: "Sign Failed, try again later",
+              type: 0,
+              successful: false,
+              dismissable: false,
+            );
+          }
+        }
+      });
     }
   }
 
-  void _processResults(VisionText scanResults) async {
+  Future<void> _processResults(VisionText scanResults) async {
     if (scanResults == null) return;
     if (scanResults.blocks.isEmpty) return;
     for (TextBlock block in scanResults.blocks) {
@@ -141,7 +118,14 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
           _isDetecting = true;
         });
         final document = decodeMRTD(mrtd);
-        if (document == null) return;
+        if (document == null) {
+          setState() {
+            _isDetecting = false;
+          }
+
+          ;
+          break;
+        }
         _scanType(document);
       }
     }
@@ -204,7 +188,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
 
   @override
   void dispose() {
-    _camera.stopImageStream();
+    if (_args.scanType == 'Sign Out') visitorSubscription.cancel();
     _camera.dispose().then((_) {
       _textRecognizer.close();
     });

@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:excel/excel.dart';
 import 'package:vsnap/failures/excel_failure.dart';
 import 'package:vsnap/utils/utils.dart';
-import 'package:vsnap/data/local/moor_database.dart';
+import 'package:vsnap/models/visitor.dart';
 
 class ExcelDataSource {
   Future<File> file;
@@ -75,40 +75,40 @@ class ExcelDataSource {
   void writeVisitorRow(Visitor visitor, int _cell) {
     int j = 0;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-        visitor.firstName,
+        visitor.firstname,
         fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
-        visitor.lastName,
+        visitor.surname,
         fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.nationalId != null ? visitor.nationalId : "",
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.passportNumber != null ? visitor.passportNumber : "",
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.documentType,
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.sex.toUpperCase(),
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeIn != null ? dateTimeToString(visitor.timeIn) : "",
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
     j += 1;
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.timeOut != null ? dateTimeToString(visitor.timeOut) : "",
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
 
     decoder.updateCell(sheetName, CellIndex.indexByString("${cells[j]}$_cell"),
         visitor.temperature,
-        fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+        fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
   }
 
   Future<Either<ExcelFailure, File>> createExcelFile(
@@ -118,7 +118,7 @@ class ExcelDataSource {
       decoder = Excel.createExcel()..setDefaultSheet(sheetName);
       file = getFile(filename + _extension);
       decoder.updateCell(sheetName, CellIndex.indexByString("A1"), "$sheetName",
-          fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+          fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
       decoder.merge(sheetName, CellIndex.indexByString("A1"),
           CellIndex.indexByString("K1"),
           customValue: "$sheetName");
@@ -126,7 +126,7 @@ class ExcelDataSource {
       if (visitors == null || visitors.isEmpty) {
         decoder.updateCell(sheetName, CellIndex.indexByString("A3"),
             "You don't have visitor registered, please register your visitors to get log",
-            fontColorHex: "#CCCCCC", verticalAlign: VerticalAlign.Top);
+            fontColorHex: "#000000", verticalAlign: VerticalAlign.Top);
       } else {
         createTableTitles();
         var _cell = 4;
