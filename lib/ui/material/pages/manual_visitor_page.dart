@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vsnap/bloc/visitor_bloc.dart';
@@ -135,6 +136,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'temperature'),
                   controller: _purposeController,
+                  keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -173,7 +175,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 child: RaisedButton(
                   onPressed: () async {
                     if (_formKey.currentState.validate() && _birth != null) {
-                      var document = Document(
+                      final document = Document(
                         names: _fullnamesController.text.split(" ")[0],
                         primaryId: _idController.text,
                         secondaryId: null,
@@ -212,25 +214,58 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
       },
       listener: (context, state) {
         if (state is VisitorSignedIn) {
-          state.signInFailureOrSuccessOption.fold(() {
-            final snackBar = SnackBar(
-              backgroundColor: Colors.redAccent,
-              content: const Text('Sign In Failed'),
-            );
-            // Find the Scaffold in the widget tree and use it to show a SnackBar.
-            Scaffold.of(context).showSnackBar(snackBar);
-            Navigator.of(context).popAndPushNamed("/");
+          final results = state.signInFailureOrSuccessOption.fold(
+              () => false, (result) => result.fold((l) => false, (r) => true));
 
-            Navigator.of(context).popAndPushNamed("/");
-          }, (signedIn) {
-            final snackBar = SnackBar(
-              backgroundColor: Colors.greenAccent,
-              content: const Text('Sign In Success'),
+          if (!results) {
+            final document = Document(
+              names: _fullnamesController.text.split(" ")[0],
+              primaryId: _idController.text,
+              secondaryId: null,
+              nationalityCountryCode:
+                  _nationalityController.text.substring(0, 3),
+              sex: _genderController.text,
+              surname: _fullnamesController.text.split(" ")[1],
+              documentNumber: "",
+              documentType: "I",
+              countryCode: _nationalityController.text.substring(0, 3),
+              birthDate: _birth,
+              expiryDate: null,
             );
-            // Find the Scaffold in the widget tree and use it to show a SnackBar.
-            Scaffold.of(context).showSnackBar(snackBar);
-            Navigator.of(context).popAndPushNamed("/");
-          });
+
+            AwesomeDialog(
+                context: context,
+                title: 'INFO',
+                dialogType: DialogType.WARNING,
+                animType: AnimType.BOTTOMSLIDE,
+                btnOkText: "try again",
+                btnCancelText: "cancel",
+                padding: const EdgeInsets.all(16.0),
+                desc: "sign in failed",
+                btnOkOnPress: () {
+                  BlocProvider.of<VisitorBloc>(context)
+                      .add(AddVisitorButtonPressed(
+                    phone: _phoneController.text,
+                    temperature: _purposeController.text,
+                    document: document,
+                  ));
+                },
+                btnCancelOnPress: () {
+                  Navigator.of(context).popAndPushNamed('/');
+                }).show();
+          } else {
+            AwesomeDialog(
+                context: context,
+                title: 'INFO',
+                dialogType: DialogType.SUCCES,
+                animType: AnimType.BOTTOMSLIDE,
+                desc: "sign in successfult",
+                btnOkText: "continue",
+                padding: const EdgeInsets.all(16.0),
+                btnOkOnPress: () {
+                  Navigator.of(context).popAndPushNamed('/');
+                }).show();
+          }
         }
       },
     );

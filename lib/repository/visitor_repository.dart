@@ -33,8 +33,7 @@ class VisitorRepository implements IVisitorRepository {
   }
 
   @override
-  Future<Either<VisitorFailure, Unit>> visitorSignIn(
-      Visitor visitor) async {
+  Future<Either<VisitorFailure, Unit>> visitorSignIn(Visitor visitor) async {
     try {
       await visitorDao.insertVisitor(visitor);
       return right(unit);
@@ -49,8 +48,7 @@ class VisitorRepository implements IVisitorRepository {
   Future<Either<VisitorFailure, Unit>> visitorSignOut(String visitorId) async {
     try {
       final _visitor = await visitorDao.getVisitor(visitorId);
-      await visitorDao
-          .updateVisitor(_visitor.signOut());
+      await visitorDao.updateVisitor(_visitor.signOut());
       return right(unit);
     } catch (e) {
       print(e.toString());

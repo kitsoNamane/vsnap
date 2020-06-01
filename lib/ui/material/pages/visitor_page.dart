@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -170,25 +171,45 @@ class VisitorTab extends StatelessWidget {
         },
         listener: (context, state) {
           if (state is VisitorSignedIn) {
-            state.signInFailureOrSuccessOption.fold(() {
-              final snackBar = SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: const Text('Sign In Failed'),
-              );
-              // Find the Scaffold in the widget tree and use it to show a SnackBar.
-              Scaffold.of(context).showSnackBar(snackBar);
-              Navigator.of(context).popAndPushNamed("/");
 
-              Navigator.of(context).popAndPushNamed("/");
-            }, (signedIn) {
-              final snackBar = SnackBar(
-                backgroundColor: Colors.greenAccent,
-                content: const Text('Sign In Success'),
-              );
-              // Find the Scaffold in the widget tree and use it to show a SnackBar.
-              Scaffold.of(context).showSnackBar(snackBar);
-              Navigator.of(context).popAndPushNamed("/");
-            });
+          final result = state.signInFailureOrSuccessOption.fold(
+              () => false, (result) => result.fold((l) => false, (r) => true));
+            if (!result) {
+              AwesomeDialog(
+                  context: context,
+                  title: 'INFO',
+                  dialogType: DialogType.WARNING,
+                  animType: AnimType.BOTTOMSLIDE,
+                  btnOkText: "try again",
+                  btnCancelText: "cancel",
+                  padding: const EdgeInsets.all(16.0),
+                  desc: "sign in failed",
+                  btnOkOnPress: () {
+                    BlocProvider.of<VisitorBloc>(context)
+                        .add(AddVisitorButtonPressed(
+                      phone: _phoneController.text,
+                      temperature: _purposeController.text,
+                      document: document,
+                    ));
+                  },
+                  btnCancelOnPress: () {
+                    Navigator.of(context).popAndPushNamed('/');
+                  })
+                .show();
+            } else {
+              AwesomeDialog(
+                  context: context,
+                  title: "INFO",
+                  dialogType: DialogType.SUCCES,
+                  animType: AnimType.BOTTOMSLIDE,
+                  desc: "sign in successfult",
+                  btnOkText: "continue",
+                  padding: const EdgeInsets.all(16.0),
+                  btnOkOnPress: () {
+                    Navigator.of(context).popAndPushNamed('/');
+                  })
+                .show();
+            }
           }
         },
       ),

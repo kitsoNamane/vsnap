@@ -12,7 +12,7 @@ T _$identity<T>(T value) => value;
 class _$ExcelEventTearOff {
   const _$ExcelEventTearOff();
 
-  BuildExcel buildExcel(Either<VisitorFailure, List<dynamic>> visitors) {
+  BuildExcel buildExcel(Either<VisitorFailure, List<Visitor>> visitors) {
     return BuildExcel(
       visitors,
     );
@@ -23,7 +23,7 @@ class _$ExcelEventTearOff {
 const $ExcelEvent = _$ExcelEventTearOff();
 
 mixin _$ExcelEvent {
-  Either<VisitorFailure, List<dynamic>> get visitors;
+  Either<VisitorFailure, List<Visitor>> get visitors;
 
   $ExcelEventCopyWith<ExcelEvent> get copyWith;
 }
@@ -32,7 +32,7 @@ abstract class $ExcelEventCopyWith<$Res> {
   factory $ExcelEventCopyWith(
           ExcelEvent value, $Res Function(ExcelEvent) then) =
       _$ExcelEventCopyWithImpl<$Res>;
-  $Res call({Either<VisitorFailure, List<dynamic>> visitors});
+  $Res call({Either<VisitorFailure, List<Visitor>> visitors});
 }
 
 class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
@@ -49,7 +49,7 @@ class _$ExcelEventCopyWithImpl<$Res> implements $ExcelEventCopyWith<$Res> {
     return _then(_value.copyWith(
       visitors: visitors == freezed
           ? _value.visitors
-          : visitors as Either<VisitorFailure, List<dynamic>>,
+          : visitors as Either<VisitorFailure, List<Visitor>>,
     ));
   }
 }
@@ -59,7 +59,7 @@ abstract class $BuildExcelCopyWith<$Res> implements $ExcelEventCopyWith<$Res> {
           BuildExcel value, $Res Function(BuildExcel) then) =
       _$BuildExcelCopyWithImpl<$Res>;
   @override
-  $Res call({Either<VisitorFailure, List<dynamic>> visitors});
+  $Res call({Either<VisitorFailure, List<Visitor>> visitors});
 }
 
 class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
@@ -77,7 +77,7 @@ class _$BuildExcelCopyWithImpl<$Res> extends _$ExcelEventCopyWithImpl<$Res>
     return _then(BuildExcel(
       visitors == freezed
           ? _value.visitors
-          : visitors as Either<VisitorFailure, List<dynamic>>,
+          : visitors as Either<VisitorFailure, List<Visitor>>,
     ));
   }
 }
@@ -86,7 +86,7 @@ class _$BuildExcel implements BuildExcel {
   const _$BuildExcel(this.visitors) : assert(visitors != null);
 
   @override
-  final Either<VisitorFailure, List<dynamic>> visitors;
+  final Either<VisitorFailure, List<Visitor>> visitors;
 
   @override
   String toString() {
@@ -112,11 +112,11 @@ class _$BuildExcel implements BuildExcel {
 }
 
 abstract class BuildExcel implements ExcelEvent {
-  const factory BuildExcel(Either<VisitorFailure, List<dynamic>> visitors) =
+  const factory BuildExcel(Either<VisitorFailure, List<Visitor>> visitors) =
       _$BuildExcel;
 
   @override
-  Either<VisitorFailure, List<dynamic>> get visitors;
+  Either<VisitorFailure, List<Visitor>> get visitors;
   @override
   $BuildExcelCopyWith<BuildExcel> get copyWith;
 }

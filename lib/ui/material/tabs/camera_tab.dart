@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:isolate_handler/isolate_handler.dart';
 import 'package:vsnap/bloc/visitor_bloc.dart';
 
 import 'package:vsnap/models/detectors.dart';
@@ -14,7 +14,6 @@ import 'package:vsnap/repository/visitor_repository.dart';
 import 'package:vsnap/services/mrtd.dart';
 import 'package:vsnap/ui/material/navigation/navigation_args.dart';
 import 'package:vsnap/ui/material/widgets/custom_painter.dart';
-import 'package:vsnap/utils/dialog.dart';
 import 'package:vsnap/utils/scan_utils.dart';
 
 class CameraPreviewTab extends StatefulWidget {
@@ -84,24 +83,39 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
       _visitorBloc.add(VisitorSignOut(document));
       visitorSubscription = _visitorBloc.listen((state) {
         if (state is VisitorSignedOut) {
-          final result = state.signOutFailureOrSuccessOption
-              .fold(() => false, (r) => r.fold((l) => false, (r) => true));
-          if (result) {
-            //_showDialog(null);
-            dialogue(
-              message: "success",
-              type: 0,
-              successful: true,
-              dismissable: false,
-            );
+          final results = state.signOutFailureOrSuccessOption
+              .fold(() => false, (result) => result.isRight());
+          if (results) {
+            AwesomeDialog(
+                context: context,
+                title: "INFO",
+                dialogType: DialogType.SUCCES,
+                animType: AnimType.BOTTOMSLIDE,
+                desc: "sign out successfult",
+                btnOkText: "continue",
+                padding: const EdgeInsets.all(16.0),
+                btnOkOnPress: () {
+                  _visitorBloc.close();
+                  Navigator.of(context).popAndPushNamed('/');
+                }).show();
           } else {
-            // show appropriate error
-            dialogue(
-              message: "Sign Failed, try again later",
-              type: 0,
-              successful: false,
-              dismissable: false,
-            );
+            AwesomeDialog(
+                context: context,
+                title: "INFO",
+                dialogType: DialogType.WARNING,
+                animType: AnimType.BOTTOMSLIDE,
+                desc: "sign out failed",
+                btnCancelText: "cancel",
+                btnOkText: "try again",
+                padding: const EdgeInsets.all(16.0),
+                btnOkOnPress: () {
+                  BlocProvider.of<VisitorBloc>(context)
+                      .add(VisitorSignOut(document));
+                },
+                btnCancelOnPress: () {
+                  _visitorBloc.close();
+                  Navigator.of(context).popAndPushNamed('/');
+                }).show();
           }
         }
       });
@@ -119,11 +133,6 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
         });
         final document = decodeMRTD(mrtd);
         if (document == null) {
-          setState() {
-            _isDetecting = false;
-          }
-
-          ;
           break;
         }
         _scanType(document);
@@ -188,7 +197,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
 
   @override
   void dispose() {
-    if (_args.scanType == 'Sign Out') visitorSubscription.cancel();
+    if (visitorSubscription != null) visitorSubscription.cancel();
     _camera.dispose().then((_) {
       _textRecognizer.close();
     });
