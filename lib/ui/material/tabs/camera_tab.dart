@@ -91,7 +91,7 @@ class _CameraPreviewTabState extends State<CameraPreviewTab> {
                 title: "INFO",
                 dialogType: DialogType.SUCCES,
                 animType: AnimType.BOTTOMSLIDE,
-                desc: "sign out successfult",
+                desc: "sign out successful",
                 btnOkText: "continue",
                 padding: const EdgeInsets.all(16.0),
                 btnOkOnPress: () {
