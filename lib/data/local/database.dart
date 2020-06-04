@@ -49,25 +49,8 @@ class VisitorDao {
     final List<Map<String, dynamic>> maps = await db.query('visitors');
 
     return List.generate(maps.length, (i) {
-      final visitor = maps[i];
-      return Visitor(
-        firstname: visitor['firstname'],
-        surname: visitor['surname'],
-        phone: visitor['phone_number'],
-        sex: visitor['sex'],
-        birthday: DateTime.tryParse(visitor['birthday']),
-        nationalId: visitor['national_id'],
-        temperature: visitor['temperature'],
-        timeIn: DateTime.tryParse(visitor['time_in']),
-        timeOut: visitor['time_out'] != null
-            ? DateTime.tryParse(visitor['time_out'])
-            : null,
-        documentType: visitor['document_type'],
-        passportNumber: visitor['passport_number'],
-        expiryDate: visitor['expiry_date'] != null
-            ? DateTime.tryParse(visitor['expiry_date'])
-            : null,
-      );
+      final visitorMap = maps[i];
+      return Visitor.fromMap(visitorMap);
     });
   }
 
