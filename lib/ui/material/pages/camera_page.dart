@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vsnap/bloc/permission_bloc.dart';
 import 'package:vsnap/ui/material/navigation/navigation_args.dart';
-import 'package:vsnap/ui/material/tabs/camera_tab.dart';
 import 'package:vsnap/ui/material/tabs/permission_error_tab.dart';
 import 'package:vsnap/ui/material/tabs/permissions_tab.dart';
 
@@ -21,27 +20,13 @@ class CameraPage extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
-                title: const Text('Camera'),
+                title: const Text('Camera Permissions'),
                 elevation: 0.0,
               ),
-              floatingActionButton:
-                  state == PermissionGranted() && args.scanType == "Sign In"
-                      ? FloatingActionButton(
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                          onPressed: () async {
-                            Navigator.of(context).popAndPushNamed("/manual");
-                          },
-                        )
-                      : null,
-              body: BlocBuilder<PermissionBloc, PermissionState>(
+              body: BlocConsumer<PermissionBloc, PermissionState>(
                   builder: (BuildContext context, state) {
-                if (state is PermissionInitial || state is PermissionLoading) {
+                if (state is PermissionInitial || state is PermissionLoading || state is PermissionGranted) {
                   return Container();
-                } else if (state is PermissionGranted) {
-                  return CameraPreviewTab();
                 } else if (state is PermissionDenied) {
                   return PermissionsTab(
                     permissions: _permissions,
@@ -65,9 +50,15 @@ class CameraPage extends StatelessWidget {
                         "Something went wrong, contact our admin at kitso@abstractclass.co",
                   );
                 }
-              }),
-            );
-          },
-        ));
+              }, listener: (BuildContext context, PermissionState state) {
+                if (state is PermissionGranted) {
+                  Navigator.of(context).popAndPushNamed("/scan_picture", arguments: args.scanType);
+                }
+              }
+            ),
+          );
+        }
+      )
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:vsnap/models/mrz_document.dart';
 import 'package:vsnap/ui/material/pages/camera_page.dart';
 import 'package:vsnap/ui/material/pages/home_page.dart';
 import 'package:vsnap/ui/material/pages/manual_visitor_page.dart';
+import 'package:vsnap/ui/material/pages/picture_page.dart';
 import 'package:vsnap/ui/material/pages/visitor_page.dart';
 
 import 'navigation_args.dart';
@@ -20,6 +21,19 @@ class RouteGenerator {
         if (args is CameraArguments) {
           return MaterialPageRoute(
             builder: (context) => CameraPage(),
+            settings: RouteSettings(
+              arguments: args,
+            ),
+          );
+        }
+        // If args is not of the correct type, return an error page.
+        // You can also throw an exception while in development.
+        return _errorRoute();
+      case '/scan_picture':
+        // Validation of correct data type
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (context) => PicturePage(),
             settings: RouteSettings(
               arguments: args,
             ),

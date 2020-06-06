@@ -9,19 +9,19 @@ void main() {
 NAMANE<<KITSO<GIDION<<<<<<<<<<''';
 
   test('it should check for TD1 validity', () {
-    final check = isMRTD(testTD1String);
+    final check = MRTD.isMRTD(testTD1String);
     expect(true, check);
   });
 
   test('it should get valid mrz from paragraph', () {
-    final mrz = getMRTDmatch(testTD1String);
+    final mrz = MRTD.getMRTDmatch(testTD1String);
     expect(mrz, testTD1String);
   });
 
   test('it should pipeline mrz decoding', () {
-    final check = isMRTD(testTD1String);
+    final check = MRTD.isMRTD(testTD1String);
     expect(true, check);
-    final mrz = getMRTDmatch(testTD1String);
+    final mrz = MRTD.getMRTDmatch(testTD1String);
     expect(mrz, testTD1String);
     final splits = mrz.split('\n').toList();
     final result = MRZParser.parse(splits);
@@ -33,8 +33,9 @@ NAMANE<<KITSO<GIDION<<<<<<<<<<''';
   });
 
   test('it should extract TD1 data', () {
-    final doc = decodeMRTD(testTD1String);
-    expect(doc.runtimeType, Document);
+    final docOrFailure = MRTD.decodeMRTD(testTD1String);
+    expect(docOrFailure.isRight(), true);
+    final doc = docOrFailure.getOrElse(() => null);
     expect(doc.surname.toLowerCase(), 'namane');
   });
 }

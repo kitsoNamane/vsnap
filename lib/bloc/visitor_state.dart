@@ -34,6 +34,7 @@ abstract class VisitorState with _$VisitorState {
     @required bool showErrorMessages,
     @required bool isSubmitting,
     @required
-        Option<Either<VisitorFailure, List<Visitor>>> getVisitorsFailureOrSuccessOption,
+        Option<Either<VisitorFailure, List<Visitor>>>
+            getVisitorsFailureOrSuccessOption,
   }) = GetVisitorDone;
 }

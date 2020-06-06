@@ -38,6 +38,7 @@ class ManualVisitorTab extends StatefulWidget {
 class _ManualVisitorTabState extends State<ManualVisitorTab> {
   final _phoneController = TextEditingController();
   final _fullnamesController = TextEditingController();
+  final _surnameController = TextEditingController();
   final _idController = TextEditingController();
   final _genderController = TextEditingController();
   final _nationalityController = TextEditingController();
@@ -56,25 +57,38 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TextFormField(
-                  decoration: InputDecoration(labelText: 'fullname'),
+                  decoration: InputDecoration(labelText: 'firstname'),
                   controller: _fullnamesController,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return "names required required";
-                    } else if (value.split(" ").length < 2) {
-                      return "enter all your names e.g John Doe";
+                      return "firstname required";
                     }
                     return null;
                   },
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: 'surname'),
+                  controller: _surnameController,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "surname required";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'Id Number'),
+                  keyboardType: TextInputType.number,
                   controller: _idController,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
@@ -86,7 +100,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'Gender'),
                   controller: _genderController,
@@ -100,7 +114,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'Nationality'),
                   controller: _nationalityController,
@@ -114,7 +128,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'phone'),
                   controller: _phoneController,
@@ -132,7 +146,7 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                 child: TextFormField(
                   decoration: InputDecoration(labelText: 'temperature'),
                   controller: _purposeController,
@@ -171,18 +185,18 @@ class _ManualVisitorTabState extends State<ManualVisitorTab> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                 child: RaisedButton(
                   onPressed: () async {
                     if (_formKey.currentState.validate() && _birth != null) {
                       final document = Document(
-                        names: _fullnamesController.text.split(" ")[0],
+                        names: _fullnamesController.text,
                         primaryId: _idController.text,
                         secondaryId: null,
                         nationalityCountryCode:
                             _nationalityController.text.substring(0, 3),
                         sex: _genderController.text,
-                        surname: _fullnamesController.text.split(" ")[1],
+                        surname: _surnameController.text,
                         documentNumber: "",
                         documentType: "I",
                         countryCode:
